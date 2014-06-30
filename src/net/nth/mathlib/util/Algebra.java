@@ -26,6 +26,11 @@ public class Algebra
 			smaller = mod;
 		}
 		
+		if (larger < 0)
+		{
+			larger *= -1;
+		}
+		
 		return larger;
 	}
 }

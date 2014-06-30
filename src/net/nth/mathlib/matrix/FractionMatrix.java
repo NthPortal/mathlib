@@ -209,7 +209,8 @@ public class FractionMatrix
 				if (row == col)
 				{
 					identity.matrix[row][col] = new Fraction(1);
-				} else
+				}
+				else
 				{
 					identity.matrix[row][col] = new Fraction(0);
 				}
@@ -260,7 +261,8 @@ public class FractionMatrix
 		if (this.rows <= this.cols)
 		{
 			smallerSize = this.rows;
-		} else
+		}
+		else
 		{
 			smallerSize = this.cols;
 		}
@@ -281,7 +283,8 @@ public class FractionMatrix
 						break;
 					}
 				}
-			} else
+			}
+			else
 			{
 				for (int j = i + 1; j < this.rows; j++)
 				{
@@ -289,8 +292,8 @@ public class FractionMatrix
 							this.matrix[i][i]));
 				}
 			}
-			// this.print();
-			// System.out.println();
+			this.print();
+			System.out.println();
 		}
 		return numRowSwaps;
 	}
@@ -303,7 +306,8 @@ public class FractionMatrix
 		if (this.rows <= this.cols)
 		{
 			smallerSize = this.rows;
-		} else
+		}
+		else
 		{
 			smallerSize = this.cols;
 		}
@@ -320,8 +324,8 @@ public class FractionMatrix
 							this.matrix[i][i]));
 				}
 			}
-			// this.print();
-			// System.out.println();
+			this.print();
+			System.out.println();
 		}
 	}
 
@@ -419,7 +423,8 @@ public class FractionMatrix
 		if (this.rows == this.cols)
 		{
 			this.square = true;
-		} else
+		}
+		else
 		{
 			this.square = false;
 		}
@@ -457,7 +462,7 @@ public class FractionMatrix
 	{
 		for (int col = 0; col < this.cols; col++)
 		{
-			Fraction.multiply(this.matrix[row][col], scalar);
+			this.matrix[row][col] = Fraction.multiply(this.matrix[row][col], scalar);
 		}
 	}
 
@@ -499,21 +504,16 @@ public class FractionMatrix
 		matrices[0].print();
 		System.out.println();
 
-		try
-		{
-			FractionMatrix inverse = matrices[0].inverse();
+		FractionMatrix inverse = matrices[0].inverse();
 
-			System.out.println("Inverse:");
-			inverse.print();
-			System.out.println();
-		} catch (NonSquareMatrixException e)
-		{
-			System.err.println(e.getMessage());
-			System.out.println();
-		} catch (NonInvertibleMatrixException e)
-		{
-			System.err.println(e.getMessage());
-			System.out.println();
-		}
+		System.out.println("Inverse:");
+		inverse.print();
+		System.out.println();
+		
+		FractionMatrix result = multiply(matrices[0], inverse);
+		
+		System.out.println("Product:");
+		result.print();
+		System.out.println();
 	}
 }

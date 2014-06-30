@@ -205,7 +205,8 @@ public class Matrix
 				if (row == col)
 				{
 					identity.matrix[row][col] = 1;
-				} else
+				}
+				else
 				{
 					identity.matrix[row][col] = 0;
 				}
@@ -256,7 +257,8 @@ public class Matrix
 		if (this.rows <= this.cols)
 		{
 			smallerSize = this.rows;
-		} else
+		}
+		else
 		{
 			smallerSize = this.cols;
 		}
@@ -277,7 +279,8 @@ public class Matrix
 						break;
 					}
 				}
-			} else
+			}
+			else
 			{
 				for (int j = i + 1; j < this.rows; j++)
 				{
@@ -298,7 +301,8 @@ public class Matrix
 		if (this.rows <= this.cols)
 		{
 			smallerSize = this.rows;
-		} else
+		}
+		else
 		{
 			smallerSize = this.cols;
 		}
@@ -413,7 +417,8 @@ public class Matrix
 		if (this.rows == this.cols)
 		{
 			this.square = true;
-		} else
+		}
+		else
 		{
 			this.square = false;
 		}
@@ -432,8 +437,7 @@ public class Matrix
 
 		// Augments with Identity matrix
 		Matrix id = identity(this.rows);
-		deepCopy(id.matrix, this.matrix, id.rows, id.cols, 0,
-				0, 0, id.cols);
+		deepCopy(id.matrix, this.matrix, id.rows, id.cols, 0, 0, 0, id.cols);
 	}
 
 	private void rowSwap(int row1, int row2)
@@ -492,21 +496,16 @@ public class Matrix
 		matrices[0].print();
 		System.out.println();
 
-		try
-		{
-			Matrix inverse = matrices[0].inverse();
+		Matrix inverse = matrices[0].inverse();
 
-			System.out.println("Inverse:");
-			inverse.print();
-			System.out.println();
-		} catch (NonSquareMatrixException e)
-		{
-			System.err.println(e.getMessage());
-			System.out.println();
-		} catch (NonInvertibleMatrixException e)
-		{
-			System.err.println(e.getMessage());
-			System.out.println();
-		}
+		System.out.println("Inverse:");
+		inverse.print();
+		System.out.println();
+
+		Matrix result = multiply(matrices[0], inverse);
+
+		System.out.println("Product:");
+		result.print();
+		System.out.println();
 	}
 }

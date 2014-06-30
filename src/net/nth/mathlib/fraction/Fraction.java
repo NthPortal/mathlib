@@ -192,7 +192,7 @@ public class Fraction
 
 		if (this.numer != 0)
 		{
-			if (this.denom != 1)
+			if (exponent.denom != 1)
 			{
 				throw new NonIntFractionException(
 						"Fractional exponents with non-'1' denominators not permitted.");
@@ -243,11 +243,5 @@ public class Fraction
 
 	public static void main(String[] args)
 	{
-		Fraction f1 = new Fraction(1);
-		Fraction f2 = new Fraction(0);
-
-		Fraction f3 = divide(f1, f2);
-
-		f3.println();
 	}
 }
