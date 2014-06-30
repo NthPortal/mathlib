@@ -27,19 +27,23 @@ public class FractionPolynomial
 		return new FractionMonomial(terms.get(index));
 	}
 
-	public void add(FractionMonomial m)
+	public FractionPolynomial add(FractionMonomial m)
 	{
-		for (int i = 0; i < this.terms.size(); i++)
+		FractionPolynomial result = new FractionPolynomial(this);
+
+		for (int i = 0; i < result.terms.size(); i++)
 		{
-			if (Fraction.compare(m.getExponent(), this.terms.get(i)
+			if (Fraction.compare(m.getExponent(), result.terms.get(i)
 					.getExponent()))
 			{
-				this.terms.set(i, FractionMonomial.add(this.terms.get(i), m));
-				return;
+				result.terms.set(i,
+						FractionMonomial.add(result.terms.get(i), m));
+				return result;
 			}
 		}
 		// Else
-		this.terms.add(m);
+		result.terms.add(m);
+		return result;
 	}
 
 	public static FractionPolynomial add(FractionPolynomial p1,
@@ -49,27 +53,30 @@ public class FractionPolynomial
 
 		for (int i = 0; i < p2.terms.size(); i++)
 		{
-			result.add(p2.terms.get(i));
+			result = result.add(p2.terms.get(i));
 		}
 
 		return result;
 	}
 
-	public void subtract(FractionMonomial m)
+	public FractionPolynomial subtract(FractionMonomial m)
 	{
-		for (int i = 0; i < this.terms.size(); i++)
+		FractionPolynomial result = new FractionPolynomial(this);
+
+		for (int i = 0; i < result.terms.size(); i++)
 		{
-			if (Fraction.compare(m.getExponent(), this.terms.get(i)
+			if (Fraction.compare(m.getExponent(), result.terms.get(i)
 					.getExponent()))
 			{
-				this.terms.set(i,
-						FractionMonomial.subtract(this.terms.get(i), m));
-				return;
+				result.terms.set(i,
+						FractionMonomial.subtract(result.terms.get(i), m));
+				return result;
 			}
 		}
 		// Else
 		m = m.multiply(-1);
-		this.terms.add(m);
+		result.terms.add(m);
+		return result;
 	}
 
 	public static FractionPolynomial subtract(FractionPolynomial p1,
@@ -79,7 +86,7 @@ public class FractionPolynomial
 
 		for (int i = 0; i < p2.terms.size(); i++)
 		{
-			result.subtract(p2.terms.get(i));
+			result = result.subtract(p2.terms.get(i));
 		}
 
 		return result;

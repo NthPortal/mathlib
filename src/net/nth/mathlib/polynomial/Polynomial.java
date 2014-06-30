@@ -25,18 +25,21 @@ public class Polynomial
 		return new Monomial(terms.get(index));
 	}
 
-	public void add(Monomial m)
+	public Polynomial add(Monomial m)
 	{
-		for (int i = 0; i < this.terms.size(); i++)
+		Polynomial result = new Polynomial(this);
+
+		for (int i = 0; i < result.terms.size(); i++)
 		{
-			if (m.getExponent() == this.terms.get(i).getExponent())
+			if (m.getExponent() == result.terms.get(i).getExponent())
 			{
-				this.terms.set(i, Monomial.add(this.terms.get(i), m));
-				return;
+				result.terms.set(i, Monomial.add(result.terms.get(i), m));
+				return result;
 			}
 		}
 		// Else
-		this.terms.add(m);
+		result.terms.add(m);
+		return result;
 	}
 
 	public static Polynomial add(Polynomial p1, Polynomial p2)
@@ -45,34 +48,37 @@ public class Polynomial
 
 		for (int i = 0; i < p2.terms.size(); i++)
 		{
-			result.add(p2.terms.get(i));
+			result = result.add(p2.terms.get(i));
 		}
 
 		return result;
 	}
 
-	public void subtract(Monomial m)
+	public Polynomial subtract(Monomial m)
 	{
-		for (int i = 0; i < this.terms.size(); i++)
+		Polynomial result = new Polynomial(this);
+
+		for (int i = 0; i < result.terms.size(); i++)
 		{
-			if (m.getExponent() == this.terms.get(i).getExponent())
+			if (m.getExponent() == result.terms.get(i).getExponent())
 			{
-				this.terms.set(i, Monomial.subtract(this.terms.get(i), m));
-				return;
+				result.terms.set(i, Monomial.subtract(result.terms.get(i), m));
+				return result;
 			}
 		}
 		// Else
 		m = m.multiply(-1);
-		this.terms.add(m);
+		result.terms.add(m);
+		return result;
 	}
-	
+
 	public static Polynomial subtract(Polynomial p1, Polynomial p2)
 	{
 		Polynomial result = new Polynomial(p1);
 
 		for (int i = 0; i < p2.terms.size(); i++)
 		{
-			result.subtract(p2.terms.get(i));
+			result = result.subtract(p2.terms.get(i));
 		}
 
 		return result;

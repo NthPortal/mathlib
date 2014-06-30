@@ -88,7 +88,7 @@ public class Fraction
 
 		return result;
 	}
-	
+
 	public Fraction add(int num)
 	{
 		return add(this, new Fraction(num));
@@ -125,7 +125,7 @@ public class Fraction
 
 		return result;
 	}
-	
+
 	public Fraction multiply(int scalar)
 	{
 		Fraction result = new Fraction((this.numer * scalar), this.denom);
@@ -152,7 +152,7 @@ public class Fraction
 
 		return result;
 	}
-	
+
 	public Fraction divide(int scalar)
 	{
 		if (scalar == 0)
@@ -164,7 +164,7 @@ public class Fraction
 		result.reduce();
 		return result;
 	}
-	
+
 	public Fraction pow(int exponent)
 	{
 		Fraction result = new Fraction(this);

@@ -462,7 +462,8 @@ public class FractionMatrix
 	{
 		for (int col = 0; col < this.cols; col++)
 		{
-			this.matrix[row][col] = Fraction.multiply(this.matrix[row][col], scalar);
+			this.matrix[row][col] = Fraction.multiply(this.matrix[row][col],
+					scalar);
 		}
 	}
 
@@ -509,9 +510,9 @@ public class FractionMatrix
 		System.out.println("Inverse:");
 		inverse.print();
 		System.out.println();
-		
+
 		FractionMatrix result = multiply(matrices[0], inverse);
-		
+
 		System.out.println("Product:");
 		result.print();
 		System.out.println();
