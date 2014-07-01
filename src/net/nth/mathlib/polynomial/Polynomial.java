@@ -3,8 +3,6 @@ package net.nth.mathlib.polynomial;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import net.nth.mathlib.util.Extremum;
-
 public class Polynomial
 {
 	public ArrayList<Monomial> terms;
@@ -168,32 +166,32 @@ public class Polynomial
 		return result;
 	}
 
-	public Polynomial divideBy(double scalar)
+	public Polynomial divide(double scalar)
 	{
 		Polynomial result = new Polynomial();
 
 		for (int i = 0; i < this.terms.size(); i++)
 		{
-			result.terms.add(this.terms.get(i).divideBy(scalar));
+			result.terms.add(this.terms.get(i).divide(scalar));
 		}
 
 		return result;
 	}
 
-	public Polynomial divideBy(Monomial m)
+	public Polynomial divide(Monomial m)
 	{
 		Polynomial result = new Polynomial();
 
 		for (int i = 0; i < this.terms.size(); i++)
 		{
-			result.terms.add(this.terms.get(i).divideBy(m));
+			result.terms.add(this.terms.get(i).divide(m));
 		}
 
 		return result;
 	}
 	
 	// Returns array of 2 FractionPolynomials: quotient then remainder
-	public Polynomial[] divideBy(Polynomial divisor)
+	public Polynomial[] divide(Polynomial divisor)
 	{
 		Polynomial[] result = new Polynomial[2];
 		result[0] = new Polynomial();
@@ -228,7 +226,7 @@ public class Polynomial
 				return result;
 			}
 
-			temp = firstDividendTerm.divideBy(firstDivisorTerm);
+			temp = firstDividendTerm.divide(firstDivisorTerm);
 			result[0].terms.add(temp);
 
 			dividend = dividend.subtract(divisor.multiply(temp));
@@ -301,15 +299,6 @@ public class Polynomial
 		return result;
 	}
 
-	public ArrayList<Extremum> calcExtrema()
-	{
-		ArrayList<Extremum> extrema = new ArrayList<Extremum>();
-
-		int notDone;
-
-		return extrema;
-	}
-
 	public void print()
 	{
 		int size = this.terms.size();
@@ -361,7 +350,7 @@ public class Polynomial
 		System.out.print("Divisor: ");
 		divisor.println();
 
-		Polynomial[] result = dividend.divideBy(divisor);
+		Polynomial[] result = dividend.divide(divisor);
 
 		System.out.print("Quotient: ");
 		result[0].println();

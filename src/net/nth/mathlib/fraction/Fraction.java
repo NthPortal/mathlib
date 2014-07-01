@@ -133,7 +133,7 @@ public class Fraction implements Comparable<Fraction>
 		return result;
 	}
 
-	public Fraction divideBy(Fraction f)
+	public Fraction divide(Fraction f)
 	{
 		Fraction result = new Fraction();
 
@@ -153,7 +153,7 @@ public class Fraction implements Comparable<Fraction>
 		return result;
 	}
 
-	public Fraction divideBy(int scalar)
+	public Fraction divide(int scalar)
 	{
 		if (scalar == 0)
 		{

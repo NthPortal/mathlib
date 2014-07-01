@@ -99,21 +99,21 @@ public class FractionMonomial implements Comparable<FractionMonomial>
 				this.exponent);
 	}
 
-	public FractionMonomial divideBy(FractionMonomial m)
+	public FractionMonomial divide(FractionMonomial m)
 	{
-		return new FractionMonomial(this.coefficient.divideBy(m.coefficient),
+		return new FractionMonomial(this.coefficient.divide(m.coefficient),
 				this.exponent.subtract(m.exponent));
 	}
 
-	public FractionMonomial divideBy(Fraction frac)
+	public FractionMonomial divide(Fraction frac)
 	{
-		return new FractionMonomial(this.coefficient.divideBy(frac),
+		return new FractionMonomial(this.coefficient.divide(frac),
 				this.exponent);
 	}
 
-	public FractionMonomial divideBy(int scalar)
+	public FractionMonomial divide(int scalar)
 	{
-		return new FractionMonomial(this.coefficient.divideBy(scalar),
+		return new FractionMonomial(this.coefficient.divide(scalar),
 				this.exponent);
 	}
 
@@ -141,7 +141,7 @@ public class FractionMonomial implements Comparable<FractionMonomial>
 
 	public FractionMonomial antiDerivative()
 	{
-		return new FractionMonomial(this.coefficient.divideBy(this.exponent
+		return new FractionMonomial(this.coefficient.divide(this.exponent
 				.add(1)), this.exponent.add(1));
 	}
 

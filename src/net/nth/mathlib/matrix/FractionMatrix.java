@@ -288,7 +288,7 @@ public class FractionMatrix
 				for (int j = i + 1; j < this.rows; j++)
 				{
 					rowReplace(j, i,
-							this.matrix[j][i].divideBy(this.matrix[i][i]));
+							this.matrix[j][i].divide(this.matrix[i][i]));
 				}
 			}
 			this.print();
@@ -320,7 +320,7 @@ public class FractionMatrix
 				for (int j = i - 1; j >= 0; j--)
 				{
 					rowReplace(j, i,
-							this.matrix[j][i].divideBy(this.matrix[i][i]));
+							this.matrix[j][i].divide(this.matrix[i][i]));
 				}
 			}
 			this.print();

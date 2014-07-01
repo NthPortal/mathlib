@@ -74,13 +74,13 @@ public class Monomial implements Comparable<Monomial>
 		return new Monomial((this.coefficient * scalar), this.exponent);
 	}
 
-	public Monomial divideBy(Monomial m)
+	public Monomial divide(Monomial m)
 	{
 		return new Monomial((this.coefficient / m.coefficient),
 				(this.exponent - m.exponent));
 	}
 
-	public Monomial divideBy(double scalar)
+	public Monomial divide(double scalar)
 	{
 		return new Monomial((this.coefficient / scalar), this.exponent);
 	}

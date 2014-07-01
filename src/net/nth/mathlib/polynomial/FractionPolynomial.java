@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import net.nth.mathlib.fraction.Fraction;
+import net.nth.mathlib.util.FractionExtremum;
 
 public class FractionPolynomial
 {
@@ -185,44 +186,44 @@ public class FractionPolynomial
 		return result;
 	}
 
-	public FractionPolynomial divideBy(int scalar)
+	public FractionPolynomial divide(int scalar)
 	{
 		FractionPolynomial result = new FractionPolynomial();
 
 		for (int i = 0; i < this.terms.size(); i++)
 		{
-			result.terms.add(this.terms.get(i).divideBy(scalar));
+			result.terms.add(this.terms.get(i).divide(scalar));
 		}
 
 		return result;
 	}
 
-	public FractionPolynomial divideBy(Fraction frac)
+	public FractionPolynomial divide(Fraction frac)
 	{
 		FractionPolynomial result = new FractionPolynomial();
 
 		for (int i = 0; i < this.terms.size(); i++)
 		{
-			result.terms.add(this.terms.get(i).divideBy(frac));
+			result.terms.add(this.terms.get(i).divide(frac));
 		}
 
 		return result;
 	}
 
-	public FractionPolynomial divideBy(FractionMonomial m)
+	public FractionPolynomial divide(FractionMonomial m)
 	{
 		FractionPolynomial result = new FractionPolynomial();
 
 		for (int i = 0; i < this.terms.size(); i++)
 		{
-			result.terms.add(this.terms.get(i).divideBy(m));
+			result.terms.add(this.terms.get(i).divide(m));
 		}
 
 		return result;
 	}
 
 	// Returns array of 2 FractionPolynomials: quotient then remainder
-	public FractionPolynomial[] divideBy(FractionPolynomial divisor)
+	public FractionPolynomial[] divide(FractionPolynomial divisor)
 	{
 		FractionPolynomial[] result = new FractionPolynomial[2];
 		result[0] = new FractionPolynomial();
@@ -257,7 +258,7 @@ public class FractionPolynomial
 				return result;
 			}
 
-			temp = firstDividendTerm.divideBy(firstDivisorTerm);
+			temp = firstDividendTerm.divide(firstDivisorTerm);
 			result[0].terms.add(temp);
 
 			dividend = dividend.subtract(divisor.multiply(temp));
@@ -374,7 +375,18 @@ public class FractionPolynomial
 	{
 		ArrayList<Fraction> roots = new ArrayList<Fraction>();
 
+		int notDone; // METHOD NOT DONE!!
+
 		return roots;
+	}
+
+	public ArrayList<FractionExtremum> calcExtrema()
+	{
+		ArrayList<FractionExtremum> extrema = new ArrayList<FractionExtremum>();
+
+		int notDone; // METHOD NOT DONE!!
+
+		return extrema;
 	}
 
 	public void print()
@@ -428,7 +440,7 @@ public class FractionPolynomial
 		System.out.print("Divisor: ");
 		divisor.println();
 
-		FractionPolynomial[] result = dividend.divideBy(divisor);
+		FractionPolynomial[] result = dividend.divide(divisor);
 
 		System.out.print("Quotient: ");
 		result[0].println();
