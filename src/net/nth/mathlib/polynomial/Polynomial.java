@@ -51,6 +51,13 @@ public class Polynomial
 	public Polynomial add(Monomial m)
 	{
 		Polynomial result = new Polynomial(this);
+
+		// Returns original polynomial if monomial added has a 0 coefficient
+		if (m.getCoefficient() == 0)
+		{
+			return result;
+		}
+
 		Monomial temp;
 
 		for (int i = 0; i < result.terms.size(); i++)
@@ -90,6 +97,14 @@ public class Polynomial
 	public Polynomial subtract(Monomial m)
 	{
 		Polynomial result = new Polynomial(this);
+
+		// Returns original polynomial if monomial subtracted has a 0
+		// coefficient
+		if (m.getCoefficient() == 0)
+		{
+			return result;
+		}
+
 		Monomial temp;
 
 		for (int i = 0; i < result.terms.size(); i++)
@@ -189,7 +204,7 @@ public class Polynomial
 
 		return result;
 	}
-	
+
 	// Returns array of 2 FractionPolynomials: quotient then remainder
 	public Polynomial[] divide(Polynomial divisor)
 	{
@@ -328,7 +343,7 @@ public class Polynomial
 
 		System.out.println();
 	}
-	
+
 	public static void main(String[] args)
 	{
 		Polynomial dividend = new Polynomial();

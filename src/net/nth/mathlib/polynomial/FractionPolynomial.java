@@ -59,6 +59,13 @@ public class FractionPolynomial
 	public FractionPolynomial add(FractionMonomial m)
 	{
 		FractionPolynomial result = new FractionPolynomial(this);
+
+		// Returns original polynomial if monomial added has a 0 coefficient
+		if (m.getCoefficient().compare(0) == 0)
+		{
+			return result;
+		}
+
 		FractionMonomial temp;
 
 		for (int i = 0; i < result.terms.size(); i++)
@@ -98,6 +105,14 @@ public class FractionPolynomial
 	public FractionPolynomial subtract(FractionMonomial m)
 	{
 		FractionPolynomial result = new FractionPolynomial(this);
+
+		// Returns original polynomial if monomial subtracted has a 0
+		// coefficient
+		if (m.getCoefficient().compare(0) == 0)
+		{
+			return result;
+		}
+
 		FractionMonomial temp;
 
 		for (int i = 0; i < result.terms.size(); i++)
