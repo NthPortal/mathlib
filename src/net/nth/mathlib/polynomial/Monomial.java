@@ -2,6 +2,8 @@ package net.nth.mathlib.polynomial;
 
 public class Monomial implements Comparable<Monomial>
 {
+	private static final char VAR_SYMBOL = 'x';
+
 	private double coefficient;
 	private double exponent;
 
@@ -118,5 +120,17 @@ public class Monomial implements Comparable<Monomial>
 	{
 		Monomial antiDeriv = this.antiDerivative();
 		return (antiDeriv.eval(upperBound) - antiDeriv.eval(lowerBound));
+	}
+
+	public void print()
+	{
+		System.out.print(this.coefficient + VAR_SYMBOL + "^(" + this.exponent
+				+ ")");
+	}
+
+	public void println()
+	{
+		System.out.println(this.coefficient + VAR_SYMBOL + "^(" + this.exponent
+				+ ")");
 	}
 }

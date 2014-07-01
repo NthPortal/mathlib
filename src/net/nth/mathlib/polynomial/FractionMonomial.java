@@ -4,6 +4,8 @@ import net.nth.mathlib.fraction.Fraction;
 
 public class FractionMonomial implements Comparable<FractionMonomial>
 {
+	private static final char VAR_SYMBOL = 'x';
+
 	private Fraction coefficient;
 	private Fraction exponent;
 
@@ -21,6 +23,19 @@ public class FractionMonomial implements Comparable<FractionMonomial>
 		else
 		{
 			this.exponent = exponent;
+		}
+	}
+
+	public FractionMonomial(int coefficient, int exponent)
+	{
+		this.coefficient = new Fraction(coefficient);
+		if (coefficient == 0)
+		{
+			this.exponent = new Fraction(0);
+		}
+		else
+		{
+			this.exponent = new Fraction(exponent);
 		}
 	}
 
@@ -140,5 +155,21 @@ public class FractionMonomial implements Comparable<FractionMonomial>
 	{
 		FractionMonomial antiDeriv = this.antiDerivative();
 		return antiDeriv.eval(upperBound).subtract(antiDeriv.eval(lowerBound));
+	}
+
+	public void print()
+	{
+		this.coefficient.print();
+		System.out.print(VAR_SYMBOL + "^(");
+		this.exponent.print();
+		System.out.print(")");
+	}
+
+	public void println()
+	{
+		this.coefficient.print();
+		System.out.print(VAR_SYMBOL + "^(");
+		this.exponent.print();
+		System.out.println(")");
 	}
 }

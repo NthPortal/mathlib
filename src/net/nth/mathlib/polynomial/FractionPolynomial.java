@@ -30,7 +30,12 @@ public class FractionPolynomial
 		return new FractionMonomial(terms.get(index));
 	}
 
-	public void reduce()
+	public int getSize()
+	{
+		return this.terms.size();
+	}
+
+	private void reduce()
 	{
 		FractionPolynomial temp = new FractionPolynomial(this);
 		FractionPolynomial temp2 = new FractionPolynomial();
@@ -45,9 +50,9 @@ public class FractionPolynomial
 		this.terms = temp2.terms;
 	}
 
-	public void order()
+	private void order()
 	{
-		Collections.sort(this.terms);
+		Collections.sort(this.terms, Collections.reverseOrder());
 	}
 
 	public FractionPolynomial add(FractionMonomial m)
@@ -218,16 +223,14 @@ public class FractionPolynomial
 	public FractionPolynomial[] divideBy(FractionPolynomial p)
 	{
 		FractionPolynomial[] result = new FractionPolynomial[2];
-		for (int i = 0; i < 2; i++)
-		{
-			result[i] = new FractionPolynomial();
-		}
+		result[0] = new FractionPolynomial();
+		result[1] = new FractionPolynomial();
 		FractionPolynomial temp = new FractionPolynomial();
 
 		this.order();
 		p.order();
-		
-		
+
+		return result;
 	}
 
 	public Fraction eval(int value)
@@ -341,5 +344,53 @@ public class FractionPolynomial
 		ArrayList<Fraction> roots = new ArrayList<Fraction>();
 
 		return roots;
+	}
+
+	public void print()
+	{
+		int size = this.terms.size();
+
+		for (int i = 0; i < size; i++)
+		{
+			this.terms.get(i).print();
+			if (i != (size - 1))
+			{
+				System.out.print(" ");
+			}
+		}
+	}
+
+	public void println()
+	{
+		int size = this.terms.size();
+
+		for (int i = 0; i < size; i++)
+		{
+			this.terms.get(i).print();
+			if (i != (size - 1))
+			{
+				System.out.print(" + ");
+			}
+		}
+
+		System.out.println();
+	}
+	
+	public static void main(String[] args)
+	{
+		FractionPolynomial test = new FractionPolynomial();
+		test.println();
+		
+		test.add(new FractionMonomial(2,2));
+		test.println();
+		
+		test.add(new FractionMonomial(new Fraction(1,2), new Fraction(3)));
+		test.println();
+		
+		test.add(new FractionMonomial(new Fraction(1,2), new Fraction(5,2)));
+		test.println();
+		
+		test.order();
+		test.println();
 	}
 }

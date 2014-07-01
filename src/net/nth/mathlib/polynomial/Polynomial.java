@@ -1,6 +1,7 @@
 package net.nth.mathlib.polynomial;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import net.nth.mathlib.util.Extremum;
 
@@ -29,7 +30,7 @@ public class Polynomial
 		return new Monomial(terms.get(index));
 	}
 
-	public void reduce()
+	private void reduce()
 	{
 		Polynomial temp = new Polynomial(this);
 		Polynomial temp2 = new Polynomial();
@@ -42,6 +43,11 @@ public class Polynomial
 		}
 
 		this.terms = temp2.terms;
+	}
+
+	private void order()
+	{
+		Collections.sort(this.terms, Collections.reverseOrder());
 	}
 
 	public Polynomial add(Monomial m)
@@ -254,6 +260,38 @@ public class Polynomial
 	{
 		ArrayList<Extremum> extrema = new ArrayList<Extremum>();
 
+		int notDone;
+
 		return extrema;
+	}
+
+	public void print()
+	{
+		int size = this.terms.size();
+
+		for (int i = 0; i < size; i++)
+		{
+			this.terms.get(i).print();
+			if (i != (size - 1))
+			{
+				System.out.print(" ");
+			}
+		}
+	}
+
+	public void println()
+	{
+		int size = this.terms.size();
+
+		for (int i = 0; i < size; i++)
+		{
+			this.terms.get(i).print();
+			if (i != (size - 1))
+			{
+				System.out.print(" ");
+			}
+		}
+
+		System.out.println();
 	}
 }
