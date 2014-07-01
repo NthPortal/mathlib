@@ -1,6 +1,6 @@
 package net.nth.mathlib.polynomial;
 
-public class Monomial
+public class Monomial implements Comparable<Monomial>
 {
 	private double coefficient;
 	private double exponent;
@@ -38,50 +38,68 @@ public class Monomial
 		return this.exponent;
 	}
 
-	public static Monomial add(Monomial m1, Monomial m2)
-			throws DifferentOrderMonomialException
+	public Monomial add(Monomial m) throws DifferentOrderMonomialException
 	{
-		if (m1.exponent != m2.exponent)
+		if (this.exponent != m.exponent)
 		{
 			throw new DifferentOrderMonomialException(
 					"Cannot add monomials of different orders.");
 		}
 
-		return new Monomial(m1.exponent, (m1.coefficient + m2.coefficient));
+		return new Monomial(this.exponent, (this.coefficient + m.coefficient));
 	}
 
-	public static Monomial subtract(Monomial m1, Monomial m2)
-			throws DifferentOrderMonomialException
+	public Monomial subtract(Monomial m) throws DifferentOrderMonomialException
 	{
-		if (m1.exponent != m2.exponent)
+		if (this.exponent != m.exponent)
 		{
 			throw new DifferentOrderMonomialException(
 					"Cannot subtract monomials of different orders.");
 		}
 
-		return new Monomial(m1.exponent, (m1.coefficient - m2.coefficient));
+		return new Monomial(this.exponent, (this.coefficient - m.coefficient));
 	}
 
-	public static Monomial multiply(Monomial m1, Monomial m2)
+	public Monomial multiply(Monomial m)
 	{
-		return new Monomial((m1.coefficient * m2.coefficient),
-				(m1.exponent + m2.exponent));
+		return new Monomial((this.coefficient * m.coefficient),
+				(this.exponent + m.exponent));
 	}
-	
+
 	public Monomial multiply(double scalar)
 	{
 		return new Monomial((this.coefficient * scalar), this.exponent);
 	}
 
-	public static Monomial divide(Monomial m1, Monomial m2)
+	public Monomial divideBy(Monomial m)
 	{
-		return new Monomial((m1.coefficient / m2.coefficient),
-				(m1.exponent - m2.exponent));
+		return new Monomial((this.coefficient / m.coefficient),
+				(this.exponent - m.exponent));
 	}
-	
-	public Monomial divide(double scalar)
+
+	public Monomial divideBy(double scalar)
 	{
 		return new Monomial((this.coefficient / scalar), this.exponent);
+	}
+
+	// Compares the order of the monomial, not a value
+	public int compareTo(Monomial m)
+	{
+		if (this.exponent < m.exponent)
+		{
+			return -1;
+		}
+		else if (this.exponent == m.exponent)
+		{
+			return 0;
+		}
+		// Else
+		return 1;
+	}
+
+	public double eval(double value)
+	{
+		return (this.coefficient * Math.pow(value, this.exponent));
 	}
 
 	public Monomial derivative()
@@ -90,7 +108,7 @@ public class Monomial
 				(this.exponent - 1));
 	}
 
-	public Monomial integral()
+	public Monomial antiDerivative()
 	{
 		return new Monomial((this.coefficient / (this.exponent + 1)),
 				(this.exponent + 1));
@@ -98,9 +116,7 @@ public class Monomial
 
 	public double integral(double lowerBound, double upperBound)
 	{
-		double result = 0;
-		result += (this.coefficient * (Math.pow(upperBound, this.exponent)));
-		result -= (this.coefficient * (Math.pow(lowerBound, this.exponent)));
-		return result;
+		Monomial antiDeriv = this.antiDerivative();
+		return (antiDeriv.eval(upperBound) - antiDeriv.eval(lowerBound));
 	}
 }

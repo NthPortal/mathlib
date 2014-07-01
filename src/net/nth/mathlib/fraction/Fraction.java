@@ -2,7 +2,7 @@ package net.nth.mathlib.fraction;
 
 import net.nth.mathlib.util.Algebra;
 
-public class Fraction
+public class Fraction implements Comparable<Fraction>
 {
 	private int numer;
 	private int denom;
@@ -74,15 +74,15 @@ public class Fraction
 		return reciprocal;
 	}
 
-	public static Fraction add(Fraction f1, Fraction f2)
+	public Fraction add(Fraction f)
 	{
 		Fraction result = new Fraction();
 
-		int gcf = Algebra.gcf(f1.denom, f2.denom);
+		int gcf = Algebra.gcf(this.denom, f.denom);
 
-		result.denom = (f1.denom * f2.denom / gcf);
-		result.numer = (f1.numer * f2.denom / gcf)
-				+ (f2.numer * f1.denom / gcf);
+		result.denom = (this.denom * f.denom / gcf);
+		result.numer = (this.numer * f.denom / gcf)
+				+ (f.numer * this.denom / gcf);
 
 		result.reduce();
 
@@ -91,18 +91,18 @@ public class Fraction
 
 	public Fraction add(int num)
 	{
-		return add(this, new Fraction(num));
+		return this.add(new Fraction(num));
 	}
 
-	public static Fraction subtract(Fraction f1, Fraction f2)
+	public Fraction subtract(Fraction f)
 	{
 		Fraction result = new Fraction();
 
-		int gcf = Algebra.gcf(f1.denom, f2.denom);
+		int gcf = Algebra.gcf(this.denom, f.denom);
 
-		result.denom = (f1.denom * f2.denom / gcf);
-		result.numer = (f1.numer * f2.denom / gcf)
-				- (f2.numer * f1.denom / gcf);
+		result.denom = (this.denom * f.denom / gcf);
+		result.numer = (this.numer * f.denom / gcf)
+				- (f.numer * this.denom / gcf);
 
 		result.reduce();
 
@@ -111,15 +111,15 @@ public class Fraction
 
 	public Fraction subtract(int num)
 	{
-		return subtract(this, new Fraction(num));
+		return this.subtract(new Fraction(num));
 	}
 
-	public static Fraction multiply(Fraction f1, Fraction f2)
+	public Fraction multiply(Fraction f)
 	{
 		Fraction result = new Fraction();
 
-		result.numer = (f1.numer * f2.numer);
-		result.denom = (f1.denom * f2.denom);
+		result.numer = (this.numer * f.numer);
+		result.denom = (this.denom * f.denom);
 
 		result.reduce();
 
@@ -133,18 +133,18 @@ public class Fraction
 		return result;
 	}
 
-	public static Fraction divide(Fraction f1, Fraction f2)
+	public Fraction divideBy(Fraction f)
 	{
 		Fraction result = new Fraction();
 
-		if (f2.numer == 0)
+		if (f.numer == 0)
 		{
 			throw new ZeroDenomException(
 					"Can't divide by a fraction with a '0' numerator.");
 		}
 
-		result.numer = (f1.numer * f2.denom);
-		result.denom = (f1.denom * f2.numer);
+		result.numer = (this.numer * f.denom);
+		result.denom = (this.denom * f.numer);
 
 		result.fixNegativeDenom();
 
@@ -153,7 +153,7 @@ public class Fraction
 		return result;
 	}
 
-	public Fraction divide(int scalar)
+	public Fraction divideBy(int scalar)
 	{
 		if (scalar == 0)
 		{
@@ -211,24 +211,34 @@ public class Fraction
 		return result;
 	}
 
-	public static boolean compare(Fraction f1, Fraction f2)
+	public int compareTo(Fraction frac)
 	{
-		if ((f1.numer == f2.numer) && (f1.denom == f2.denom))
+		int gcf = Algebra.gcf(this.denom, frac.denom);
+
+		if ((this.numer * frac.denom / gcf) < (frac.numer * this.denom / gcf))
 		{
-			return true;
+			return -1;
+		}
+		else if ((this.numer * frac.denom / gcf) == (frac.numer * this.denom / gcf))
+		{
+			return 0;
 		}
 		// Else
-		return false;
+		return 1;
 	}
 
-	public boolean compare(int num)
+	public int compare(int num)
 	{
-		if ((this.denom == 1) && (this.numer == num))
+		if (this.numer < (num * this.denom))
 		{
-			return true;
+			return -1;
+		}
+		else if (this.numer == (num * this.denom))
+		{
+			return 0;
 		}
 		// Else
-		return false;
+		return 1;
 	}
 
 	public void print()

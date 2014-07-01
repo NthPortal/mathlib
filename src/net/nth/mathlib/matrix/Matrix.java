@@ -98,73 +98,70 @@ public class Matrix
 		this.matrix[row][col] = value;
 	}
 
-	public static Matrix add(Matrix m1, Matrix m2)
-			throws IncompatMatrixSizesException
+	public Matrix add(Matrix m) throws IncompatMatrixSizesException
 	{
-		if (!(m1.rows == m2.rows && m1.cols == m2.cols))
+		if (!(this.rows == m.rows && this.cols == m.cols))
 		{
 			throw new IncompatMatrixSizesException(
 					"Cannot add matrices of different dimensions.");
 		}
 
-		Matrix result = new Matrix(m1.rows, m1.cols);
+		Matrix result = new Matrix(this.rows, this.cols);
 
-		for (int row = 0; row < m1.rows; row++)
+		for (int row = 0; row < this.rows; row++)
 		{
-			for (int col = 0; col < m1.cols; col++)
+			for (int col = 0; col < this.cols; col++)
 			{
-				result.matrix[row][col] = m1.matrix[row][col]
-						+ m2.matrix[row][col];
+				result.matrix[row][col] = this.matrix[row][col]
+						+ m.matrix[row][col];
 			}
 		}
 
 		return result;
 	}
 
-	public static Matrix subtract(Matrix m1, Matrix m2)
-			throws IncompatMatrixSizesException
+	public Matrix subtract(Matrix m) throws IncompatMatrixSizesException
 	{
-		if (!(m1.rows == m2.rows && m1.cols == m2.cols))
+		if (!(this.rows == m.rows && this.cols == m.cols))
 		{
 			throw new IncompatMatrixSizesException(
 					"Cannot subtract matrices of different dimensions.");
 		}
 
-		Matrix result = new Matrix(m1.rows, m1.cols);
+		Matrix result = new Matrix(this.rows, this.cols);
 
-		for (int row = 0; row < m1.rows; row++)
+		for (int row = 0; row < this.rows; row++)
 		{
-			for (int col = 0; col < m1.cols; col++)
+			for (int col = 0; col < this.cols; col++)
 			{
-				result.matrix[row][col] = m1.matrix[row][col]
-						- m2.matrix[row][col];
+				result.matrix[row][col] = this.matrix[row][col]
+						- m.matrix[row][col];
 			}
 		}
 
 		return result;
 	}
 
-	public static Matrix multiply(Matrix m1, Matrix m2)
-			throws IncompatMatrixSizesException
+	public Matrix multiply(Matrix m) throws IncompatMatrixSizesException
 	{
-		if (!(m1.cols == m2.rows))
+		if (!(this.cols == m.rows))
 		{
 			throw new IncompatMatrixSizesException(
 					"The first matrix must have the same number of columns as the second has rows.");
 		}
 
-		Matrix result = new Matrix(m1.rows, m2.cols);
+		Matrix result = new Matrix(this.rows, m.cols);
 
-		for (int row = 0; row < m1.rows; row++)
+		for (int row = 0; row < this.rows; row++)
 		{
-			for (int col = 0; col < m2.cols; col++)
+			for (int col = 0; col < m.cols; col++)
 			{
 				result.matrix[row][col] = 0;
-				for (int m1Col = 0; m1Col < m1.cols; m1Col++)
+				for (int m1Col = 0; m1Col < this.cols; m1Col++)
 				{
 					// m2Row = m1Col
-					result.matrix[row][col] += m1.matrix[row][m1Col]
-							* m2.matrix[m1Col][col];
+					result.matrix[row][col] += this.matrix[row][m1Col]
+							* m.matrix[m1Col][col];
 				}
 			}
 		}
@@ -502,7 +499,7 @@ public class Matrix
 		inverse.print();
 		System.out.println();
 
-		Matrix result = multiply(matrices[0], inverse);
+		Matrix result = matrices[0].multiply(inverse);
 
 		System.out.println("Product:");
 		result.print();

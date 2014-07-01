@@ -100,75 +100,74 @@ public class FractionMatrix
 		this.matrix[row][col] = value;
 	}
 
-	public static FractionMatrix add(FractionMatrix m1, FractionMatrix m2)
+	public FractionMatrix add(FractionMatrix m)
 			throws IncompatMatrixSizesException
 	{
-		if (!(m1.rows == m2.rows && m1.cols == m2.cols))
+		if (!(this.rows == m.rows && this.cols == m.cols))
 		{
 			throw new IncompatMatrixSizesException(
 					"Cannot add matrices of different dimensions.");
 		}
 
-		FractionMatrix result = new FractionMatrix(m1.rows, m1.cols);
+		FractionMatrix result = new FractionMatrix(this.rows, this.cols);
 
-		for (int row = 0; row < m1.rows; row++)
+		for (int row = 0; row < this.rows; row++)
 		{
-			for (int col = 0; col < m1.cols; col++)
+			for (int col = 0; col < this.cols; col++)
 			{
-				result.matrix[row][col] = Fraction.add(m1.matrix[row][col],
-						m2.matrix[row][col]);
+				result.matrix[row][col] = this.matrix[row][col]
+						.add(m.matrix[row][col]);
 			}
 		}
 
 		return result;
 	}
 
-	public static FractionMatrix subtract(FractionMatrix m1, FractionMatrix m2)
+	public FractionMatrix subtract(FractionMatrix m)
 			throws IncompatMatrixSizesException
 	{
-		if (!(m1.rows == m2.rows && m1.cols == m2.cols))
+		if (!(this.rows == m.rows && this.cols == m.cols))
 		{
 			throw new IncompatMatrixSizesException(
 					"Cannot subtract matrices of different dimensions.");
 		}
 
-		FractionMatrix result = new FractionMatrix(m1.rows, m1.cols);
+		FractionMatrix result = new FractionMatrix(this.rows, this.cols);
 
-		for (int row = 0; row < m1.rows; row++)
+		for (int row = 0; row < this.rows; row++)
 		{
-			for (int col = 0; col < m1.cols; col++)
+			for (int col = 0; col < this.cols; col++)
 			{
-				result.matrix[row][col] = Fraction.subtract(
-						m1.matrix[row][col], m2.matrix[row][col]);
+				result.matrix[row][col] = this.matrix[row][col]
+						.subtract(m.matrix[row][col]);
 			}
 		}
 
 		return result;
 	}
 
-	public static FractionMatrix multiply(FractionMatrix m1, FractionMatrix m2)
+	public FractionMatrix multiply(FractionMatrix m)
 			throws IncompatMatrixSizesException
 	{
-		if (!(m1.cols == m2.rows))
+		if (!(this.cols == m.rows))
 		{
 			throw new IncompatMatrixSizesException(
 					"The first matrix must have the same number of columns as the second has rows.");
 		}
 
-		FractionMatrix result = new FractionMatrix(m1.rows, m2.cols);
+		FractionMatrix result = new FractionMatrix(this.rows, m.cols);
 
-		for (int row = 0; row < m1.rows; row++)
+		for (int row = 0; row < this.rows; row++)
 		{
-			for (int col = 0; col < m2.cols; col++)
+			for (int col = 0; col < m.cols; col++)
 			{
 				result.matrix[row][col] = new Fraction(0);
-				for (int m1Col = 0; m1Col < m1.cols; m1Col++)
+				for (int m1Col = 0; m1Col < this.cols; m1Col++)
 				{
 					// m2Row = m1Col
-					result.matrix[row][col] = Fraction.add(
-							result.matrix[row][col], Fraction.multiply(
-									m1.matrix[row][m1Col],
-									m2.matrix[m1Col][col]));
+					result.matrix[row][col] = result.matrix[row][col]
+							.add(this.matrix[row][m1Col]
+									.multiply(m.matrix[m1Col][col]));
 				}
 			}
 		}
@@ -236,7 +235,7 @@ public class FractionMatrix
 
 		for (int i = 0; i < this.rows; i++)
 		{
-			det = Fraction.multiply(det, tempMatrix.matrix[i][i]);
+			det = det.multiply(tempMatrix.matrix[i][i]);
 		}
 
 		if (numRowSwaps % 2 == 1)
@@ -245,7 +244,7 @@ public class FractionMatrix
 		}
 
 		// Not sure if necessary in Java - was needed in C++
-		if (det.compare(-0))
+		if (det.compare(-0) == 0)
 		{
 			det = new Fraction(0);
 		}
@@ -271,11 +270,11 @@ public class FractionMatrix
 		// because last row doesn't get reduced
 		for (int i = 0; i < smallerSize - 1; i++)
 		{
-			if (this.matrix[i][i].compare(0))
+			if (this.matrix[i][i].compare(0) == 0)
 			{
 				for (int j = i + 1; j < this.rows; j++)
 				{
-					if (!this.matrix[j][i].compare(0))
+					if (this.matrix[j][i].compare(0) != 0)
 					{
 						rowSwap(i, j);
 						numRowSwaps++;
@@ -288,8 +287,8 @@ public class FractionMatrix
 			{
 				for (int j = i + 1; j < this.rows; j++)
 				{
-					rowReplace(j, i, Fraction.divide(this.matrix[j][i],
-							this.matrix[i][i]));
+					rowReplace(j, i,
+							this.matrix[j][i].divideBy(this.matrix[i][i]));
 				}
 			}
 			this.print();
@@ -316,12 +315,12 @@ public class FractionMatrix
 		// because last row doesn't get reduced
 		for (int i = smallerSize - 1; i > 0; i--)
 		{
-			if (!this.matrix[i][i].compare(0))
+			if (this.matrix[i][i].compare(0) != 0)
 			{
 				for (int j = i - 1; j >= 0; j--)
 				{
-					rowReplace(j, i, Fraction.divide(this.matrix[j][i],
-							this.matrix[i][i]));
+					rowReplace(j, i,
+							this.matrix[j][i].divideBy(this.matrix[i][i]));
 				}
 			}
 			this.print();
@@ -344,7 +343,7 @@ public class FractionMatrix
 		// Move zero rows to bottom HERE
 		for (int row = 0; row < this.rows; row++)
 		{
-			if (this.matrix[row][row].compare(0))
+			if (this.matrix[row][row].compare(0) == 0)
 			{
 				for (int i = row; i < (row - 1); i++)
 				{
@@ -371,7 +370,7 @@ public class FractionMatrix
 
 		FractionMatrix lhs = new FractionMatrix(this.rows, this.cols);
 		deepCopy(tempMatrix.matrix, lhs.matrix, lhs.rows, lhs.cols);
-		if (lhs.det().compare(0))
+		if (lhs.det().compare(0) == 0)
 		{
 			throw new NonInvertibleMatrixException();
 		}
@@ -462,8 +461,7 @@ public class FractionMatrix
 	{
 		for (int col = 0; col < this.cols; col++)
 		{
-			this.matrix[row][col] = Fraction.multiply(this.matrix[row][col],
-					scalar);
+			this.matrix[row][col] = this.matrix[row][col].multiply(scalar);
 		}
 	}
 
@@ -471,9 +469,8 @@ public class FractionMatrix
 	{
 		for (int col = 0; col < this.cols; col++)
 		{
-			this.matrix[targetRow][col] = Fraction.subtract(
-					this.matrix[targetRow][col],
-					Fraction.multiply(scalar, this.matrix[modRow][col]));
+			this.matrix[targetRow][col] = this.matrix[targetRow][col]
+					.subtract(scalar.multiply(this.matrix[modRow][col]));
 		}
 	}
 
@@ -511,7 +508,7 @@ public class FractionMatrix
 		inverse.print();
 		System.out.println();
 
-		FractionMatrix result = multiply(matrices[0], inverse);
+		FractionMatrix result = matrices[0].multiply(inverse);
 
 		System.out.println("Product:");
 		result.print();

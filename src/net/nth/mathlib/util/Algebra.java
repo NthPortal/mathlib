@@ -1,5 +1,7 @@
 package net.nth.mathlib.util;
 
+import java.util.ArrayList;
+
 public class Algebra
 {
 	public static int gcf(int n1, int n2)
@@ -32,5 +34,22 @@ public class Algebra
 		}
 		
 		return larger;
+	}
+	
+	public static ArrayList<Integer> calcFactors(int num)
+	{
+		ArrayList<Integer> factors = new ArrayList<Integer>();
+
+		// Stop looping once i reaches the denominator divided by all discovered factors
+		for(int i = 2; i <= num; i++)
+		{
+			while(num % i == 0)
+			{
+				factors.add(i);
+				num /= i;
+			}
+		}
+		
+		return factors;
 	}
 }
