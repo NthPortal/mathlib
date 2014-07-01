@@ -90,7 +90,7 @@ public class FractionPolynomial
 			}
 		}
 		// Else
-		result.terms.add(m);
+		result.terms.add(new FractionMonomial(m));
 		result.order();
 		return result;
 	}
@@ -410,9 +410,9 @@ public class FractionPolynomial
 	private static FractionPolynomial makeFactor(Fraction constant)
 	{
 		FractionPolynomial factor = new FractionPolynomial();
-
-		factor.add(new FractionMonomial(1, 1));
-		factor.add(new FractionMonomial(constant, new Fraction(0)));
+		
+		factor = factor.add(new FractionMonomial(1, 1));
+		factor = factor.add(new FractionMonomial(constant, new Fraction(0)));
 
 		return factor;
 	}
@@ -482,6 +482,12 @@ public class FractionPolynomial
 	{
 		int size = this.terms.size();
 
+		if (size == 0)
+		{
+			System.out.print(0);
+			return;
+		}
+		
 		for (int i = 0; i < size; i++)
 		{
 			this.terms.get(i).print();
@@ -496,6 +502,12 @@ public class FractionPolynomial
 	{
 		int size = this.terms.size();
 
+		if (size == 0)
+		{
+			System.out.println(0);
+			return;
+		}
+		
 		for (int i = 0; i < size; i++)
 		{
 			this.terms.get(i).print();
@@ -512,8 +524,8 @@ public class FractionPolynomial
 	{
 		FractionPolynomial factorTest = new FractionPolynomial();
 		ArrayList<Fraction> roots;
-
-		factorTest.add(makeFactor(new Fraction(4)));
+		
+		factorTest = factorTest.add(makeFactor(new Fraction(4)));
 
 		factorTest = factorTest.multiply(makeFactor(new Fraction(6)));
 		factorTest = factorTest.multiply(makeFactor(new Fraction(-2)));
