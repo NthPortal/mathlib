@@ -27,6 +27,11 @@ public class Polynomial
 	{
 		return new Monomial(terms.get(index));
 	}
+	
+	public int getSize()
+	{
+		return this.terms.size();
+	}
 
 	private void reduce()
 	{
