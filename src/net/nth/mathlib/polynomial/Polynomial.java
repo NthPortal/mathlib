@@ -5,7 +5,7 @@ import java.util.Collections;
 
 public class Polynomial
 {
-	public ArrayList<Monomial> terms;
+	private ArrayList<Monomial> terms;
 
 	public Polynomial()
 	{
@@ -20,7 +20,11 @@ public class Polynomial
 
 	public Polynomial(Polynomial p)
 	{
-		this.terms = p.terms;
+		this.terms = new ArrayList<Monomial>();
+		for (int i = 0; i < p.terms.size(); i++)
+		{
+			this.terms.add(new Monomial(p.terms.get(i)));
+		}
 	}
 
 	public Monomial getTerm(int index)

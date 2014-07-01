@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import net.nth.mathlib.fraction.Fraction;
+import net.nth.mathlib.util.Algebra;
 import net.nth.mathlib.util.FractionExtremum;
 
 public class FractionPolynomial
 {
-	public ArrayList<FractionMonomial> terms;
+	private ArrayList<FractionMonomial> terms;
 
 	public FractionPolynomial()
 	{
@@ -23,7 +24,11 @@ public class FractionPolynomial
 
 	public FractionPolynomial(FractionPolynomial p)
 	{
-		this.terms = p.terms;
+		this.terms = new ArrayList<FractionMonomial>();
+		for (int i = 0; i < p.terms.size(); i++)
+		{
+			this.terms.add(new FractionMonomial(p.terms.get(i)));
+		}
 	}
 
 	public FractionMonomial getTerm(int index)
@@ -67,7 +72,7 @@ public class FractionPolynomial
 		}
 
 		FractionMonomial temp;
-
+		
 		for (int i = 0; i < result.terms.size(); i++)
 		{
 			if (m.getExponent().compareTo(result.terms.get(i).getExponent()) == 0)
@@ -251,10 +256,6 @@ public class FractionPolynomial
 			throw new ZeroDivisionException(
 					"Cannot divide polynomial by a polynomial with value of 0.");
 		}
-		else if (this.terms.size() == 0)
-		{
-			return result;
-		}
 
 		FractionPolynomial dividend = new FractionPolynomial(this);
 		FractionMonomial firstDividendTerm;
@@ -263,6 +264,11 @@ public class FractionPolynomial
 
 		while (true)
 		{
+			if (dividend.terms.size() == 0)
+			{
+				return result;
+			}
+			
 			firstDividendTerm = dividend.terms.get(0);
 			firstDivisorTerm = divisor.terms.get(0);
 
@@ -386,11 +392,79 @@ public class FractionPolynomial
 		return result;
 	}
 
-	public ArrayList<Fraction> calcRoots()
+	private void makeIntCoefficients()
+	{
+		FractionPolynomial temp = new FractionPolynomial(this);
+		int lcm = 1;
+
+		for (int i = 0; i < temp.terms.size(); i++)
+		{
+			lcm = Algebra.lcm(lcm, temp.terms.get(i).getCoefficient()
+					.getDenom());
+		}
+		temp = temp.multiply(lcm);
+
+		this.terms = temp.terms;
+	}
+
+	private static FractionPolynomial makeFactor(Fraction constant)
+	{
+		FractionPolynomial factor = new FractionPolynomial();
+
+		factor.add(new FractionMonomial(1, 1));
+		factor.add(new FractionMonomial(constant, new Fraction(0)));
+
+		return factor;
+	}
+
+	// Only finds rational roots
+	public ArrayList<Fraction> calcRootsRational()
 	{
 		ArrayList<Fraction> roots = new ArrayList<Fraction>();
+		FractionPolynomial func = new FractionPolynomial(this);
+		ArrayList<Integer> numerFactors;
+		ArrayList<Integer> denomFactors;
+		Fraction possibleRoot;
+		boolean success;
 
-		int notDone; // METHOD NOT DONE!!
+		while (func.terms.size() != 0)
+		{
+			func.makeIntCoefficients();
+
+			numerFactors = Algebra.calcFactors(func.terms
+					.get(func.terms.size() - 1).getCoefficient().toInt());
+			denomFactors = Algebra.calcFactors(func.terms.get(0)
+					.getCoefficient().toInt());
+
+			numerFactors.add(1);
+			denomFactors.add(1);
+
+			success = false;
+
+			doubleLoop: for (int i = 0; i < numerFactors.size(); i++)
+			{
+				for (int j = 0; j < denomFactors.size(); j++)
+				{
+					possibleRoot = new Fraction(numerFactors.get(i),
+							denomFactors.get(j));
+					
+					for (int neg = 0; neg <= 1; neg++)
+					{
+						if (func.eval(possibleRoot.multiply(-1 * neg)).compare(0) == 0)
+						{
+							roots.add(possibleRoot);
+							func = func.divide(makeFactor(possibleRoot))[0];
+							success = true;
+							break doubleLoop;
+						}
+					}
+				}
+			}
+			if (!success)
+			{
+				break;
+			}
+		}
 
 		return roots;
 	}
@@ -436,31 +510,31 @@ public class FractionPolynomial
 
 	public static void main(String[] args)
 	{
-		FractionPolynomial dividend = new FractionPolynomial();
-		FractionPolynomial divisor = new FractionPolynomial();
+		FractionPolynomial factorTest = new FractionPolynomial();
+		ArrayList<Fraction> roots;
 
-		dividend = dividend.add(new FractionMonomial(4, 5));
-		dividend = dividend.add(new FractionMonomial(-3, 4));
-		dividend = dividend.add(new FractionMonomial(1, 3));
-		dividend = dividend.add(new FractionMonomial(-1, 1));
-		dividend = dividend.add(new FractionMonomial(6, 0));
+		factorTest.add(makeFactor(new Fraction(4)));
 
-		divisor = divisor.add(new FractionMonomial(2, 2));
-		divisor = divisor.add(new FractionMonomial(-1, 1));
-		divisor = divisor.add(new FractionMonomial(3, 0));
+		factorTest = factorTest.multiply(makeFactor(new Fraction(6)));
+		factorTest = factorTest.multiply(makeFactor(new Fraction(-2)));
+		factorTest = factorTest.multiply(makeFactor(new Fraction(3)));
 
-		System.out.print("Dividend: ");
-		dividend.println();
+		factorTest.println();
 
-		System.out.print("Divisor: ");
-		divisor.println();
+		factorTest = factorTest.divide(2);
+		factorTest.println();
 
-		FractionPolynomial[] result = dividend.divide(divisor);
+		roots = factorTest.calcRootsRational();
 
-		System.out.print("Quotient: ");
-		result[0].println();
+		int size = roots.size();
+		for (int i = 0; i < size; i++)
+		{
+			roots.get(i).print();
 
-		System.out.print("Remainder: ");
-		result[1].println();
+			if (i != (size - 1))
+			{
+				System.out.print(", ");
+			}
+		}
 	}
 }

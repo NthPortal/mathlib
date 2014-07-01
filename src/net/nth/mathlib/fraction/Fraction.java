@@ -44,6 +44,16 @@ public class Fraction implements Comparable<Fraction>
 	{
 		return this.denom;
 	}
+	
+	public boolean testIfInt()
+	{
+		if (this.denom == 1)
+		{
+			return true;
+		}
+		// Else
+		return false;
+	}
 
 	public int toInt() throws NonIntFractionException
 	{

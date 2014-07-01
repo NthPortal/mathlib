@@ -41,8 +41,8 @@ public class FractionMonomial implements Comparable<FractionMonomial>
 
 	public FractionMonomial(FractionMonomial m)
 	{
-		this.coefficient = m.coefficient;
-		this.exponent = m.exponent;
+		this.coefficient = new Fraction(m.coefficient);
+		this.exponent = new Fraction(m.exponent);
 	}
 
 	public Fraction getCoefficient()

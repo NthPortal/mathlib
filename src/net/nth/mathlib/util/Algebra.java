@@ -36,8 +36,28 @@ public class Algebra
 		return larger;
 	}
 	
+	public static int lcm(int n1, int n2)
+	{
+		int gcf = gcf(n1, n2);
+		
+		int lcm = (n1 * n2 / gcf);
+		
+		if (lcm < 0)
+		{
+			lcm *= -1;
+		}
+		
+		return lcm;
+	}
+	
+	// Returns positive prime factors
 	public static ArrayList<Integer> calcFactors(int num)
 	{
+		if (num < 0)
+		{
+			num *= -1;
+		}
+		
 		ArrayList<Integer> factors = new ArrayList<Integer>();
 
 		// Stop looping once i reaches the denominator divided by all discovered factors
@@ -51,5 +71,10 @@ public class Algebra
 		}
 		
 		return factors;
+	}
+	
+	public static void main(String[] args)
+	{
+		System.out.println(gcf(1,10));
 	}
 }
