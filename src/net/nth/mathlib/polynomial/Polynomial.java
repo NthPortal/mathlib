@@ -47,12 +47,21 @@ public class Polynomial
 	public Polynomial add(Monomial m)
 	{
 		Polynomial result = new Polynomial(this);
+		Monomial temp;
 
 		for (int i = 0; i < result.terms.size(); i++)
 		{
 			if (m.getExponent() == result.terms.get(i).getExponent())
 			{
-				result.terms.set(i, result.terms.get(i).add(m));
+				temp = result.terms.get(i).add(m);
+				if (temp.getCoefficient() == 0)
+				{
+					result.terms.remove(i);
+				}
+				else
+				{
+					result.terms.set(i, temp);
+				}
 				return result;
 			}
 		}
@@ -76,12 +85,21 @@ public class Polynomial
 	public Polynomial subtract(Monomial m)
 	{
 		Polynomial result = new Polynomial(this);
+		Monomial temp;
 
 		for (int i = 0; i < result.terms.size(); i++)
 		{
 			if (m.getExponent() == result.terms.get(i).getExponent())
 			{
-				result.terms.set(i, result.terms.get(i).subtract(m));
+				temp = result.terms.get(i).subtract(m);
+				if (temp.getCoefficient() == 0)
+				{
+					result.terms.remove(i);
+				}
+				else
+				{
+					result.terms.set(i, temp);
+				}
 				return result;
 			}
 		}

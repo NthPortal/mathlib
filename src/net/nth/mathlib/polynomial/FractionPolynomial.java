@@ -53,12 +53,21 @@ public class FractionPolynomial
 	public FractionPolynomial add(FractionMonomial m)
 	{
 		FractionPolynomial result = new FractionPolynomial(this);
+		FractionMonomial temp;
 
 		for (int i = 0; i < result.terms.size(); i++)
 		{
 			if (m.getExponent().compareTo(result.terms.get(i).getExponent()) == 0)
 			{
-				result.terms.set(i, result.terms.get(i).add(m));
+				temp = result.terms.get(i).add(m);
+				if (temp.getCoefficient().compare(0) == 0)
+				{
+					result.terms.remove(i);
+				}
+				else
+				{
+					result.terms.set(i, temp);
+				}
 				return result;
 			}
 		}
@@ -82,12 +91,21 @@ public class FractionPolynomial
 	public FractionPolynomial subtract(FractionMonomial m)
 	{
 		FractionPolynomial result = new FractionPolynomial(this);
+		FractionMonomial temp;
 
 		for (int i = 0; i < result.terms.size(); i++)
 		{
 			if (m.getExponent().compareTo(result.terms.get(i).getExponent()) == 0)
 			{
-				result.terms.set(i, result.terms.get(i).subtract(m));
+				temp = result.terms.get(i).subtract(m);
+				if (temp.getCoefficient().compare(0) == 0)
+				{
+					result.terms.remove(i);
+				}
+				else
+				{
+					result.terms.set(i, temp);
+				}
 				return result;
 			}
 		}
