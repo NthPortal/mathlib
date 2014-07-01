@@ -72,7 +72,7 @@ public class FractionPolynomial
 		}
 
 		FractionMonomial temp;
-		
+
 		for (int i = 0; i < result.terms.size(); i++)
 		{
 			if (m.getExponent().compareTo(result.terms.get(i).getExponent()) == 0)
@@ -268,7 +268,7 @@ public class FractionPolynomial
 			{
 				return result;
 			}
-			
+
 			firstDividendTerm = dividend.terms.get(0);
 			firstDivisorTerm = divisor.terms.get(0);
 
@@ -410,9 +410,9 @@ public class FractionPolynomial
 	private static FractionPolynomial makeFactor(Fraction constant)
 	{
 		FractionPolynomial factor = new FractionPolynomial();
-		
+
 		factor = factor.add(new FractionMonomial(1, 1));
-		factor = factor.add(new FractionMonomial(constant, new Fraction(0)));
+		factor = factor.add(new FractionMonomial(constant.multiply(-1), new Fraction(0)));
 
 		return factor;
 	}
@@ -429,7 +429,7 @@ public class FractionPolynomial
 
 		while (func.terms.size() != 0)
 		{
-			func.makeIntCoefficients();
+			func.makeIntCoefficients(); // check if necessary
 
 			numerFactors = Algebra.calcFactors(func.terms
 					.get(func.terms.size() - 1).getCoefficient().toInt());
@@ -441,21 +441,26 @@ public class FractionPolynomial
 
 			success = false;
 
-			doubleLoop: for (int i = 0; i < numerFactors.size(); i++)
+			loop: for (int i = 0; i < numerFactors.size(); i++)
 			{
 				for (int j = 0; j < denomFactors.size(); j++)
 				{
 					possibleRoot = new Fraction(numerFactors.get(i),
 							denomFactors.get(j));
-					
+
 					for (int neg = 0; neg <= 1; neg++)
 					{
-						if (func.eval(possibleRoot.multiply(-1 * neg)).compare(0) == 0)
+						if (neg == 1)
+						{
+							possibleRoot = possibleRoot.multiply(-1);
+						}
+						
+						if (func.eval(possibleRoot).compare(0) == 0)
 						{
 							roots.add(possibleRoot);
 							func = func.divide(makeFactor(possibleRoot))[0];
 							success = true;
-							break doubleLoop;
+							break loop;
 						}
 					}
 				}
@@ -487,7 +492,7 @@ public class FractionPolynomial
 			System.out.print(0);
 			return;
 		}
-		
+
 		for (int i = 0; i < size; i++)
 		{
 			this.terms.get(i).print();
@@ -507,7 +512,7 @@ public class FractionPolynomial
 			System.out.println(0);
 			return;
 		}
-		
+
 		for (int i = 0; i < size; i++)
 		{
 			this.terms.get(i).print();
@@ -524,16 +529,13 @@ public class FractionPolynomial
 	{
 		FractionPolynomial factorTest = new FractionPolynomial();
 		ArrayList<Fraction> roots;
-		
+
 		factorTest = factorTest.add(makeFactor(new Fraction(4)));
 
 		factorTest = factorTest.multiply(makeFactor(new Fraction(6)));
 		factorTest = factorTest.multiply(makeFactor(new Fraction(-2)));
 		factorTest = factorTest.multiply(makeFactor(new Fraction(3)));
 
-		factorTest.println();
-
-		factorTest = factorTest.divide(2);
 		factorTest.println();
 
 		roots = factorTest.calcRootsRational();
