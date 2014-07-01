@@ -45,6 +45,17 @@ public class Fraction implements Comparable<Fraction>
 		return this.denom;
 	}
 
+	public int toInt() throws NonIntFractionException
+	{
+		if (this.denom != 1)
+		{
+			throw new NonIntFractionException(
+					"Cannot convert Fraction with non-'1' denominator to int.");
+		}
+		
+		return this.numer;
+	}
+
 	private void reduce()
 	{
 		int gcf = Algebra.gcf(this.numer, this.denom);
