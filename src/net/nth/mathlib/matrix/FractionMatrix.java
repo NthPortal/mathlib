@@ -92,7 +92,7 @@ public class FractionMatrix
 
 	public Fraction getSpot(int row, int col)
 	{
-		return this.matrix[row][col];
+		return new Fraction(this.matrix[row][col]);
 	}
 
 	public void setSpot(int row, int col, Fraction value)
