@@ -4,7 +4,7 @@ import net.nth.mathlib.fraction.Fraction;
 
 public class FractionMonomial implements Comparable<FractionMonomial>
 {
-	private static final char VAR_SYMBOL = 'x';
+	private static final String VAR_SYMBOL = "x";
 
 	private Fraction coefficient;
 	private Fraction exponent;
@@ -58,27 +58,27 @@ public class FractionMonomial implements Comparable<FractionMonomial>
 	public FractionMonomial add(FractionMonomial m)
 			throws DifferentOrderMonomialException
 	{
-		if (this.exponent != m.exponent)
+		if (this.exponent.compareTo(m.exponent) != 0)
 		{
 			throw new DifferentOrderMonomialException(
 					"Cannot add monomials of different orders.");
 		}
 
-		return new FractionMonomial(this.exponent,
-				this.coefficient.add(m.coefficient));
+		return new FractionMonomial(this.coefficient.add(m.coefficient),
+				this.exponent);
 	}
 
 	public FractionMonomial subtract(FractionMonomial m)
 			throws DifferentOrderMonomialException
 	{
-		if (this.exponent != m.exponent)
+		if (this.exponent.compareTo(m.exponent) != 0)
 		{
 			throw new DifferentOrderMonomialException(
 					"Cannot subtract monomials of different orders.");
 		}
 
-		return new FractionMonomial(this.exponent,
-				this.coefficient.subtract(m.coefficient));
+		return new FractionMonomial(this.coefficient.subtract(m.coefficient),
+				this.exponent);
 	}
 
 	public FractionMonomial multiply(FractionMonomial m)

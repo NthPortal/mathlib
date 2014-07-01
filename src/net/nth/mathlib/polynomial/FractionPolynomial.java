@@ -78,6 +78,7 @@ public class FractionPolynomial
 		}
 		// Else
 		result.terms.add(m);
+		result.order();
 		return result;
 	}
 
@@ -117,6 +118,7 @@ public class FractionPolynomial
 		// Else
 		m = m.multiply(-1);
 		result.terms.add(m);
+		result.order();
 		return result;
 	}
 
@@ -220,17 +222,46 @@ public class FractionPolynomial
 	}
 
 	// Returns array of 2 FractionPolynomials: quotient then remainder
-	public FractionPolynomial[] divideBy(FractionPolynomial p)
+	public FractionPolynomial[] divideBy(FractionPolynomial divisor)
 	{
 		FractionPolynomial[] result = new FractionPolynomial[2];
 		result[0] = new FractionPolynomial();
 		result[1] = new FractionPolynomial();
-		FractionPolynomial temp = new FractionPolynomial();
 
-		this.order();
-		p.order();
+		// Check for divisor or dividend being empty polynomial (equivalent to
+		// 0)
+		if (divisor.terms.size() == 0)
+		{
+			throw new ZeroDivisionException(
+					"Cannot divide polynomial by a polynomial with value of 0.");
+		}
+		else if (this.terms.size() == 0)
+		{
+			return result;
+		}
 
-		return result;
+		FractionPolynomial dividend = new FractionPolynomial(this);
+		FractionMonomial firstDividendTerm;
+		FractionMonomial firstDivisorTerm;
+		FractionMonomial temp = new FractionMonomial();
+
+		while (true)
+		{
+			firstDividendTerm = dividend.terms.get(0);
+			firstDivisorTerm = divisor.terms.get(0);
+
+			// Check if dividing by higher order term
+			if (firstDividendTerm.compareTo(firstDivisorTerm) == -1)
+			{
+				result[1] = new FractionPolynomial(dividend);
+				return result;
+			}
+
+			temp = firstDividendTerm.divideBy(firstDivisorTerm);
+			result[0].terms.add(temp);
+
+			dividend = dividend.subtract(divisor.multiply(temp));
+		}
 	}
 
 	public Fraction eval(int value)
@@ -375,22 +406,34 @@ public class FractionPolynomial
 
 		System.out.println();
 	}
-	
+
 	public static void main(String[] args)
 	{
-		FractionPolynomial test = new FractionPolynomial();
-		test.println();
-		
-		test.add(new FractionMonomial(2,2));
-		test.println();
-		
-		test.add(new FractionMonomial(new Fraction(1,2), new Fraction(3)));
-		test.println();
-		
-		test.add(new FractionMonomial(new Fraction(1,2), new Fraction(5,2)));
-		test.println();
-		
-		test.order();
-		test.println();
+		FractionPolynomial dividend = new FractionPolynomial();
+		FractionPolynomial divisor = new FractionPolynomial();
+
+		dividend = dividend.add(new FractionMonomial(4, 5));
+		dividend = dividend.add(new FractionMonomial(-3, 4));
+		dividend = dividend.add(new FractionMonomial(1, 3));
+		dividend = dividend.add(new FractionMonomial(-1, 1));
+		dividend = dividend.add(new FractionMonomial(6, 0));
+
+		divisor = divisor.add(new FractionMonomial(2, 2));
+		divisor = divisor.add(new FractionMonomial(-1, 1));
+		divisor = divisor.add(new FractionMonomial(3, 0));
+
+		System.out.print("Dividend: ");
+		dividend.println();
+
+		System.out.print("Divisor: ");
+		divisor.println();
+
+		FractionPolynomial[] result = dividend.divideBy(divisor);
+
+		System.out.print("Quotient: ");
+		result[0].println();
+
+		System.out.print("Remainder: ");
+		result[1].println();
 	}
 }

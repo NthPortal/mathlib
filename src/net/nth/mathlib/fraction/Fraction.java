@@ -157,7 +157,7 @@ public class Fraction implements Comparable<Fraction>
 	{
 		if (scalar == 0)
 		{
-			throw new ZeroDenomException("Can't divide by 0.");
+			throw new ZeroDenomException("Cannot divide by 0.");
 		}
 
 		Fraction result = new Fraction(this.numer, (this.denom * scalar));

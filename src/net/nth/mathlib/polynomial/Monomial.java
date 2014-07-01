@@ -2,7 +2,7 @@ package net.nth.mathlib.polynomial;
 
 public class Monomial implements Comparable<Monomial>
 {
-	private static final char VAR_SYMBOL = 'x';
+	private static final String VAR_SYMBOL = "x";
 
 	private double coefficient;
 	private double exponent;
@@ -14,6 +14,7 @@ public class Monomial implements Comparable<Monomial>
 	public Monomial(double coefficient, double exponent)
 	{
 		this.coefficient = coefficient;
+		
 		if (coefficient == 0)
 		{
 			this.exponent = 0;
@@ -48,7 +49,7 @@ public class Monomial implements Comparable<Monomial>
 					"Cannot add monomials of different orders.");
 		}
 
-		return new Monomial(this.exponent, (this.coefficient + m.coefficient));
+		return new Monomial((this.coefficient + m.coefficient), this.exponent);
 	}
 
 	public Monomial subtract(Monomial m) throws DifferentOrderMonomialException
@@ -59,7 +60,7 @@ public class Monomial implements Comparable<Monomial>
 					"Cannot subtract monomials of different orders.");
 		}
 
-		return new Monomial(this.exponent, (this.coefficient - m.coefficient));
+		return new Monomial((this.coefficient - m.coefficient), this.exponent);
 	}
 
 	public Monomial multiply(Monomial m)

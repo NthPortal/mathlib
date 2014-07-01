@@ -73,6 +73,7 @@ public class Polynomial
 		}
 		// Else
 		result.terms.add(m);
+		result.order();
 		return result;
 	}
 
@@ -112,6 +113,7 @@ public class Polynomial
 		// Else
 		m = m.multiply(-1);
 		result.terms.add(m);
+		result.order();
 		return result;
 	}
 
@@ -188,6 +190,49 @@ public class Polynomial
 		}
 
 		return result;
+	}
+	
+	// Returns array of 2 FractionPolynomials: quotient then remainder
+	public Polynomial[] divideBy(Polynomial divisor)
+	{
+		Polynomial[] result = new Polynomial[2];
+		result[0] = new Polynomial();
+		result[1] = new Polynomial();
+
+		// Check for divisor or dividend being empty polynomial (equivalent to
+		// 0)
+		if (divisor.terms.size() == 0)
+		{
+			throw new ZeroDivisionException(
+					"Cannot divide polynomial by a polynomial with value of 0.");
+		}
+		else if (this.terms.size() == 0)
+		{
+			return result;
+		}
+
+		Polynomial dividend = new Polynomial(this);
+		Monomial firstDividendTerm;
+		Monomial firstDivisorTerm;
+		Monomial temp = new Monomial();
+
+		while (true)
+		{
+			firstDividendTerm = dividend.terms.get(0);
+			firstDivisorTerm = divisor.terms.get(0);
+
+			// Check if dividing by higher order term
+			if (firstDividendTerm.compareTo(firstDivisorTerm) == -1)
+			{
+				result[1] = new Polynomial(dividend);
+				return result;
+			}
+
+			temp = firstDividendTerm.divideBy(firstDivisorTerm);
+			result[0].terms.add(temp);
+
+			dividend = dividend.subtract(divisor.multiply(temp));
+		}
 	}
 
 	public double eval(double value)
@@ -293,5 +338,35 @@ public class Polynomial
 		}
 
 		System.out.println();
+	}
+	
+	public static void main(String[] args)
+	{
+		Polynomial dividend = new Polynomial();
+		Polynomial divisor = new Polynomial();
+
+		dividend = dividend.add(new Monomial(4, 5));
+		dividend = dividend.add(new Monomial(-3, 4));
+		dividend = dividend.add(new Monomial(1, 3));
+		dividend = dividend.add(new Monomial(-1, 1));
+		dividend = dividend.add(new Monomial(6, 0));
+
+		divisor = divisor.add(new Monomial(2, 2));
+		divisor = divisor.add(new Monomial(-1, 1));
+		divisor = divisor.add(new Monomial(3, 0));
+
+		System.out.print("Dividend: ");
+		dividend.println();
+
+		System.out.print("Divisor: ");
+		divisor.println();
+
+		Polynomial[] result = dividend.divideBy(divisor);
+
+		System.out.print("Quotient: ");
+		result[0].println();
+
+		System.out.print("Remainder: ");
+		result[1].println();
 	}
 }
