@@ -5,6 +5,7 @@ import java.util.Collections;
 
 import net.nth.mathlib.fraction.Fraction;
 import net.nth.mathlib.util.Algebra;
+import net.nth.mathlib.util.ExtremumType;
 import net.nth.mathlib.util.FractionExtremum;
 
 public class FractionPolynomial
@@ -18,8 +19,11 @@ public class FractionPolynomial
 
 	public FractionPolynomial(ArrayList<FractionMonomial> monomials)
 	{
-		this.terms = monomials;
-		this.reduce();
+		this.terms = new ArrayList<FractionMonomial>();
+		for (int i = 0; i < monomials.size(); i++)
+		{
+			this.add(new FractionMonomial(monomials.get(i)));
+		}
 	}
 
 	public FractionPolynomial(FractionPolynomial p)
@@ -412,7 +416,8 @@ public class FractionPolynomial
 		FractionPolynomial factor = new FractionPolynomial();
 
 		factor = factor.add(new FractionMonomial(1, 1));
-		factor = factor.add(new FractionMonomial(constant.multiply(-1), new Fraction(0)));
+		factor = factor.add(new FractionMonomial(constant.multiply(-1),
+				new Fraction(0)));
 
 		return factor;
 	}
@@ -456,7 +461,7 @@ public class FractionPolynomial
 						{
 							possibleRoot = possibleRoot.multiply(-1);
 						}
-						
+
 						if (func.eval(possibleRoot).compare(0) == 0)
 						{
 							roots.add(possibleRoot);
@@ -474,8 +479,30 @@ public class FractionPolynomial
 	public ArrayList<FractionExtremum> calcExtrema()
 	{
 		ArrayList<FractionExtremum> extrema = new ArrayList<FractionExtremum>();
+		Fraction secondDerivEval;
+		Fraction possibleExtremum;
 
-		int notDone; // METHOD NOT DONE!!
+		FractionPolynomial firstDeriv = this.derivative();
+		FractionPolynomial secondDeriv = firstDeriv.derivative();
+
+		ArrayList<Fraction> possibleExtrema = firstDeriv.calcRootsRational();
+
+		for (int i = 0; i < possibleExtrema.size(); i++)
+		{
+			possibleExtremum = new Fraction(possibleExtrema.get(i));
+			secondDerivEval = secondDeriv.eval(possibleExtremum);
+
+			if (secondDerivEval.compare(0) == -1)
+			{
+				extrema.add(new FractionExtremum(ExtremumType.MAX,
+						possibleExtremum));
+			}
+			else if (secondDerivEval.compare(0) == 1)
+			{
+				extrema.add(new FractionExtremum(ExtremumType.MIN,
+						possibleExtremum));
+			}
+		}
 
 		return extrema;
 	}
