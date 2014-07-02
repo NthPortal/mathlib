@@ -44,7 +44,7 @@ public class Fraction implements Comparable<Fraction>
 	{
 		return this.denom;
 	}
-	
+
 	public boolean testIfInt()
 	{
 		if (this.denom == 1)
@@ -62,8 +62,13 @@ public class Fraction implements Comparable<Fraction>
 			throw new NonIntFractionException(
 					"Cannot convert Fraction with non-'1' denominator to int.");
 		}
-		
+
 		return this.numer;
+	}
+	
+	public double toDouble()
+	{
+		return (this.numer / (double) this.denom);
 	}
 
 	private void reduce()

@@ -15,14 +15,14 @@ public class FractionMonomial implements Comparable<FractionMonomial>
 
 	public FractionMonomial(Fraction coefficient, Fraction exponent)
 	{
-		this.coefficient = coefficient;
+		this.coefficient = new Fraction(coefficient);
 		if (coefficient.compare(0) == 0)
 		{
 			this.exponent = new Fraction(0);
 		}
 		else
 		{
-			this.exponent = exponent;
+			this.exponent = new Fraction(exponent);
 		}
 	}
 

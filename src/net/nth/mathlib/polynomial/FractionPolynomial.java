@@ -420,16 +420,18 @@ public class FractionPolynomial
 	// Only finds rational roots
 	public ArrayList<Fraction> calcRootsRational()
 	{
+		// Declare variables
 		ArrayList<Fraction> roots = new ArrayList<Fraction>();
 		FractionPolynomial func = new FractionPolynomial(this);
 		ArrayList<Integer> numerFactors;
 		ArrayList<Integer> denomFactors;
 		Fraction possibleRoot;
-		boolean success;
+		boolean success = true;
 
-		while (func.terms.size() != 0)
+		// Loop until have all rational roots
+		while ((func.terms.size() != 0) && (success))
 		{
-			func.makeIntCoefficients(); // check if necessary
+			func.makeIntCoefficients(); // CHECK IF NECESSARY
 
 			numerFactors = Algebra.calcFactors(func.terms
 					.get(func.terms.size() - 1).getCoefficient().toInt());
@@ -465,12 +467,7 @@ public class FractionPolynomial
 					}
 				}
 			}
-			if (!success)
-			{
-				break;
-			}
 		}
-
 		return roots;
 	}
 
