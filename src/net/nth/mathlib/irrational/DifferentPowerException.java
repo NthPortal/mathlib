@@ -1,4 +1,4 @@
-package net.nth.mathlib.number;
+package net.nth.mathlib.irrational;
 
 @SuppressWarnings("serial")
 public class DifferentPowerException extends IllegalArgumentException
