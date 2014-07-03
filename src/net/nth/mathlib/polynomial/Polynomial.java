@@ -14,8 +14,11 @@ public class Polynomial
 
 	public Polynomial(ArrayList<Monomial> monomials)
 	{
-		this.terms = monomials;
-		this.reduce();
+		this.terms = new ArrayList<Monomial>();
+		for (int i = 0; i < monomials.size(); i++)
+		{
+			this.add(new Monomial(monomials.get(i)));
+		}
 	}
 
 	public Polynomial(Polynomial p)
@@ -37,6 +40,7 @@ public class Polynomial
 		return this.terms.size();
 	}
 
+	/*
 	private void reduce()
 	{
 		Polynomial temp = new Polynomial(this);
@@ -51,6 +55,7 @@ public class Polynomial
 
 		this.terms = temp2.terms;
 	}
+	*/
 
 	private void order()
 	{
@@ -223,14 +228,10 @@ public class Polynomial
 
 		// Check for divisor or dividend being empty polynomial (equivalent to
 		// 0)
-		if (divisor.terms.size() == 0)
+		if (divisor.terms.isEmpty())
 		{
 			throw new ZeroDivisionException(
 					"Cannot divide polynomial by a polynomial with value of 0.");
-		}
-		else if (this.terms.size() == 0)
-		{
-			return result;
 		}
 
 		Polynomial dividend = new Polynomial(this);
@@ -240,6 +241,11 @@ public class Polynomial
 
 		while (true)
 		{
+			if (dividend.terms.isEmpty())
+			{
+				return result;
+			}
+			
 			firstDividendTerm = dividend.terms.get(0);
 			firstDivisorTerm = divisor.terms.get(0);
 

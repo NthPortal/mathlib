@@ -1,17 +1,17 @@
 package net.nth.mathlib.polynomial;
 
-public class Monomial implements Comparable<Monomial>
+class Monomial implements Comparable<Monomial>
 {
 	private static final String VAR_SYMBOL = "x";
 
 	private double coefficient;
-	private double exponent;
+	private int exponent;
 
 	public Monomial()
 	{
 	}
 
-	public Monomial(double coefficient, double exponent)
+	public Monomial(double coefficient, int exponent)
 	{
 		this.coefficient = coefficient;
 		

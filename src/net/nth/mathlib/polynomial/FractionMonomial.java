@@ -2,27 +2,27 @@ package net.nth.mathlib.polynomial;
 
 import net.nth.mathlib.fraction.Fraction;
 
-public class FractionMonomial implements Comparable<FractionMonomial>
+class FractionMonomial implements Comparable<FractionMonomial>
 {
 	private static final String VAR_SYMBOL = "x";
 
 	private Fraction coefficient;
-	private Fraction exponent;
+	private int exponent;
 
 	public FractionMonomial()
 	{
 	}
 
-	public FractionMonomial(Fraction coefficient, Fraction exponent)
+	public FractionMonomial(Fraction coefficient, int exponent)
 	{
 		this.coefficient = new Fraction(coefficient);
 		if (coefficient.compare(0) == 0)
 		{
-			this.exponent = new Fraction(0);
+			this.exponent = 0;
 		}
 		else
 		{
-			this.exponent = new Fraction(exponent);
+			this.exponent = exponent;
 		}
 	}
 
@@ -31,18 +31,18 @@ public class FractionMonomial implements Comparable<FractionMonomial>
 		this.coefficient = new Fraction(coefficient);
 		if (coefficient == 0)
 		{
-			this.exponent = new Fraction(0);
+			this.exponent = 0;
 		}
 		else
 		{
-			this.exponent = new Fraction(exponent);
+			this.exponent = exponent;
 		}
 	}
 
 	public FractionMonomial(FractionMonomial m)
 	{
 		this.coefficient = new Fraction(m.coefficient);
-		this.exponent = new Fraction(m.exponent);
+		this.exponent = m.exponent;
 	}
 
 	public Fraction getCoefficient()
@@ -50,15 +50,15 @@ public class FractionMonomial implements Comparable<FractionMonomial>
 		return new Fraction(this.coefficient);
 	}
 
-	public Fraction getExponent()
+	public int getExponent()
 	{
-		return new Fraction(this.exponent);
+		return this.exponent;
 	}
 
 	public FractionMonomial add(FractionMonomial m)
 			throws DifferentOrderMonomialException
 	{
-		if (this.exponent.compareTo(m.exponent) != 0)
+		if (this.exponent != m.exponent)
 		{
 			throw new DifferentOrderMonomialException(
 					"Cannot add monomials of different orders.");
@@ -71,7 +71,7 @@ public class FractionMonomial implements Comparable<FractionMonomial>
 	public FractionMonomial subtract(FractionMonomial m)
 			throws DifferentOrderMonomialException
 	{
-		if (this.exponent.compareTo(m.exponent) != 0)
+		if (this.exponent != m.exponent)
 		{
 			throw new DifferentOrderMonomialException(
 					"Cannot subtract monomials of different orders.");
@@ -84,7 +84,7 @@ public class FractionMonomial implements Comparable<FractionMonomial>
 	public FractionMonomial multiply(FractionMonomial m)
 	{
 		return new FractionMonomial(this.coefficient.multiply(m.coefficient),
-				this.exponent.add(m.exponent));
+				(this.exponent + m.exponent));
 	}
 
 	public FractionMonomial multiply(Fraction frac)
@@ -102,7 +102,7 @@ public class FractionMonomial implements Comparable<FractionMonomial>
 	public FractionMonomial divide(FractionMonomial m)
 	{
 		return new FractionMonomial(this.coefficient.divide(m.coefficient),
-				this.exponent.subtract(m.exponent));
+				(this.exponent - m.exponent));
 	}
 
 	public FractionMonomial divide(Fraction frac)
@@ -119,7 +119,16 @@ public class FractionMonomial implements Comparable<FractionMonomial>
 
 	public int compareTo(FractionMonomial m)
 	{
-		return this.exponent.compareTo(m.exponent);
+		if (this.exponent < m.exponent)
+		{
+			return -1;
+		}
+		else if (this.exponent == m.exponent)
+		{
+			return 0;
+		}
+		// Else
+		return 1;
 	}
 
 	public Fraction eval(int value)
@@ -136,13 +145,13 @@ public class FractionMonomial implements Comparable<FractionMonomial>
 	public FractionMonomial derivative()
 	{
 		return new FractionMonomial(this.coefficient.multiply(this.exponent),
-				this.exponent.subtract(1));
+				(this.exponent - 1));
 	}
 
 	public FractionMonomial antiDerivative()
 	{
-		return new FractionMonomial(this.coefficient.divide(this.exponent
-				.add(1)), this.exponent.add(1));
+		return new FractionMonomial(this.coefficient.divide(this.exponent + 1),
+				(this.exponent + 1));
 	}
 
 	public Fraction integral(int lowerBound, int upperBound)
@@ -160,16 +169,12 @@ public class FractionMonomial implements Comparable<FractionMonomial>
 	public void print()
 	{
 		this.coefficient.print();
-		System.out.print(VAR_SYMBOL + "^(");
-		this.exponent.print();
-		System.out.print(")");
+		System.out.print(VAR_SYMBOL + "^(" + this.exponent + ")");
 	}
 
 	public void println()
 	{
 		this.coefficient.print();
-		System.out.print(VAR_SYMBOL + "^(");
-		this.exponent.print();
-		System.out.println(")");
+		System.out.println(VAR_SYMBOL + "^(" + this.exponent + ")");
 	}
 }

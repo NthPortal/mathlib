@@ -2,6 +2,8 @@ package net.nth.mathlib.polynomial;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.TreeSet;
 
 import net.nth.mathlib.fraction.Fraction;
 import net.nth.mathlib.util.Algebra;
@@ -11,6 +13,7 @@ import net.nth.mathlib.util.FractionExtremum;
 public class FractionPolynomial
 {
 	private ArrayList<FractionMonomial> terms;
+	private static final int SMALL_INTERVAL_MULTIPLIER = 1000;
 
 	public FractionPolynomial()
 	{
@@ -35,6 +38,20 @@ public class FractionPolynomial
 		}
 	}
 
+	// Creates a FractionPolynomial with one term
+	public FractionPolynomial(int coefficient, int exponent)
+	{
+		this.terms = new ArrayList<FractionMonomial>();
+		this.terms.add(new FractionMonomial(coefficient, exponent));
+	}
+
+	// Creates a FractionPolynomial with one term
+	public FractionPolynomial(Fraction coefficient, int exponent)
+	{
+		this.terms = new ArrayList<FractionMonomial>();
+		this.terms.add(new FractionMonomial(coefficient, exponent));
+	}
+
 	public FractionMonomial getTerm(int index)
 	{
 		return new FractionMonomial(terms.get(index));
@@ -45,20 +62,18 @@ public class FractionPolynomial
 		return this.terms.size();
 	}
 
-	private void reduce()
-	{
-		FractionPolynomial temp = new FractionPolynomial(this);
-		FractionPolynomial temp2 = new FractionPolynomial();
-
-		this.terms.clear();
-
-		for (int i = 0; i < temp.terms.size(); i++)
-		{
-			temp2 = temp2.add(temp.terms.get(i));
-		}
-
-		this.terms = temp2.terms;
-	}
+	/*
+	 * private void reduce() { FractionPolynomial temp = new
+	 * FractionPolynomial(this); FractionPolynomial temp2 = new
+	 * FractionPolynomial();
+	 * 
+	 * this.terms.clear();
+	 * 
+	 * for (int i = 0; i < temp.terms.size(); i++) { temp2 =
+	 * temp2.add(temp.terms.get(i)); }
+	 * 
+	 * this.terms = temp2.terms; }
+	 */
 
 	private void order()
 	{
@@ -79,7 +94,7 @@ public class FractionPolynomial
 
 		for (int i = 0; i < result.terms.size(); i++)
 		{
-			if (m.getExponent().compareTo(result.terms.get(i).getExponent()) == 0)
+			if (m.getExponent() == result.terms.get(i).getExponent())
 			{
 				temp = result.terms.get(i).add(m);
 				if (temp.getCoefficient().compare(0) == 0)
@@ -126,7 +141,7 @@ public class FractionPolynomial
 
 		for (int i = 0; i < result.terms.size(); i++)
 		{
-			if (m.getExponent().compareTo(result.terms.get(i).getExponent()) == 0)
+			if (m.getExponent() == result.terms.get(i).getExponent())
 			{
 				temp = result.terms.get(i).subtract(m);
 				if (temp.getCoefficient().compare(0) == 0)
@@ -255,7 +270,7 @@ public class FractionPolynomial
 
 		// Check for divisor or dividend being empty polynomial (equivalent to
 		// 0)
-		if (divisor.terms.size() == 0)
+		if (divisor.terms.isEmpty())
 		{
 			throw new ZeroDivisionException(
 					"Cannot divide polynomial by a polynomial with value of 0.");
@@ -268,7 +283,7 @@ public class FractionPolynomial
 
 		while (true)
 		{
-			if (dividend.terms.size() == 0)
+			if (dividend.terms.isEmpty())
 			{
 				return result;
 			}
@@ -351,8 +366,7 @@ public class FractionPolynomial
 		{
 			result.terms.add(this.terms.get(i).antiDerivative());
 		}
-		result.terms.add(new FractionMonomial(new Fraction(constant),
-				new Fraction(0)));
+		result.terms.add(new FractionMonomial(new Fraction(constant), 0));
 
 		return result;
 	}
@@ -365,7 +379,7 @@ public class FractionPolynomial
 		{
 			result.terms.add(this.terms.get(i).antiDerivative());
 		}
-		result.terms.add(new FractionMonomial(constant, new Fraction(0)));
+		result.terms.add(new FractionMonomial(constant, 0));
 
 		return result;
 	}
@@ -416,8 +430,7 @@ public class FractionPolynomial
 		FractionPolynomial factor = new FractionPolynomial();
 
 		factor = factor.add(new FractionMonomial(1, 1));
-		factor = factor.add(new FractionMonomial(constant.multiply(-1),
-				new Fraction(0)));
+		factor = factor.add(new FractionMonomial(constant.multiply(-1), 0));
 
 		return factor;
 	}
@@ -438,13 +451,18 @@ public class FractionPolynomial
 		{
 			func.makeIntCoefficients(); // CHECK IF NECESSARY
 
-			numerFactors = Algebra.calcFactors(func.terms
-					.get(func.terms.size() - 1).getCoefficient().toInt());
+			if (func.terms.get(func.terms.size() - 1).getExponent() == 0)
+			{
+				numerFactors = new ArrayList<Integer>();
+				numerFactors.add(0);
+			}
+			else
+			{
+				numerFactors = Algebra.calcFactors(func.terms
+						.get(func.terms.size() - 1).getCoefficient().toInt());
+			}
 			denomFactors = Algebra.calcFactors(func.terms.get(0)
 					.getCoefficient().toInt());
-
-			numerFactors.add(1);
-			denomFactors.add(1);
 
 			success = false;
 
@@ -485,13 +503,16 @@ public class FractionPolynomial
 		FractionPolynomial firstDeriv = this.derivative();
 		FractionPolynomial secondDeriv = firstDeriv.derivative();
 
-		ArrayList<Fraction> possibleExtrema = firstDeriv.calcRootsRational();
+		TreeSet<Fraction> possibleExtrema = new TreeSet<Fraction>(
+				firstDeriv.calcRootsRational());
 
-		for (int i = 0; i < possibleExtrema.size(); i++)
+		Iterator<Fraction> extremaIter = possibleExtrema.iterator();
+		while (extremaIter.hasNext())
 		{
-			possibleExtremum = new Fraction(possibleExtrema.get(i));
+			possibleExtremum = new Fraction(extremaIter.next());
 			secondDerivEval = secondDeriv.eval(possibleExtremum);
 
+			// Second derivative test
 			if (secondDerivEval.compare(0) == -1)
 			{
 				extrema.add(new FractionExtremum(ExtremumType.MAX,
@@ -501,6 +522,30 @@ public class FractionPolynomial
 			{
 				extrema.add(new FractionExtremum(ExtremumType.MIN,
 						possibleExtremum));
+			}
+			// Else first derivative test
+			else
+			{
+				Fraction smallInterval = new Fraction(1,
+						possibleExtremum.getDenom() * SMALL_INTERVAL_MULTIPLIER);
+				if ((firstDeriv.eval(possibleExtremum.subtract(smallInterval))
+						.compare(0) == -1)
+						&& (firstDeriv
+								.eval(possibleExtremum.add(smallInterval))
+								.compare(0) == 1))
+				{
+					extrema.add(new FractionExtremum(ExtremumType.MIN,
+							possibleExtremum));
+				}
+				else if ((firstDeriv.eval(
+						possibleExtremum.subtract(smallInterval)).compare(0) == 1)
+						&& (firstDeriv
+								.eval(possibleExtremum.add(smallInterval))
+								.compare(0) == -1))
+				{
+					extrema.add(new FractionExtremum(ExtremumType.MAX,
+							possibleExtremum));
+				}
 			}
 		}
 
@@ -551,23 +596,17 @@ public class FractionPolynomial
 
 	public static void main(String[] args)
 	{
-		FractionPolynomial factorTest = new FractionPolynomial();
-		ArrayList<Fraction> roots;
-
-		factorTest = factorTest.add(makeFactor(new Fraction(4)));
-
-		factorTest = factorTest.multiply(makeFactor(new Fraction(6)));
-		factorTest = factorTest.multiply(makeFactor(new Fraction(-2)));
-		factorTest = factorTest.multiply(makeFactor(new Fraction(3)));
+		FractionPolynomial factorTest = new FractionPolynomial(1, 4);
+		ArrayList<FractionExtremum> extrema;
 
 		factorTest.println();
 
-		roots = factorTest.calcRootsRational();
+		extrema = factorTest.calcExtrema();
 
-		int size = roots.size();
+		int size = extrema.size();
 		for (int i = 0; i < size; i++)
 		{
-			roots.get(i).print();
+			extrema.get(i).print();
 
 			if (i != (size - 1))
 			{
