@@ -30,32 +30,39 @@ public class Polynomial
 		}
 	}
 
+	// Creates a Polynomial with one term
+	public Polynomial(double coefficient, int exponent)
+	{
+		if (exponent < 0)
+		{
+			throw new InvalidExponentException();
+		}
+
+		this.terms = new ArrayList<Monomial>();
+		this.terms.add(new Monomial(coefficient, exponent));
+	}
+
 	public Monomial getTerm(int index)
 	{
 		return new Monomial(terms.get(index));
 	}
-	
+
 	public int getSize()
 	{
 		return this.terms.size();
 	}
 
 	/*
-	private void reduce()
-	{
-		Polynomial temp = new Polynomial(this);
-		Polynomial temp2 = new Polynomial();
-
-		this.terms.clear();
-
-		for (int i = 0; i < temp.terms.size(); i++)
-		{
-			temp2 = temp2.add(temp.terms.get(i));
-		}
-
-		this.terms = temp2.terms;
-	}
-	*/
+	 * private void reduce() { Polynomial temp = new Polynomial(this);
+	 * Polynomial temp2 = new Polynomial();
+	 * 
+	 * this.terms.clear();
+	 * 
+	 * for (int i = 0; i < temp.terms.size(); i++) { temp2 =
+	 * temp2.add(temp.terms.get(i)); }
+	 * 
+	 * this.terms = temp2.terms; }
+	 */
 
 	private void order()
 	{
@@ -245,7 +252,7 @@ public class Polynomial
 			{
 				return result;
 			}
-			
+
 			firstDividendTerm = dividend.terms.get(0);
 			firstDivisorTerm = divisor.terms.get(0);
 

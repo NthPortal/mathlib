@@ -17,11 +17,12 @@ class FractionMonomial implements Comparable<FractionMonomial>
 	{
 		if (this.exponent < 0)
 		{
-			throw new InvalidExponentException();
+			throw new InvalidExponentException(
+					"Something went wrong. This shouldn't have been called.");
 		}
-		
+
 		this.coefficient = new Fraction(coefficient);
-		
+
 		if (coefficient.compare(0) == 0)
 		{
 			this.exponent = 0;
@@ -36,11 +37,12 @@ class FractionMonomial implements Comparable<FractionMonomial>
 	{
 		if (this.exponent < 0)
 		{
-			throw new InvalidExponentException();
+			throw new InvalidExponentException(
+					"Something went wrong. This shouldn't have been called.");
 		}
-		
+
 		this.coefficient = new Fraction(coefficient);
-		
+
 		if (coefficient == 0)
 		{
 			this.exponent = 0;

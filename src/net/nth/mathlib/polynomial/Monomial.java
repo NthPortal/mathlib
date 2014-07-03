@@ -15,11 +15,12 @@ class Monomial implements Comparable<Monomial>
 	{
 		if (this.exponent < 0)
 		{
-			throw new InvalidExponentException();
+			throw new InvalidExponentException(
+					"Something went wrong. This shouldn't have been called.");
 		}
-		
+
 		this.coefficient = coefficient;
-		
+
 		if (coefficient == 0)
 		{
 			this.exponent = 0;
@@ -41,7 +42,7 @@ class Monomial implements Comparable<Monomial>
 		return this.coefficient;
 	}
 
-	public double getExponent()
+	public int getExponent()
 	{
 		return this.exponent;
 	}

@@ -41,6 +41,11 @@ public class FractionPolynomial
 	// Creates a FractionPolynomial with one term
 	public FractionPolynomial(int coefficient, int exponent)
 	{
+		if (exponent < 0)
+		{
+			throw new InvalidExponentException();
+		}
+		
 		this.terms = new ArrayList<FractionMonomial>();
 		this.terms.add(new FractionMonomial(coefficient, exponent));
 	}
@@ -48,6 +53,11 @@ public class FractionPolynomial
 	// Creates a FractionPolynomial with one term
 	public FractionPolynomial(Fraction coefficient, int exponent)
 	{
+		if (exponent < 0)
+		{
+			throw new InvalidExponentException();
+		}
+		
 		this.terms = new ArrayList<FractionMonomial>();
 		this.terms.add(new FractionMonomial(coefficient, exponent));
 	}
@@ -198,7 +208,7 @@ public class FractionPolynomial
 		return result;
 	}
 
-	public FractionPolynomial multiply(FractionMonomial m)
+	private FractionPolynomial multiply(FractionMonomial m)
 	{
 		FractionPolynomial result = new FractionPolynomial();
 
@@ -249,7 +259,7 @@ public class FractionPolynomial
 		return result;
 	}
 
-	public FractionPolynomial divide(FractionMonomial m)
+	private FractionPolynomial divide(FractionMonomial m)
 	{
 		FractionPolynomial result = new FractionPolynomial();
 
@@ -451,7 +461,7 @@ public class FractionPolynomial
 		{
 			func.makeIntCoefficients(); // CHECK IF NECESSARY
 
-			if (func.terms.get(func.terms.size() - 1).getExponent() == 0)
+			if (func.terms.get(func.terms.size() - 1).getExponent() != 0)
 			{
 				numerFactors = new ArrayList<Integer>();
 				numerFactors.add(0);
@@ -602,7 +612,7 @@ public class FractionPolynomial
 		factorTest.println();
 
 		extrema = factorTest.calcExtrema();
-
+		
 		int size = extrema.size();
 		for (int i = 0; i < size; i++)
 		{
