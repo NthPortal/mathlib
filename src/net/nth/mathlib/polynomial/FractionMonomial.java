@@ -15,7 +15,13 @@ class FractionMonomial implements Comparable<FractionMonomial>
 
 	public FractionMonomial(Fraction coefficient, int exponent)
 	{
+		if (this.exponent < 0)
+		{
+			throw new InvalidExponentException();
+		}
+		
 		this.coefficient = new Fraction(coefficient);
+		
 		if (coefficient.compare(0) == 0)
 		{
 			this.exponent = 0;
@@ -28,7 +34,13 @@ class FractionMonomial implements Comparable<FractionMonomial>
 
 	public FractionMonomial(int coefficient, int exponent)
 	{
+		if (this.exponent < 0)
+		{
+			throw new InvalidExponentException();
+		}
+		
 		this.coefficient = new Fraction(coefficient);
+		
 		if (coefficient == 0)
 		{
 			this.exponent = 0;

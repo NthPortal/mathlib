@@ -168,7 +168,7 @@ public class Polynomial
 		return result;
 	}
 
-	public Polynomial multiply(Monomial m)
+	private Polynomial multiply(Monomial m)
 	{
 		Polynomial result = new Polynomial();
 
@@ -207,7 +207,7 @@ public class Polynomial
 		return result;
 	}
 
-	public Polynomial divide(Monomial m)
+	private Polynomial divide(Monomial m)
 	{
 		Polynomial result = new Polynomial();
 

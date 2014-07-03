@@ -13,6 +13,11 @@ class Monomial implements Comparable<Monomial>
 
 	public Monomial(double coefficient, int exponent)
 	{
+		if (this.exponent < 0)
+		{
+			throw new InvalidExponentException();
+		}
+		
 		this.coefficient = coefficient;
 		
 		if (coefficient == 0)
