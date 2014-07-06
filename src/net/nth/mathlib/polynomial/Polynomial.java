@@ -214,18 +214,6 @@ public class Polynomial
 		return result;
 	}
 
-	private Polynomial divide(PolyUnit m)
-	{
-		Polynomial result = new Polynomial();
-
-		for (int i = 0; i < this.terms.size(); i++)
-		{
-			result.terms.add(this.terms.get(i).divide(m));
-		}
-
-		return result;
-	}
-
 	// Returns array of 2 FractionPolynomials: quotient then remainder
 	public Polynomial[] divide(Polynomial divisor)
 	{

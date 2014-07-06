@@ -259,18 +259,6 @@ public class FractionPolynomial
 		return result;
 	}
 
-	private FractionPolynomial divide(FracPolyUnit m)
-	{
-		FractionPolynomial result = new FractionPolynomial();
-
-		for (int i = 0; i < this.terms.size(); i++)
-		{
-			result.terms.add(this.terms.get(i).divide(m));
-		}
-
-		return result;
-	}
-
 	// Returns array of 2 FractionPolynomials: quotient then remainder
 	public FractionPolynomial[] divide(FractionPolynomial divisor)
 	{
