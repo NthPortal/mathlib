@@ -45,7 +45,7 @@ public class Fraction implements Comparable<Fraction>
 		return this.denom;
 	}
 
-	public boolean testIfInt()
+	public boolean isInt()
 	{
 		if (this.denom == 1)
 		{
