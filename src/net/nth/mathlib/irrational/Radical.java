@@ -5,31 +5,31 @@ import java.util.ArrayList;
 import net.nth.mathlib.fraction.Fraction;
 import net.nth.mathlib.util.Algebra;
 
-public class Irrational
+public class Radical
 {
 	private int radicand;
 	private Fraction coefficient;
 	private Fraction exponent;
 
-	public Irrational()
+	public Radical()
 	{
 	}
 
-	public Irrational(int whole)
-	{
-		this.radicand = 1;
-		this.coefficient = new Fraction(whole);
-		this.exponent = new Fraction(0);
-	}
-
-	public Irrational(Fraction whole)
+	public Radical(int whole)
 	{
 		this.radicand = 1;
 		this.coefficient = new Fraction(whole);
 		this.exponent = new Fraction(0);
 	}
 
-	public Irrational(int scalar, int radicand, Fraction power)
+	public Radical(Fraction whole)
+	{
+		this.radicand = 1;
+		this.coefficient = new Fraction(whole);
+		this.exponent = new Fraction(0);
+	}
+
+	public Radical(int scalar, int radicand, Fraction power)
 	{
 		this.radicand = radicand;
 		this.coefficient = new Fraction(scalar);
@@ -37,7 +37,7 @@ public class Irrational
 		this.reduce();
 	}
 
-	public Irrational(Fraction scalar, int base, Fraction power)
+	public Radical(Fraction scalar, int base, Fraction power)
 	{
 		this.radicand = base;
 		this.coefficient = new Fraction(scalar);
@@ -45,7 +45,7 @@ public class Irrational
 		this.reduce();
 	}
 
-	public Irrational(Irrational i)
+	public Radical(Radical i)
 	{
 		this.radicand = i.radicand;
 		this.coefficient = new Fraction(i.coefficient);
@@ -134,7 +134,7 @@ public class Irrational
 
 	public static void main(String[] args)
 	{
-		Irrational test = new Irrational(1, 32, new Fraction(1, 3));
+		Radical test = new Radical(1, 32, new Fraction(1, 3));
 		test.println();
 	}
 }

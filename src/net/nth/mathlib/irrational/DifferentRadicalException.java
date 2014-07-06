@@ -1,14 +1,14 @@
 package net.nth.mathlib.irrational;
 
 @SuppressWarnings("serial")
-public class DifferentPowerException extends IllegalArgumentException
+public class DifferentRadicalException extends IllegalArgumentException
 {
-	public DifferentPowerException()
+	public DifferentRadicalException()
 	{
 		super("Operation cannot be performed on numbers with different exponents.");
 	}
 	
-	public DifferentPowerException(String errMsg)
+	public DifferentRadicalException(String errMsg)
 	{
 		super(errMsg);
 	}
