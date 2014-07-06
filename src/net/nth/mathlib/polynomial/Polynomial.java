@@ -5,28 +5,28 @@ import java.util.Collections;
 
 public class Polynomial
 {
-	private ArrayList<Monomial> terms;
+	private ArrayList<PolyUnit> terms;
 
 	public Polynomial()
 	{
-		this.terms = new ArrayList<Monomial>();
+		this.terms = new ArrayList<PolyUnit>();
 	}
 
-	public Polynomial(ArrayList<Monomial> monomials)
+	public Polynomial(ArrayList<PolyUnit> monomials)
 	{
-		this.terms = new ArrayList<Monomial>();
+		this.terms = new ArrayList<PolyUnit>();
 		for (int i = 0; i < monomials.size(); i++)
 		{
-			this.add(new Monomial(monomials.get(i)));
+			this.add(new PolyUnit(monomials.get(i)));
 		}
 	}
 
 	public Polynomial(Polynomial p)
 	{
-		this.terms = new ArrayList<Monomial>();
+		this.terms = new ArrayList<PolyUnit>();
 		for (int i = 0; i < p.terms.size(); i++)
 		{
-			this.terms.add(new Monomial(p.terms.get(i)));
+			this.terms.add(new PolyUnit(p.terms.get(i)));
 		}
 	}
 
@@ -38,13 +38,13 @@ public class Polynomial
 			throw new InvalidExponentException();
 		}
 
-		this.terms = new ArrayList<Monomial>();
-		this.terms.add(new Monomial(coefficient, exponent));
+		this.terms = new ArrayList<PolyUnit>();
+		this.terms.add(new PolyUnit(coefficient, exponent));
 	}
 
-	public Monomial getTerm(int index)
+	public PolyUnit getTerm(int index)
 	{
-		return new Monomial(terms.get(index));
+		return new PolyUnit(terms.get(index));
 	}
 
 	public int getSize()
@@ -69,7 +69,7 @@ public class Polynomial
 		Collections.sort(this.terms, Collections.reverseOrder());
 	}
 
-	public Polynomial add(Monomial m)
+	public Polynomial add(PolyUnit m)
 	{
 		Polynomial result = new Polynomial(this);
 
@@ -79,7 +79,7 @@ public class Polynomial
 			return result;
 		}
 
-		Monomial temp;
+		PolyUnit temp;
 
 		for (int i = 0; i < result.terms.size(); i++)
 		{
@@ -115,7 +115,7 @@ public class Polynomial
 		return result;
 	}
 
-	public Polynomial subtract(Monomial m)
+	public Polynomial subtract(PolyUnit m)
 	{
 		Polynomial result = new Polynomial(this);
 
@@ -126,7 +126,7 @@ public class Polynomial
 			return result;
 		}
 
-		Monomial temp;
+		PolyUnit temp;
 
 		for (int i = 0; i < result.terms.size(); i++)
 		{
@@ -175,7 +175,7 @@ public class Polynomial
 		return result;
 	}
 
-	private Polynomial multiply(Monomial m)
+	private Polynomial multiply(PolyUnit m)
 	{
 		Polynomial result = new Polynomial();
 
@@ -214,7 +214,7 @@ public class Polynomial
 		return result;
 	}
 
-	private Polynomial divide(Monomial m)
+	private Polynomial divide(PolyUnit m)
 	{
 		Polynomial result = new Polynomial();
 
@@ -242,9 +242,9 @@ public class Polynomial
 		}
 
 		Polynomial dividend = new Polynomial(this);
-		Monomial firstDividendTerm;
-		Monomial firstDivisorTerm;
-		Monomial temp = new Monomial();
+		PolyUnit firstDividendTerm;
+		PolyUnit firstDivisorTerm;
+		PolyUnit temp = new PolyUnit();
 
 		while (true)
 		{
@@ -285,7 +285,7 @@ public class Polynomial
 	public Polynomial derivative()
 	{
 		Polynomial result = new Polynomial();
-		Monomial temp;
+		PolyUnit temp;
 
 		for (int i = 0; i < this.terms.size(); i++)
 		{
@@ -319,7 +319,7 @@ public class Polynomial
 		{
 			result.terms.add(this.terms.get(i).antiDerivative());
 		}
-		result.terms.add(new Monomial(constant, 0));
+		result.terms.add(new PolyUnit(constant, 0));
 
 		return result;
 	}
@@ -371,15 +371,15 @@ public class Polynomial
 		Polynomial dividend = new Polynomial();
 		Polynomial divisor = new Polynomial();
 
-		dividend = dividend.add(new Monomial(4, 5));
-		dividend = dividend.add(new Monomial(-3, 4));
-		dividend = dividend.add(new Monomial(1, 3));
-		dividend = dividend.add(new Monomial(-1, 1));
-		dividend = dividend.add(new Monomial(6, 0));
+		dividend = dividend.add(new PolyUnit(4, 5));
+		dividend = dividend.add(new PolyUnit(-3, 4));
+		dividend = dividend.add(new PolyUnit(1, 3));
+		dividend = dividend.add(new PolyUnit(-1, 1));
+		dividend = dividend.add(new PolyUnit(6, 0));
 
-		divisor = divisor.add(new Monomial(2, 2));
-		divisor = divisor.add(new Monomial(-1, 1));
-		divisor = divisor.add(new Monomial(3, 0));
+		divisor = divisor.add(new PolyUnit(2, 2));
+		divisor = divisor.add(new PolyUnit(-1, 1));
+		divisor = divisor.add(new PolyUnit(3, 0));
 
 		System.out.print("Dividend: ");
 		dividend.println();

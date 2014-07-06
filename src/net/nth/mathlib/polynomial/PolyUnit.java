@@ -1,17 +1,17 @@
 package net.nth.mathlib.polynomial;
 
-class Monomial implements Comparable<Monomial>
+class PolyUnit implements Comparable<PolyUnit>
 {
 	private static final String VAR_SYMBOL = "x";
 
 	private double coefficient;
 	private int exponent;
 
-	public Monomial()
+	public PolyUnit()
 	{
 	}
 
-	public Monomial(double coefficient, int exponent)
+	public PolyUnit(double coefficient, int exponent)
 	{
 		if (this.exponent < 0)
 		{
@@ -31,7 +31,7 @@ class Monomial implements Comparable<Monomial>
 		}
 	}
 
-	public Monomial(Monomial m)
+	public PolyUnit(PolyUnit m)
 	{
 		this.coefficient = m.coefficient;
 		this.exponent = m.exponent;
@@ -47,7 +47,7 @@ class Monomial implements Comparable<Monomial>
 		return this.exponent;
 	}
 
-	public Monomial add(Monomial m) throws DifferentOrderMonomialException
+	public PolyUnit add(PolyUnit m) throws DifferentOrderMonomialException
 	{
 		if (this.exponent != m.exponent)
 		{
@@ -55,10 +55,10 @@ class Monomial implements Comparable<Monomial>
 					"Cannot add monomials of different orders.");
 		}
 
-		return new Monomial((this.coefficient + m.coefficient), this.exponent);
+		return new PolyUnit((this.coefficient + m.coefficient), this.exponent);
 	}
 
-	public Monomial subtract(Monomial m) throws DifferentOrderMonomialException
+	public PolyUnit subtract(PolyUnit m) throws DifferentOrderMonomialException
 	{
 		if (this.exponent != m.exponent)
 		{
@@ -66,33 +66,33 @@ class Monomial implements Comparable<Monomial>
 					"Cannot subtract monomials of different orders.");
 		}
 
-		return new Monomial((this.coefficient - m.coefficient), this.exponent);
+		return new PolyUnit((this.coefficient - m.coefficient), this.exponent);
 	}
 
-	public Monomial multiply(Monomial m)
+	public PolyUnit multiply(PolyUnit m)
 	{
-		return new Monomial((this.coefficient * m.coefficient),
+		return new PolyUnit((this.coefficient * m.coefficient),
 				(this.exponent + m.exponent));
 	}
 
-	public Monomial multiply(double scalar)
+	public PolyUnit multiply(double scalar)
 	{
-		return new Monomial((this.coefficient * scalar), this.exponent);
+		return new PolyUnit((this.coefficient * scalar), this.exponent);
 	}
 
-	public Monomial divide(Monomial m)
+	public PolyUnit divide(PolyUnit m)
 	{
-		return new Monomial((this.coefficient / m.coefficient),
+		return new PolyUnit((this.coefficient / m.coefficient),
 				(this.exponent - m.exponent));
 	}
 
-	public Monomial divide(double scalar)
+	public PolyUnit divide(double scalar)
 	{
-		return new Monomial((this.coefficient / scalar), this.exponent);
+		return new PolyUnit((this.coefficient / scalar), this.exponent);
 	}
 
 	// Compares the order of the monomial, not a value
-	public int compareTo(Monomial m)
+	public int compareTo(PolyUnit m)
 	{
 		if (this.exponent < m.exponent)
 		{
@@ -111,21 +111,21 @@ class Monomial implements Comparable<Monomial>
 		return (this.coefficient * Math.pow(value, this.exponent));
 	}
 
-	public Monomial derivative()
+	public PolyUnit derivative()
 	{
-		return new Monomial((this.coefficient * this.exponent),
+		return new PolyUnit((this.coefficient * this.exponent),
 				(this.exponent - 1));
 	}
 
-	public Monomial antiDerivative()
+	public PolyUnit antiDerivative()
 	{
-		return new Monomial((this.coefficient / (this.exponent + 1)),
+		return new PolyUnit((this.coefficient / (this.exponent + 1)),
 				(this.exponent + 1));
 	}
 
 	public double integral(double lowerBound, double upperBound)
 	{
-		Monomial antiDeriv = this.antiDerivative();
+		PolyUnit antiDeriv = this.antiDerivative();
 		return (antiDeriv.eval(upperBound) - antiDeriv.eval(lowerBound));
 	}
 

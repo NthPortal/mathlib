@@ -2,18 +2,18 @@ package net.nth.mathlib.polynomial;
 
 import net.nth.mathlib.fraction.Fraction;
 
-class FractionMonomial implements Comparable<FractionMonomial>
+class FracPolyUnit implements Comparable<FracPolyUnit>
 {
 	private static final String VAR_SYMBOL = "x";
 
 	private Fraction coefficient;
 	private int exponent;
 
-	public FractionMonomial()
+	public FracPolyUnit()
 	{
 	}
 
-	public FractionMonomial(Fraction coefficient, int exponent)
+	public FracPolyUnit(Fraction coefficient, int exponent)
 	{
 		if (this.exponent < 0)
 		{
@@ -33,7 +33,7 @@ class FractionMonomial implements Comparable<FractionMonomial>
 		}
 	}
 
-	public FractionMonomial(int coefficient, int exponent)
+	public FracPolyUnit(int coefficient, int exponent)
 	{
 		if (this.exponent < 0)
 		{
@@ -53,7 +53,7 @@ class FractionMonomial implements Comparable<FractionMonomial>
 		}
 	}
 
-	public FractionMonomial(FractionMonomial m)
+	public FracPolyUnit(FracPolyUnit m)
 	{
 		this.coefficient = new Fraction(m.coefficient);
 		this.exponent = m.exponent;
@@ -69,7 +69,7 @@ class FractionMonomial implements Comparable<FractionMonomial>
 		return this.exponent;
 	}
 
-	public FractionMonomial add(FractionMonomial m)
+	public FracPolyUnit add(FracPolyUnit m)
 			throws DifferentOrderMonomialException
 	{
 		if (this.exponent != m.exponent)
@@ -78,11 +78,11 @@ class FractionMonomial implements Comparable<FractionMonomial>
 					"Cannot add monomials of different orders.");
 		}
 
-		return new FractionMonomial(this.coefficient.add(m.coefficient),
+		return new FracPolyUnit(this.coefficient.add(m.coefficient),
 				this.exponent);
 	}
 
-	public FractionMonomial subtract(FractionMonomial m)
+	public FracPolyUnit subtract(FracPolyUnit m)
 			throws DifferentOrderMonomialException
 	{
 		if (this.exponent != m.exponent)
@@ -91,47 +91,47 @@ class FractionMonomial implements Comparable<FractionMonomial>
 					"Cannot subtract monomials of different orders.");
 		}
 
-		return new FractionMonomial(this.coefficient.subtract(m.coefficient),
+		return new FracPolyUnit(this.coefficient.subtract(m.coefficient),
 				this.exponent);
 	}
 
-	public FractionMonomial multiply(FractionMonomial m)
+	public FracPolyUnit multiply(FracPolyUnit m)
 	{
-		return new FractionMonomial(this.coefficient.multiply(m.coefficient),
+		return new FracPolyUnit(this.coefficient.multiply(m.coefficient),
 				(this.exponent + m.exponent));
 	}
 
-	public FractionMonomial multiply(Fraction frac)
+	public FracPolyUnit multiply(Fraction frac)
 	{
-		return new FractionMonomial(this.coefficient.multiply(frac),
+		return new FracPolyUnit(this.coefficient.multiply(frac),
 				this.exponent);
 	}
 
-	public FractionMonomial multiply(int scalar)
+	public FracPolyUnit multiply(int scalar)
 	{
-		return new FractionMonomial(this.coefficient.multiply(scalar),
+		return new FracPolyUnit(this.coefficient.multiply(scalar),
 				this.exponent);
 	}
 
-	public FractionMonomial divide(FractionMonomial m)
+	public FracPolyUnit divide(FracPolyUnit m)
 	{
-		return new FractionMonomial(this.coefficient.divide(m.coefficient),
+		return new FracPolyUnit(this.coefficient.divide(m.coefficient),
 				(this.exponent - m.exponent));
 	}
 
-	public FractionMonomial divide(Fraction frac)
+	public FracPolyUnit divide(Fraction frac)
 	{
-		return new FractionMonomial(this.coefficient.divide(frac),
+		return new FracPolyUnit(this.coefficient.divide(frac),
 				this.exponent);
 	}
 
-	public FractionMonomial divide(int scalar)
+	public FracPolyUnit divide(int scalar)
 	{
-		return new FractionMonomial(this.coefficient.divide(scalar),
+		return new FracPolyUnit(this.coefficient.divide(scalar),
 				this.exponent);
 	}
 
-	public int compareTo(FractionMonomial m)
+	public int compareTo(FracPolyUnit m)
 	{
 		if (this.exponent < m.exponent)
 		{
@@ -156,27 +156,27 @@ class FractionMonomial implements Comparable<FractionMonomial>
 		return this.coefficient.multiply(value.pow(this.exponent));
 	}
 
-	public FractionMonomial derivative()
+	public FracPolyUnit derivative()
 	{
-		return new FractionMonomial(this.coefficient.multiply(this.exponent),
+		return new FracPolyUnit(this.coefficient.multiply(this.exponent),
 				(this.exponent - 1));
 	}
 
-	public FractionMonomial antiDerivative()
+	public FracPolyUnit antiDerivative()
 	{
-		return new FractionMonomial(this.coefficient.divide(this.exponent + 1),
+		return new FracPolyUnit(this.coefficient.divide(this.exponent + 1),
 				(this.exponent + 1));
 	}
 
 	public Fraction integral(int lowerBound, int upperBound)
 	{
-		FractionMonomial antiDeriv = this.antiDerivative();
+		FracPolyUnit antiDeriv = this.antiDerivative();
 		return antiDeriv.eval(upperBound).subtract(antiDeriv.eval(lowerBound));
 	}
 
 	public Fraction integral(Fraction lowerBound, Fraction upperBound)
 	{
-		FractionMonomial antiDeriv = this.antiDerivative();
+		FracPolyUnit antiDeriv = this.antiDerivative();
 		return antiDeriv.eval(upperBound).subtract(antiDeriv.eval(lowerBound));
 	}
 

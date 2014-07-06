@@ -12,29 +12,29 @@ import net.nth.mathlib.util.FractionExtremum;
 
 public class FractionPolynomial
 {
-	private ArrayList<FractionMonomial> terms;
+	private ArrayList<FracPolyUnit> terms;
 	private static final int SMALL_INTERVAL_MULTIPLIER = 1000;
 
 	public FractionPolynomial()
 	{
-		this.terms = new ArrayList<FractionMonomial>();
+		this.terms = new ArrayList<FracPolyUnit>();
 	}
 
-	public FractionPolynomial(ArrayList<FractionMonomial> monomials)
+	public FractionPolynomial(ArrayList<FracPolyUnit> monomials)
 	{
-		this.terms = new ArrayList<FractionMonomial>();
+		this.terms = new ArrayList<FracPolyUnit>();
 		for (int i = 0; i < monomials.size(); i++)
 		{
-			this.add(new FractionMonomial(monomials.get(i)));
+			this.add(new FracPolyUnit(monomials.get(i)));
 		}
 	}
 
 	public FractionPolynomial(FractionPolynomial p)
 	{
-		this.terms = new ArrayList<FractionMonomial>();
+		this.terms = new ArrayList<FracPolyUnit>();
 		for (int i = 0; i < p.terms.size(); i++)
 		{
-			this.terms.add(new FractionMonomial(p.terms.get(i)));
+			this.terms.add(new FracPolyUnit(p.terms.get(i)));
 		}
 	}
 
@@ -46,8 +46,8 @@ public class FractionPolynomial
 			throw new InvalidExponentException();
 		}
 		
-		this.terms = new ArrayList<FractionMonomial>();
-		this.terms.add(new FractionMonomial(coefficient, exponent));
+		this.terms = new ArrayList<FracPolyUnit>();
+		this.terms.add(new FracPolyUnit(coefficient, exponent));
 	}
 
 	// Creates a FractionPolynomial with one term
@@ -58,13 +58,13 @@ public class FractionPolynomial
 			throw new InvalidExponentException();
 		}
 		
-		this.terms = new ArrayList<FractionMonomial>();
-		this.terms.add(new FractionMonomial(coefficient, exponent));
+		this.terms = new ArrayList<FracPolyUnit>();
+		this.terms.add(new FracPolyUnit(coefficient, exponent));
 	}
 
-	public FractionMonomial getTerm(int index)
+	public FracPolyUnit getTerm(int index)
 	{
-		return new FractionMonomial(terms.get(index));
+		return new FracPolyUnit(terms.get(index));
 	}
 
 	public int getSize()
@@ -90,7 +90,7 @@ public class FractionPolynomial
 		Collections.sort(this.terms, Collections.reverseOrder());
 	}
 
-	public FractionPolynomial add(FractionMonomial m)
+	public FractionPolynomial add(FracPolyUnit m)
 	{
 		FractionPolynomial result = new FractionPolynomial(this);
 
@@ -100,7 +100,7 @@ public class FractionPolynomial
 			return result;
 		}
 
-		FractionMonomial temp;
+		FracPolyUnit temp;
 
 		for (int i = 0; i < result.terms.size(); i++)
 		{
@@ -119,7 +119,7 @@ public class FractionPolynomial
 			}
 		}
 		// Else
-		result.terms.add(new FractionMonomial(m));
+		result.terms.add(new FracPolyUnit(m));
 		result.order();
 		return result;
 	}
@@ -136,7 +136,7 @@ public class FractionPolynomial
 		return result;
 	}
 
-	public FractionPolynomial subtract(FractionMonomial m)
+	public FractionPolynomial subtract(FracPolyUnit m)
 	{
 		FractionPolynomial result = new FractionPolynomial(this);
 
@@ -147,7 +147,7 @@ public class FractionPolynomial
 			return result;
 		}
 
-		FractionMonomial temp;
+		FracPolyUnit temp;
 
 		for (int i = 0; i < result.terms.size(); i++)
 		{
@@ -208,7 +208,7 @@ public class FractionPolynomial
 		return result;
 	}
 
-	private FractionPolynomial multiply(FractionMonomial m)
+	private FractionPolynomial multiply(FracPolyUnit m)
 	{
 		FractionPolynomial result = new FractionPolynomial();
 
@@ -259,7 +259,7 @@ public class FractionPolynomial
 		return result;
 	}
 
-	private FractionPolynomial divide(FractionMonomial m)
+	private FractionPolynomial divide(FracPolyUnit m)
 	{
 		FractionPolynomial result = new FractionPolynomial();
 
@@ -287,9 +287,9 @@ public class FractionPolynomial
 		}
 
 		FractionPolynomial dividend = new FractionPolynomial(this);
-		FractionMonomial firstDividendTerm;
-		FractionMonomial firstDivisorTerm;
-		FractionMonomial temp = new FractionMonomial();
+		FracPolyUnit firstDividendTerm;
+		FracPolyUnit firstDivisorTerm;
+		FracPolyUnit temp = new FracPolyUnit();
 
 		while (true)
 		{
@@ -342,7 +342,7 @@ public class FractionPolynomial
 	public FractionPolynomial derivative()
 	{
 		FractionPolynomial result = new FractionPolynomial();
-		FractionMonomial temp;
+		FracPolyUnit temp;
 
 		for (int i = 0; i < this.terms.size(); i++)
 		{
@@ -376,7 +376,7 @@ public class FractionPolynomial
 		{
 			result.terms.add(this.terms.get(i).antiDerivative());
 		}
-		result.terms.add(new FractionMonomial(new Fraction(constant), 0));
+		result.terms.add(new FracPolyUnit(new Fraction(constant), 0));
 
 		return result;
 	}
@@ -389,7 +389,7 @@ public class FractionPolynomial
 		{
 			result.terms.add(this.terms.get(i).antiDerivative());
 		}
-		result.terms.add(new FractionMonomial(constant, 0));
+		result.terms.add(new FracPolyUnit(constant, 0));
 
 		return result;
 	}
@@ -439,8 +439,8 @@ public class FractionPolynomial
 	{
 		FractionPolynomial factor = new FractionPolynomial();
 
-		factor = factor.add(new FractionMonomial(1, 1));
-		factor = factor.add(new FractionMonomial(constant.multiply(-1), 0));
+		factor = factor.add(new FracPolyUnit(1, 1));
+		factor = factor.add(new FracPolyUnit(constant.multiply(-1), 0));
 
 		return factor;
 	}
