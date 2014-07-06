@@ -116,6 +116,34 @@ public class Radical
 		}
 	}
 
+	public Radical add(Radical r)
+	{
+		if ((this.radicand != r.radicand)
+				|| (this.exponent.compareTo(r.exponent) != 0))
+		{
+			throw new DifferentRadicalException(
+					"Addition cannot be performed on numbers with different radicands or exponents.");
+		}
+		
+		Radical result = new Radical(this);
+		result.coefficient = this.coefficient.add(r.coefficient);
+		return result;
+	}
+	
+	public Radical subtract(Radical r)
+	{
+		if ((this.radicand != r.radicand)
+				|| (this.exponent.compareTo(r.exponent) != 0))
+		{
+			throw new DifferentRadicalException(
+					"Addition cannot be performed on numbers with different radicands or exponents.");
+		}
+		
+		Radical result = new Radical(this);
+		result.coefficient = this.coefficient.subtract(r.coefficient);
+		return result;
+	}
+
 	public void print()
 	{
 		this.coefficient.print();
