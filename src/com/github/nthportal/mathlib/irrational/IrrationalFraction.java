@@ -78,52 +78,12 @@ public class IrrationalFraction implements Comparable<IrrationalFraction>
 		return reciprocal;
 	}
 
-	public IrrationalFraction add(IrrationalFraction f)
-	{
-		IrrationalFraction result = new IrrationalFraction();
-
-		int gcf = Algebra.gcf(this.denom, f.denom);
-
-		result.denom = (this.denom * f.denom / gcf);
-		result.numer = (this.numer * f.denom / gcf)
-				+ (f.numer * this.denom / gcf);
-
-		result.reduce();
-
-		return result;
-	}
-
-	public IrrationalFraction add(int num)
-	{
-		return this.add(new IrrationalFraction(num));
-	}
-
-	public IrrationalFraction subtract(IrrationalFraction f)
-	{
-		IrrationalFraction result = new IrrationalFraction();
-
-		int gcf = Algebra.gcf(this.denom, f.denom);
-
-		result.denom = (this.denom * f.denom / gcf);
-		result.numer = (this.numer * f.denom / gcf)
-				- (f.numer * this.denom / gcf);
-
-		result.reduce();
-
-		return result;
-	}
-
-	public IrrationalFraction subtract(int num)
-	{
-		return this.subtract(new IrrationalFraction(num));
-	}
-
 	public IrrationalFraction multiply(IrrationalFraction f)
 	{
 		IrrationalFraction result = new IrrationalFraction();
 
-		result.numer = (this.numer * f.numer);
-		result.denom = (this.denom * f.denom);
+		result.numer = this.numer.multiply(f.numer);
+		result.denom = this.denom.multiply(f.denom);
 
 		result.reduce();
 

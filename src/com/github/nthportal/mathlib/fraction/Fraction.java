@@ -154,9 +154,7 @@ public class Fraction implements Comparable<Fraction>
 
 	public Fraction multiply(int scalar)
 	{
-		Fraction result = new Fraction((this.numer * scalar), this.denom);
-		result.reduce();
-		return result;
+		return new Fraction((this.numer * scalar), this.denom);
 	}
 
 	public Fraction divide(Fraction f)
@@ -186,9 +184,7 @@ public class Fraction implements Comparable<Fraction>
 			throw new ZeroDenomException("Cannot divide by 0.");
 		}
 
-		Fraction result = new Fraction(this.numer, (this.denom * scalar));
-		result.reduce();
-		return result;
+		return new Fraction(this.numer, (this.denom * scalar));
 	}
 
 	public Fraction pow(int exponent)
