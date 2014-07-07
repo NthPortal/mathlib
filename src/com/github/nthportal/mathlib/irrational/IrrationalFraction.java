@@ -15,7 +15,7 @@ public class IrrationalFraction implements Comparable<IrrationalFraction>
 
 	public IrrationalFraction(Radical numer, Radical denom)
 	{
-		if (denom == 0)
+		if (denom.compareTo(0) == 0)
 		{
 			throw new ZeroDenomException();
 		}
@@ -37,57 +37,38 @@ public class IrrationalFraction implements Comparable<IrrationalFraction>
 		this.denom = frac.denom;
 	}
 
-	public int getNumer()
+	public Radical getNumer()
 	{
-		return this.numer;
+		return new Radical(this.numer);
 	}
 
-	public int getDenom()
+	public Radical getDenom()
 	{
-		return this.denom;
+		return new Radical(this.denom);
 	}
 	
-	public boolean testIfInt()
+	public double toDouble()
 	{
-		if (this.denom == 1)
-		{
-			return true;
-		}
-		// Else
-		return false;
+		return (this.numer.toDouble() / this.denom.toDouble());
 	}
 
-	public int toInt() throws NonIntFractionException
+	private void reduce() // NEEDS REWRITING
 	{
-		if (this.denom != 1)
-		{
-			throw new NonIntFractionException(
-					"Cannot convert Fraction with non-'1' denominator to int.");
-		}
-		
-		return this.numer;
-	}
-
-	private void reduce()
-	{
-		int gcf = Algebra.gcf(this.numer, this.denom);
-
-		this.numer /= gcf;
-		this.denom /= gcf;
+		throw new RuntimeException("METHOD NOT YET WRITTERN");
 	}
 
 	private void fixNegativeDenom()
 	{
-		if (this.denom < 0)
+		if (this.denom.compareTo(0) == -1)
 		{
-			this.denom *= -1;
-			this.numer *= -1;
+			this.denom.multiply(-1);
+			this.numer.multiply(-1);
 		}
 	}
 
 	public IrrationalFraction reciprocal()
 	{
-		if (this.numer == 0)
+		if (this.numer.compareTo(0)== 0)
 		{
 			throw new ZeroDenomException("0 has no reciprocal.");
 		}

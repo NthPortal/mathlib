@@ -8,7 +8,7 @@ import com.github.nthportal.mathlib.util.Algebra;
 public class Radical
 {
 	private int radicand;
-	private Fraction coefficient;
+	private int coefficient;
 	private Fraction exponent;
 
 	public Radical()
@@ -18,29 +18,14 @@ public class Radical
 	public Radical(int whole)
 	{
 		this.radicand = 1;
-		this.coefficient = new Fraction(whole);
-		this.exponent = new Fraction(0);
-	}
-
-	public Radical(Fraction whole)
-	{
-		this.radicand = 1;
-		this.coefficient = new Fraction(whole);
+		this.coefficient = whole;
 		this.exponent = new Fraction(0);
 	}
 
 	public Radical(int scalar, int radicand, Fraction power)
 	{
 		this.radicand = radicand;
-		this.coefficient = new Fraction(scalar);
-		this.exponent = new Fraction(power);
-		this.reduce();
-	}
-
-	public Radical(Fraction scalar, int base, Fraction power)
-	{
-		this.radicand = base;
-		this.coefficient = new Fraction(scalar);
+		this.coefficient = scalar;
 		this.exponent = new Fraction(power);
 		this.reduce();
 	}
@@ -48,25 +33,31 @@ public class Radical
 	public Radical(Radical i)
 	{
 		this.radicand = i.radicand;
-		this.coefficient = new Fraction(i.coefficient);
+		this.coefficient = i.coefficient;
 		this.exponent = new Fraction(i.exponent);
+	}
+
+	public double toDouble()
+	{
+		return (this.coefficient * Math.pow(this.radicand,
+				this.exponent.toDouble()));
 	}
 
 	private void reduce()
 	{
-		Fraction temp = new Fraction(this.radicand);
+		int temp = this.radicand;
 
 		if (this.exponent.isInt())
 		{
-			temp = temp.pow(this.exponent);
-			this.coefficient = this.coefficient.multiply(temp);
+			temp = (int) Math.pow(temp, this.exponent.toInt());
+			this.coefficient *= temp;
 			this.radicand = 1;
 			this.exponent = new Fraction(0);
 		}
 		else
 		{
 			int numer = this.exponent.getNumer();
-			temp = temp.pow(numer);
+			temp = (int) Math.pow(temp, numer);
 			this.exponent = this.exponent.divide(numer);
 			this.reduceBase();
 			if (this.radicand == 1)
@@ -98,7 +89,7 @@ public class Radical
 					{
 						this.radicand /= current;
 					}
-					this.coefficient = this.coefficient.multiply(current);
+					this.coefficient *= current;
 
 					i++;
 					if (!(i == size))
@@ -124,12 +115,12 @@ public class Radical
 			throw new DifferentRadicalException(
 					"Addition cannot be performed on numbers with different radicands or exponents.");
 		}
-		
+
 		Radical result = new Radical(this);
-		result.coefficient = this.coefficient.add(r.coefficient);
+		result.coefficient = this.coefficient + r.coefficient;
 		return result;
 	}
-	
+
 	public Radical subtract(Radical r)
 	{
 		if ((this.radicand != r.radicand)
@@ -138,55 +129,91 @@ public class Radical
 			throw new DifferentRadicalException(
 					"Addition cannot be performed on numbers with different radicands or exponents.");
 		}
-		
+
 		Radical result = new Radical(this);
-		result.coefficient = this.coefficient.subtract(r.coefficient);
+		result.coefficient = this.coefficient + r.coefficient;
 		return result;
 	}
-	
-	public Radical multiply(Fraction frac)
+
+	public Radical multiply(int num)
 	{
 		Radical result = new Radical(this);
-		result.coefficient = result.coefficient.multiply(frac);
+		result.coefficient *= num;
 		return result;
 	}
-	
+
 	public Radical multiply(Radical r)
 	{
 		Radical result = new Radical();
 		int expDenom1 = this.exponent.getDenom();
 		int expDenom2 = r.exponent.getDenom();
 		int gcf = Algebra.gcf(expDenom1, expDenom2);
-		
-		result.coefficient = this.coefficient.multiply(r.coefficient);
-		
+
+		result.coefficient = this.coefficient * r.coefficient;
+
 		result.radicand = (int) Math.pow(this.radicand, (expDenom2 / gcf));
 		result.radicand *= (int) Math.pow(r.radicand, (expDenom1 / gcf));
 
 		result.exponent = new Fraction(1, (expDenom1 * expDenom2 / gcf));
-		
+
 		return result;
 	}
-	
-	public Radical divide(Fraction frac)
+
+	public Radical divide(int num)
 	{
+		if (!(this.coefficient % num == 0))
+		{
+			throw new NonWholeDivisionException();
+		}
+		
 		Radical result = new Radical(this);
-		result.coefficient = result.coefficient.divide(frac);
+		result.coefficient /= num;
 		return result;
+	}
+
+	public int compareTo(double num)
+	{
+		double doubleThis = this.toDouble();
+
+		if (doubleThis < num)
+		{
+			return -1;
+		}
+		else if (doubleThis == num)
+		{
+			return 0;
+		}
+		// Else
+		return 1;
+	}
+
+	public int compareTo(Radical r)
+	{
+		double doubleThis = this.toDouble();
+		double doubleR = r.toDouble();
+
+		if (doubleThis < doubleR)
+		{
+			return -1;
+		}
+		else if (doubleThis == doubleR)
+		{
+			return 0;
+		}
+		// Else
+		return 1;
 	}
 
 	public void print()
 	{
-		this.coefficient.print();
-		System.out.print("(" + this.radicand + ")^(");
+		System.out.print(this.coefficient + "(" + this.radicand + ")^(");
 		this.exponent.print();
 		System.out.print(")");
 	}
 
 	public void println()
 	{
-		this.coefficient.print();
-		System.out.print("(" + this.radicand + ")^(");
+		System.out.print(this.coefficient + "(" + this.radicand + ")^(");
 		this.exponent.print();
 		System.out.println(")");
 	}
@@ -197,7 +224,7 @@ public class Radical
 		test1.println();
 		Radical test2 = new Radical(1, 3, new Fraction(1, 2));
 		test2.println();
-		
+
 		Radical result = test1.multiply(test2);
 		result.println();
 	}
