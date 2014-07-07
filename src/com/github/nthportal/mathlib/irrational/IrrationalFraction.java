@@ -1,8 +1,8 @@
 package com.github.nthportal.mathlib.irrational;
 
+import com.github.nthportal.mathlib.fraction.Fraction;
 import com.github.nthportal.mathlib.fraction.NonIntFractionException;
 import com.github.nthportal.mathlib.fraction.ZeroDenomException;
-import com.github.nthportal.mathlib.util.Algebra;
 
 public class IrrationalFraction implements Comparable<IrrationalFraction>
 {
@@ -46,7 +46,7 @@ public class IrrationalFraction implements Comparable<IrrationalFraction>
 	{
 		return new Radical(this.denom);
 	}
-	
+
 	public double toDouble()
 	{
 		return (this.numer.toDouble() / this.denom.toDouble());
@@ -68,12 +68,13 @@ public class IrrationalFraction implements Comparable<IrrationalFraction>
 
 	public IrrationalFraction reciprocal()
 	{
-		if (this.numer.compareTo(0)== 0)
+		if (this.numer.compareTo(0) == 0)
 		{
 			throw new ZeroDenomException("0 has no reciprocal.");
 		}
 
-		IrrationalFraction reciprocal = new IrrationalFraction(this.denom, this.numer);
+		IrrationalFraction reciprocal = new IrrationalFraction(this.denom,
+				this.numer);
 		reciprocal.fixNegativeDenom();
 		return reciprocal;
 	}
@@ -92,23 +93,21 @@ public class IrrationalFraction implements Comparable<IrrationalFraction>
 
 	public IrrationalFraction multiply(int scalar)
 	{
-		IrrationalFraction result = new IrrationalFraction((this.numer * scalar), this.denom);
-		result.reduce();
-		return result;
+		return new IrrationalFraction(this.numer.multiply(scalar), this.denom);
 	}
 
 	public IrrationalFraction divide(IrrationalFraction f)
 	{
 		IrrationalFraction result = new IrrationalFraction();
 
-		if (f.numer == 0)
+		if (f.numer.compareTo(0) == 0)
 		{
 			throw new ZeroDenomException(
 					"Can't divide by a fraction with a '0' numerator.");
 		}
 
-		result.numer = (this.numer * f.denom);
-		result.denom = (this.denom * f.numer);
+		result.numer = this.numer.multiply(f.denom);
+		result.denom = this.denom.multiply(f.numer);
 
 		result.fixNegativeDenom();
 
@@ -124,16 +123,14 @@ public class IrrationalFraction implements Comparable<IrrationalFraction>
 			throw new ZeroDenomException("Cannot divide by 0.");
 		}
 
-		IrrationalFraction result = new IrrationalFraction(this.numer, (this.denom * scalar));
-		result.reduce();
-		return result;
+		return new IrrationalFraction(this.numer, this.denom.multiply(scalar));
 	}
 
 	public IrrationalFraction pow(int exponent)
 	{
 		IrrationalFraction result = new IrrationalFraction(this);
 
-		if (this.numer == 0)
+		if (this.numer.compareTo(0) == 0)
 		{
 			return result;
 		}
@@ -144,32 +141,27 @@ public class IrrationalFraction implements Comparable<IrrationalFraction>
 			result = result.reciprocal();
 		}
 
-		result.numer = (int) Math.pow(result.numer, exponent);
-		result.denom = (int) Math.pow(result.denom, exponent);
+		result.numer = result.numer.pow(exponent);
+		result.denom = result.denom.pow(exponent);
 
 		return result;
 	}
 
-	public IrrationalFraction pow(IrrationalFraction exponent) throws NonIntFractionException
+	public IrrationalFraction pow(Fraction exponent)
+			throws NonIntFractionException
 	{
 		IrrationalFraction result = new IrrationalFraction(this);
 
-		if (this.numer != 0)
+		if (this.numer.compareTo(0) != 0)
 		{
-			if (exponent.denom != 1)
-			{
-				throw new NonIntFractionException(
-						"Fractional exponents with non-'1' denominators not permitted.");
-			}
-
-			if (exponent.numer < 0)
+			if (exponent.compare(0) == -1)
 			{
 				exponent.multiply(-1);
 				result = result.reciprocal();
 			}
 
-			result.numer = (int) Math.pow(result.numer, exponent.numer);
-			result.denom = (int) Math.pow(result.denom, exponent.numer);
+			result.numer = result.numer.pow(exponent);
+			result.denom = result.denom.pow(exponent);
 		}
 
 		return result;
@@ -177,13 +169,13 @@ public class IrrationalFraction implements Comparable<IrrationalFraction>
 
 	public int compareTo(IrrationalFraction frac)
 	{
-		int gcf = Algebra.gcf(this.denom, frac.denom);
-
-		if ((this.numer * frac.denom / gcf) < (frac.numer * this.denom / gcf))
+		if ((this.numer.toDouble() * frac.denom.toDouble()) < (frac.numer
+				.toDouble() * this.denom.toDouble()))
 		{
 			return -1;
 		}
-		else if ((this.numer * frac.denom / gcf) == (frac.numer * this.denom / gcf))
+		else if ((this.numer.toDouble() * frac.denom.toDouble()) == (frac.numer
+				.toDouble() * this.denom.toDouble()))
 		{
 			return 0;
 		}
@@ -193,16 +185,7 @@ public class IrrationalFraction implements Comparable<IrrationalFraction>
 
 	public int compare(int num)
 	{
-		if (this.numer < (num * this.denom))
-		{
-			return -1;
-		}
-		else if (this.numer == (num * this.denom))
-		{
-			return 0;
-		}
-		// Else
-		return 1;
+		return this.numer.compareTo(this.denom.multiply(num));
 	}
 
 	public void print()

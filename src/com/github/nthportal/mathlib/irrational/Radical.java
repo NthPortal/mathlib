@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.github.nthportal.mathlib.fraction.Fraction;
 import com.github.nthportal.mathlib.util.Algebra;
 
-public class Radical
+public class Radical implements Comparable<Radical>
 {
 	private int radicand;
 	private int coefficient;
@@ -35,6 +35,21 @@ public class Radical
 		this.radicand = i.radicand;
 		this.coefficient = i.coefficient;
 		this.exponent = new Fraction(i.exponent);
+	}
+
+	public int getRadicand()
+	{
+		return this.radicand;
+	}
+
+	public int getCoefficient()
+	{
+		return this.coefficient;
+	}
+
+	public Fraction getExponent()
+	{
+		return new Fraction(this.exponent);
 	}
 
 	public double toDouble()
@@ -165,10 +180,22 @@ public class Radical
 		{
 			throw new NonWholeDivisionException();
 		}
-		
+
 		Radical result = new Radical(this);
 		result.coefficient /= num;
 		return result;
+	}
+
+	public Radical pow(int exponent)
+	{
+		return new Radical(this.coefficient, this.radicand,
+				(this.exponent.multiply(exponent)));
+	}
+	
+	public Radical pow(Fraction exponent)
+	{
+		return new Radical(this.coefficient, this.radicand,
+				(this.exponent.multiply(exponent)));
 	}
 
 	public int compareTo(double num)
