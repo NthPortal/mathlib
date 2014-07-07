@@ -143,6 +143,37 @@ public class Radical
 		result.coefficient = this.coefficient.subtract(r.coefficient);
 		return result;
 	}
+	
+	public Radical multiply(Fraction frac)
+	{
+		Radical result = new Radical(this);
+		result.coefficient = result.coefficient.multiply(frac);
+		return result;
+	}
+	
+	public Radical multiply(Radical r)
+	{
+		Radical result = new Radical();
+		int expDenom1 = this.exponent.getDenom();
+		int expDenom2 = r.exponent.getDenom();
+		int gcf = Algebra.gcf(expDenom1, expDenom2);
+		
+		result.coefficient = this.coefficient.multiply(r.coefficient);
+		
+		result.radicand = (int) Math.pow(this.radicand, (expDenom2 / gcf));
+		result.radicand *= (int) Math.pow(r.radicand, (expDenom1 / gcf));
+
+		result.exponent = new Fraction(1, (expDenom1 * expDenom2 / gcf));
+		
+		return result;
+	}
+	
+	public Radical divide(Fraction frac)
+	{
+		Radical result = new Radical(this);
+		result.coefficient = result.coefficient.divide(frac);
+		return result;
+	}
 
 	public void print()
 	{
@@ -162,7 +193,12 @@ public class Radical
 
 	public static void main(String[] args)
 	{
-		Radical test = new Radical(1, 32, new Fraction(1, 3));
-		test.println();
+		Radical test1 = new Radical(1, 32, new Fraction(1, 3));
+		test1.println();
+		Radical test2 = new Radical(1, 3, new Fraction(1, 2));
+		test2.println();
+		
+		Radical result = test1.multiply(test2);
+		result.println();
 	}
 }

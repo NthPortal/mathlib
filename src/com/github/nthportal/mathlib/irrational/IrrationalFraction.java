@@ -6,29 +6,29 @@ import com.github.nthportal.mathlib.util.Algebra;
 
 public class IrrationalFraction implements Comparable<IrrationalFraction>
 {
-	private int numer;
-	private int denom;
+	private Radical numer;
+	private Radical denom;
 
 	public IrrationalFraction()
 	{
 	}
 
-	public IrrationalFraction(int numer, int denom)
+	public IrrationalFraction(Radical numer, Radical denom)
 	{
 		if (denom == 0)
 		{
 			throw new ZeroDenomException();
 		}
 
-		this.numer = numer;
-		this.denom = denom;
+		this.numer = new Radical(numer);
+		this.denom = new Radical(denom);
 		this.reduce();
 	}
 
-	public IrrationalFraction(int whole)
+	public IrrationalFraction(Radical r)
 	{
-		this.numer = whole;
-		this.denom = 1;
+		this.numer = new Radical(r);
+		this.denom = new Radical(1);
 	}
 
 	public IrrationalFraction(IrrationalFraction frac)
