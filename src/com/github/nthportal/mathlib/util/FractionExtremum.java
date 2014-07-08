@@ -6,10 +6,6 @@ public class FractionExtremum
 {
 	ExtremumType type;
 	Fraction value;
-	
-	public FractionExtremum()
-	{
-	}
 
 	public FractionExtremum(ExtremumType type, Fraction value)
 	{

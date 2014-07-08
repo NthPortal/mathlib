@@ -5,10 +5,6 @@ public class Extremum
 	ExtremumType type;
 	double value;
 
-	public Extremum()
-	{
-	}
-
 	public Extremum(ExtremumType type, double value)
 	{
 		this.type = type;
