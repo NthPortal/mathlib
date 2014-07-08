@@ -3,7 +3,7 @@ package com.github.nthportal.mathlib.matrix;
 import java.util.Random;
 
 import com.github.nthportal.mathlib.fraction.Fraction;
-import com.github.nthportal.mathlib.util.SWRAIDKWException;
+import com.github.nthportal.mathlib.util.SWWAIDKWException;
 
 public class FractionMatrix
 {
@@ -197,7 +197,7 @@ public class FractionMatrix
 		// They have different values even though they have the same dimensions
 		if (m1.square != m2.square)
 		{
-			throw new SWRAIDKWException();
+			throw new SWWAIDKWException();
 		}
 
 		// Else
@@ -225,7 +225,7 @@ public class FractionMatrix
 		// They have different values even though they have the same dimensions
 		if (this.square != m.square)
 		{
-			throw new SWRAIDKWException();
+			throw new SWWAIDKWException();
 		}
 
 		// Else
