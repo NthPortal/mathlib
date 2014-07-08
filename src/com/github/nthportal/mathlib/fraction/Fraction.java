@@ -7,7 +7,7 @@ public class Fraction implements Comparable<Fraction>
 	private int numer;
 	private int denom;
 
-	public Fraction()
+	private Fraction()
 	{
 	}
 

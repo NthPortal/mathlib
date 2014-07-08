@@ -11,7 +11,7 @@ public class Radical implements Comparable<Radical>
 	private int coefficient;
 	private Fraction exponent;
 
-	public Radical()
+	private Radical()
 	{
 	}
 
