@@ -3,6 +3,7 @@ package com.github.nthportal.mathlib.matrix;
 import java.util.Random;
 
 import com.github.nthportal.mathlib.fraction.Fraction;
+import com.github.nthportal.mathlib.util.SWRAIDKWException;
 
 public class FractionMatrix
 {
@@ -192,6 +193,40 @@ public class FractionMatrix
 				}
 			}
 		}
+		
+		// They have different values even though they have the same dimensions
+		if (m1.square != m2.square)
+		{
+			throw new SWRAIDKWException();
+		}
+
+		// Else
+		return true;
+	}
+	
+	public boolean equals(FractionMatrix m)
+	{
+		if (!(this.rows == m.rows && this.cols == m.cols))
+		{
+			return false;
+		}
+
+		for (int row = 0; row < this.rows; row++)
+		{
+			for (int col = 0; col < this.cols; col++)
+			{
+				if (!(this.matrix[row][col] == m.matrix[row][col]))
+				{
+					return false;
+				}
+			}
+		}
+		
+		// They have different values even though they have the same dimensions
+		if (this.square != m.square)
+		{
+			throw new SWRAIDKWException();
+		}
 
 		// Else
 		return true;
@@ -244,7 +279,7 @@ public class FractionMatrix
 		}
 
 		// Not sure if necessary in Java - was needed in C++
-		if (det.compare(-0) == 0)
+		if (det.compareTo(-0) == 0)
 		{
 			det = new Fraction(0);
 		}
@@ -270,11 +305,11 @@ public class FractionMatrix
 		// because last row doesn't get reduced
 		for (int i = 0; i < smallerSize - 1; i++)
 		{
-			if (this.matrix[i][i].compare(0) == 0)
+			if (this.matrix[i][i].compareTo(0) == 0)
 			{
 				for (int j = i + 1; j < this.rows; j++)
 				{
-					if (this.matrix[j][i].compare(0) != 0)
+					if (this.matrix[j][i].compareTo(0) != 0)
 					{
 						rowSwap(i, j);
 						numRowSwaps++;
@@ -315,7 +350,7 @@ public class FractionMatrix
 		// because last row doesn't get reduced
 		for (int i = smallerSize - 1; i > 0; i--)
 		{
-			if (this.matrix[i][i].compare(0) != 0)
+			if (this.matrix[i][i].compareTo(0) != 0)
 			{
 				for (int j = i - 1; j >= 0; j--)
 				{
@@ -343,7 +378,7 @@ public class FractionMatrix
 		// Move zero rows to bottom HERE
 		for (int row = 0; row < this.rows; row++)
 		{
-			if (this.matrix[row][row].compare(0) == 0)
+			if (this.matrix[row][row].compareTo(0) == 0)
 			{
 				for (int i = row; i < (row - 1); i++)
 				{
@@ -370,7 +405,7 @@ public class FractionMatrix
 
 		FractionMatrix lhs = new FractionMatrix(this.rows, this.cols);
 		deepCopy(tempMatrix.matrix, lhs.matrix, lhs.rows, lhs.cols);
-		if (lhs.det().compare(0) == 0)
+		if (lhs.det().compareTo(0) == 0)
 		{
 			throw new NonInvertibleMatrixException();
 		}

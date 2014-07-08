@@ -31,10 +31,10 @@ class PolyUnit implements Comparable<PolyUnit>
 		}
 	}
 
-	public PolyUnit(PolyUnit m)
+	public PolyUnit(PolyUnit p)
 	{
-		this.coefficient = m.coefficient;
-		this.exponent = m.exponent;
+		this.coefficient = p.coefficient;
+		this.exponent = p.exponent;
 	}
 
 	public double getCoefficient()
@@ -47,32 +47,32 @@ class PolyUnit implements Comparable<PolyUnit>
 		return this.exponent;
 	}
 
-	public PolyUnit add(PolyUnit m) throws DifferentOrderMonomialException
+	public PolyUnit add(PolyUnit p) throws DifferentOrderMonomialException
 	{
-		if (this.exponent != m.exponent)
+		if (this.exponent != p.exponent)
 		{
 			throw new DifferentOrderMonomialException(
 					"Cannot add monomials of different orders.");
 		}
 
-		return new PolyUnit((this.coefficient + m.coefficient), this.exponent);
+		return new PolyUnit((this.coefficient + p.coefficient), this.exponent);
 	}
 
-	public PolyUnit subtract(PolyUnit m) throws DifferentOrderMonomialException
+	public PolyUnit subtract(PolyUnit p) throws DifferentOrderMonomialException
 	{
-		if (this.exponent != m.exponent)
+		if (this.exponent != p.exponent)
 		{
 			throw new DifferentOrderMonomialException(
 					"Cannot subtract monomials of different orders.");
 		}
 
-		return new PolyUnit((this.coefficient - m.coefficient), this.exponent);
+		return new PolyUnit((this.coefficient - p.coefficient), this.exponent);
 	}
 
-	public PolyUnit multiply(PolyUnit m)
+	public PolyUnit multiply(PolyUnit p)
 	{
-		return new PolyUnit((this.coefficient * m.coefficient),
-				(this.exponent + m.exponent));
+		return new PolyUnit((this.coefficient * p.coefficient),
+				(this.exponent + p.exponent));
 	}
 
 	public PolyUnit multiply(double scalar)
@@ -80,10 +80,10 @@ class PolyUnit implements Comparable<PolyUnit>
 		return new PolyUnit((this.coefficient * scalar), this.exponent);
 	}
 
-	public PolyUnit divide(PolyUnit m)
+	public PolyUnit divide(PolyUnit p)
 	{
-		return new PolyUnit((this.coefficient / m.coefficient),
-				(this.exponent - m.exponent));
+		return new PolyUnit((this.coefficient / p.coefficient),
+				(this.exponent - p.exponent));
 	}
 
 	public PolyUnit divide(double scalar)
@@ -92,18 +92,28 @@ class PolyUnit implements Comparable<PolyUnit>
 	}
 
 	// Compares the order of the monomial, not a value
-	public int compareTo(PolyUnit m)
+	public int compareTo(PolyUnit p)
 	{
-		if (this.exponent < m.exponent)
+		if (this.exponent < p.exponent)
 		{
 			return -1;
 		}
-		else if (this.exponent == m.exponent)
+		else if (this.exponent == p.exponent)
 		{
 			return 0;
 		}
 		// Else
 		return 1;
+	}
+	
+	public boolean equals(PolyUnit p)
+	{
+		if ((this.coefficient == p.coefficient) && (this.exponent == p.exponent))
+		{
+			return true;
+		}
+		// Else
+		return false;
 	}
 
 	public double eval(double value)

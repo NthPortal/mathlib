@@ -258,6 +258,28 @@ public class Polynomial
 		}
 	}
 
+	public boolean equals(Polynomial p)
+	{
+		int size = this.terms.size();
+
+		if (size != p.terms.size())
+		{
+			return false;
+		}
+
+		// Should work because polynomial should always be sorted
+		for (int i = 0; i < size; i++)
+		{
+			if (!this.terms.get(i).equals(p.terms.get(i)))
+			{
+				return false;
+			}
+		}
+
+		// Else
+		return true;
+	}
+
 	public double eval(double value)
 	{
 		double result = 0;

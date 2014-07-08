@@ -54,7 +54,7 @@ public class IrrationalFraction implements Comparable<IrrationalFraction>
 
 	private void reduce() // NEEDS REWRITING
 	{
-		throw new RuntimeException("METHOD NOT YET WRITTERN");
+		throw new RuntimeException("METHOD NOT YET WRITTEN");
 	}
 
 	private void fixNegativeDenom()
@@ -154,7 +154,7 @@ public class IrrationalFraction implements Comparable<IrrationalFraction>
 
 		if (this.numer.compareTo(0) != 0)
 		{
-			if (exponent.compare(0) == -1)
+			if (exponent.compareTo(0) == -1)
 			{
 				exponent.multiply(-1);
 				result = result.reciprocal();

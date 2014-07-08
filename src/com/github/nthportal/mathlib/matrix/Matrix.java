@@ -2,6 +2,8 @@ package com.github.nthportal.mathlib.matrix;
 
 import java.util.Random;
 
+import com.github.nthportal.mathlib.util.SWRAIDKWException;
+
 public class Matrix
 {
 	private double[][] matrix;
@@ -185,6 +187,40 @@ public class Matrix
 					return false;
 				}
 			}
+		}
+		
+		// They have different values even though they have the same dimensions
+		if (m1.square != m2.square)
+		{
+			throw new SWRAIDKWException();
+		}
+
+		// Else
+		return true;
+	}
+
+	public boolean equals(Matrix m)
+	{
+		if (!(this.rows == m.rows && this.cols == m.cols))
+		{
+			return false;
+		}
+
+		for (int row = 0; row < this.rows; row++)
+		{
+			for (int col = 0; col < this.cols; col++)
+			{
+				if (!(this.matrix[row][col] == m.matrix[row][col]))
+				{
+					return false;
+				}
+			}
+		}
+
+		// They have different values even though they have the same dimensions
+		if (this.square != m.square)
+		{
+			throw new SWRAIDKWException();
 		}
 
 		// Else

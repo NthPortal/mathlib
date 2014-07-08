@@ -191,7 +191,7 @@ public class Radical implements Comparable<Radical>
 		return new Radical(this.coefficient, this.radicand,
 				(this.exponent.multiply(exponent)));
 	}
-	
+
 	public Radical pow(Fraction exponent)
 	{
 		return new Radical(this.coefficient, this.radicand,
@@ -229,6 +229,18 @@ public class Radical implements Comparable<Radical>
 		}
 		// Else
 		return 1;
+	}
+
+	public boolean equals(Radical r)
+	{
+		if ((this.radicand == r.radicand)
+				&& (this.coefficient == r.coefficient)
+				&& (this.exponent.equals(r.exponent)))
+		{
+			return true;
+		}
+		// Else
+		return false;
 	}
 
 	public void print()

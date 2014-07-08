@@ -23,7 +23,7 @@ class FracPolyUnit implements Comparable<FracPolyUnit>
 
 		this.coefficient = new Fraction(coefficient);
 
-		if (coefficient.compare(0) == 0)
+		if (coefficient.compareTo(0) == 0)
 		{
 			this.exponent = 0;
 		}
@@ -143,6 +143,16 @@ class FracPolyUnit implements Comparable<FracPolyUnit>
 		}
 		// Else
 		return 1;
+	}
+	
+	public boolean equals(FracPolyUnit p)
+	{
+		if (this.coefficient.equals(p.coefficient) && (this.exponent == p.exponent))
+		{
+			return true;
+		}
+		// Else
+		return false;
 	}
 
 	public Fraction eval(int value)

@@ -249,7 +249,7 @@ public class Fraction implements Comparable<Fraction>
 		return 1;
 	}
 
-	public int compare(int num)
+	public int compareTo(int num)
 	{
 		if (this.numer < (num * this.denom))
 		{
@@ -261,6 +261,16 @@ public class Fraction implements Comparable<Fraction>
 		}
 		// Else
 		return 1;
+	}
+	
+	public boolean equals(Fraction frac)
+	{
+		if ((this.numer == frac.numer) && (this.denom == frac.denom))
+		{
+			return true;
+		}
+		// Else
+		return false;
 	}
 
 	public void print()
