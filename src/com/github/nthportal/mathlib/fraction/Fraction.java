@@ -11,6 +11,11 @@ public class Fraction implements Comparable<Fraction>
 	{
 	}
 
+	
+	/**
+	 * @param numer An int numerator of the fraction.
+	 * @param denom An int denominator of the fraction. Should not be 0.
+	 */
 	public Fraction(int numer, int denom)
 	{
 		if (denom == 0)
@@ -20,15 +25,24 @@ public class Fraction implements Comparable<Fraction>
 
 		this.numer = numer;
 		this.denom = denom;
+		this.fixNegativeDenom();
 		this.reduce();
 	}
 
+	
+	/**
+	 * @param whole An int used as the value of the fraction.
+	 * The denominator of the fraction is set to 1.
+	 */
 	public Fraction(int whole)
 	{
 		this.numer = whole;
 		this.denom = 1;
 	}
 
+	/**
+	 * @param frac A fraction to be copied. 
+	 */
 	public Fraction(Fraction frac)
 	{
 		this.numer = frac.numer;
