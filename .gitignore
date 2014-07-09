@@ -1,0 +1,9 @@
+
+#IntelliJ IDEA metadata
+.idea
+*.iml
+
+# build output
+bin/
+testbin/
+
