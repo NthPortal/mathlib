@@ -633,5 +633,6 @@ public class FractionPolynomial
 				System.out.print(", ");
 			}
 		}
+		System.out.println();
 	}
 }
