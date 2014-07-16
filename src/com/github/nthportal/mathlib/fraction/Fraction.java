@@ -1,6 +1,7 @@
 package com.github.nthportal.mathlib.fraction;
 
 import com.github.nthportal.mathlib.util.Algebra;
+import com.github.nthportal.mathlib.util.ZeroDivisionException;
 
 public class Fraction implements Comparable<Fraction>
 {
@@ -177,7 +178,7 @@ public class Fraction implements Comparable<Fraction>
 
 		if (f.numer == 0)
 		{
-			throw new ZeroDenomException(
+			throw new ZeroDivisionException(
 					"Can't divide by a fraction with a '0' numerator.");
 		}
 
@@ -195,7 +196,7 @@ public class Fraction implements Comparable<Fraction>
 	{
 		if (scalar == 0)
 		{
-			throw new ZeroDenomException("Cannot divide by 0.");
+			throw new ZeroDivisionException("Cannot divide by 0.");
 		}
 
 		return new Fraction(this.numer, (this.denom * scalar));

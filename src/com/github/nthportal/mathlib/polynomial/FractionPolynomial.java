@@ -9,6 +9,7 @@ import com.github.nthportal.mathlib.fraction.Fraction;
 import com.github.nthportal.mathlib.util.Algebra;
 import com.github.nthportal.mathlib.util.ExtremumType;
 import com.github.nthportal.mathlib.util.FractionExtremum;
+import com.github.nthportal.mathlib.util.ZeroDivisionException;
 
 public class FractionPolynomial
 {

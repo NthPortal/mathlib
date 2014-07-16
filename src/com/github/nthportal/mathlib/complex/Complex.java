@@ -1,6 +1,7 @@
 package com.github.nthportal.mathlib.complex;
 
 import com.github.nthportal.mathlib.util.SWWAIDKWException;
+import com.github.nthportal.mathlib.util.ZeroDivisionException;
 
 public class Complex
 {
@@ -54,6 +55,11 @@ public class Complex
 
 	public Complex divide(double scalar)
 	{
+		if (scalar == 0)
+		{
+			throw new ZeroDivisionException();
+		}
+		
 		return new Complex((this.real / scalar), (this.imaginary / scalar));
 	}
 
@@ -71,6 +77,11 @@ public class Complex
 			throw new SWWAIDKWException();
 		}
 
+		if (numer.real == 0)
+		{
+			throw new ZeroDivisionException();
+		}
+		
 		return new Complex((numer.real / denom.real),
 				(numer.imaginary / denom.real));
 	}

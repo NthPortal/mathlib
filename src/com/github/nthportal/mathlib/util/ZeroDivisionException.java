@@ -1,4 +1,4 @@
-package com.github.nthportal.mathlib.polynomial;
+package com.github.nthportal.mathlib.util;
 
 @SuppressWarnings("serial")
 public class ZeroDivisionException extends ArithmeticException

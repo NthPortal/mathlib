@@ -3,6 +3,8 @@ package com.github.nthportal.mathlib.polynomial;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import com.github.nthportal.mathlib.util.ZeroDivisionException;
+
 public class Polynomial
 {
 	private ArrayList<PolyUnit> terms;
@@ -204,6 +206,11 @@ public class Polynomial
 
 	public Polynomial divide(double scalar)
 	{
+		if (scalar == 0)
+		{
+			throw new ZeroDivisionException();
+		}
+		
 		Polynomial result = new Polynomial();
 
 		for (int i = 0; i < this.terms.size(); i++)
