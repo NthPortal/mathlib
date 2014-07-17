@@ -72,7 +72,7 @@ public class LongFraction
 		return false;
 	}
 
-	public long toInt() throws NonIntFractionException
+	public long toLong() throws NonIntFractionException
 	{
 		if (this.denom != 1)
 		{
