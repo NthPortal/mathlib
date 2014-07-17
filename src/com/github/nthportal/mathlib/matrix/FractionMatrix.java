@@ -355,8 +355,6 @@ public class FractionMatrix
 							this.matrix[j][i].divide(this.matrix[i][i]));
 				}
 			}
-			this.print();
-			System.out.println();
 		}
 		return numRowSwaps;
 	}
@@ -387,8 +385,6 @@ public class FractionMatrix
 							this.matrix[j][i].divide(this.matrix[i][i]));
 				}
 			}
-			this.print();
-			System.out.println();
 		}
 	}
 
