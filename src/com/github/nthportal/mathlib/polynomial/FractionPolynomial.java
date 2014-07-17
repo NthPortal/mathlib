@@ -553,7 +553,7 @@ public class FractionPolynomial
 		Iterator<Fraction> extremaIter = possibleExtrema.iterator();
 		while (extremaIter.hasNext())
 		{
-			possibleExtremum = new Fraction(extremaIter.next());
+			possibleExtremum = extremaIter.next();
 			secondDerivEval = secondDeriv.eval(possibleExtremum);
 
 			// Second derivative test

@@ -21,7 +21,7 @@ class FracPolyUnit implements Comparable<FracPolyUnit>
 					"Something went wrong. This shouldn't have been called.");
 		}
 
-		this.coefficient = new Fraction(coefficient);
+		this.coefficient = coefficient;
 
 		if (coefficient.compareTo(0) == 0)
 		{
@@ -55,13 +55,13 @@ class FracPolyUnit implements Comparable<FracPolyUnit>
 
 	public FracPolyUnit(FracPolyUnit m)
 	{
-		this.coefficient = new Fraction(m.coefficient);
+		this.coefficient = m.coefficient;
 		this.exponent = m.exponent;
 	}
 
 	public Fraction getCoefficient()
 	{
-		return new Fraction(this.coefficient);
+		return this.coefficient;
 	}
 
 	public int getExponent()
@@ -103,8 +103,7 @@ class FracPolyUnit implements Comparable<FracPolyUnit>
 
 	public FracPolyUnit multiply(Fraction frac)
 	{
-		return new FracPolyUnit(this.coefficient.multiply(frac),
-				this.exponent);
+		return new FracPolyUnit(this.coefficient.multiply(frac), this.exponent);
 	}
 
 	public FracPolyUnit multiply(int scalar)
@@ -121,14 +120,12 @@ class FracPolyUnit implements Comparable<FracPolyUnit>
 
 	public FracPolyUnit divide(Fraction frac)
 	{
-		return new FracPolyUnit(this.coefficient.divide(frac),
-				this.exponent);
+		return new FracPolyUnit(this.coefficient.divide(frac), this.exponent);
 	}
 
 	public FracPolyUnit divide(int scalar)
 	{
-		return new FracPolyUnit(this.coefficient.divide(scalar),
-				this.exponent);
+		return new FracPolyUnit(this.coefficient.divide(scalar), this.exponent);
 	}
 
 	public int compareTo(FracPolyUnit m)
@@ -144,10 +141,11 @@ class FracPolyUnit implements Comparable<FracPolyUnit>
 		// Else
 		return 1;
 	}
-	
+
 	public boolean equals(FracPolyUnit p)
 	{
-		if (this.coefficient.equals(p.coefficient) && (this.exponent == p.exponent))
+		if (this.coefficient.equals(p.coefficient)
+				&& (this.exponent == p.exponent))
 		{
 			return true;
 		}
