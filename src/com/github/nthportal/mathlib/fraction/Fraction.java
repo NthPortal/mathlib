@@ -12,10 +12,11 @@ public class Fraction implements Comparable<Fraction>
 	{
 	}
 
-	
 	/**
-	 * @param numer An int numerator of the fraction.
-	 * @param denom An int denominator of the fraction. Should not be 0.
+	 * @param numer
+	 *            An int numerator of the fraction.
+	 * @param denom
+	 *            An int denominator of the fraction. Should not be 0.
 	 */
 	public Fraction(int numer, int denom)
 	{
@@ -30,10 +31,10 @@ public class Fraction implements Comparable<Fraction>
 		this.reduce();
 	}
 
-	
 	/**
-	 * @param whole An int used as the value of the fraction.
-	 * The denominator of the fraction is set to 1.
+	 * @param whole
+	 *            An int used as the value of the fraction. The denominator of
+	 *            the fraction is set to 1.
 	 */
 	public Fraction(int whole)
 	{
@@ -42,7 +43,8 @@ public class Fraction implements Comparable<Fraction>
 	}
 
 	/**
-	 * @param frac A fraction to be copied. 
+	 * @param frac
+	 *            A fraction to be copied.
 	 */
 	public Fraction(Fraction frac)
 	{
@@ -80,7 +82,7 @@ public class Fraction implements Comparable<Fraction>
 
 		return this.numer;
 	}
-	
+
 	public double toDouble()
 	{
 		return (this.numer / (double) this.denom);
@@ -223,31 +225,6 @@ public class Fraction implements Comparable<Fraction>
 		return result;
 	}
 
-	public Fraction pow(Fraction exponent) throws NonIntFractionException
-	{
-		Fraction result = new Fraction(this);
-
-		if (this.numer != 0)
-		{
-			if (exponent.denom != 1)
-			{
-				throw new NonIntFractionException(
-						"Fractional exponents with non-'1' denominators not permitted.");
-			}
-
-			if (exponent.numer < 0)
-			{
-				exponent.multiply(-1);
-				result = result.reciprocal();
-			}
-
-			result.numer = (int) Math.pow(result.numer, exponent.numer);
-			result.denom = (int) Math.pow(result.denom, exponent.numer);
-		}
-
-		return result;
-	}
-
 	public int compareTo(Fraction frac)
 	{
 		int gcf = Algebra.gcf(this.denom, frac.denom);
@@ -277,7 +254,7 @@ public class Fraction implements Comparable<Fraction>
 		// Else
 		return 1;
 	}
-	
+
 	public boolean equals(Fraction frac)
 	{
 		if ((this.numer == frac.numer) && (this.denom == frac.denom))
