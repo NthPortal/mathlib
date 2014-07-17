@@ -6,12 +6,8 @@ class FracPolyUnit implements Comparable<FracPolyUnit>
 {
 	private static final String VAR_SYMBOL = "x";
 
-	private Fraction coefficient;
-	private int exponent;
-
-	public FracPolyUnit()
-	{
-	}
+	private final Fraction coefficient;
+	private final int exponent;
 
 	public FracPolyUnit(Fraction coefficient, int exponent)
 	{
@@ -35,28 +31,7 @@ class FracPolyUnit implements Comparable<FracPolyUnit>
 
 	public FracPolyUnit(int coefficient, int exponent)
 	{
-		if (this.exponent < 0)
-		{
-			throw new InvalidExponentException(
-					"Something went wrong. This shouldn't have been called.");
-		}
-
-		this.coefficient = new Fraction(coefficient);
-
-		if (coefficient == 0)
-		{
-			this.exponent = 0;
-		}
-		else
-		{
-			this.exponent = exponent;
-		}
-	}
-
-	public FracPolyUnit(FracPolyUnit m)
-	{
-		this.coefficient = m.coefficient;
-		this.exponent = m.exponent;
+		this(new Fraction(coefficient), exponent);
 	}
 
 	public Fraction getCoefficient()

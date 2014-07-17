@@ -4,12 +4,8 @@ class PolyUnit implements Comparable<PolyUnit>
 {
 	private static final String VAR_SYMBOL = "x";
 
-	private double coefficient;
-	private int exponent;
-
-	public PolyUnit()
-	{
-	}
+	private final double coefficient;
+	private final int exponent;
 
 	public PolyUnit(double coefficient, int exponent)
 	{
@@ -29,12 +25,6 @@ class PolyUnit implements Comparable<PolyUnit>
 		{
 			this.exponent = exponent;
 		}
-	}
-
-	public PolyUnit(PolyUnit p)
-	{
-		this.coefficient = p.coefficient;
-		this.exponent = p.exponent;
 	}
 
 	public double getCoefficient()
@@ -105,10 +95,11 @@ class PolyUnit implements Comparable<PolyUnit>
 		// Else
 		return 1;
 	}
-	
+
 	public boolean equals(PolyUnit p)
 	{
-		if ((this.coefficient == p.coefficient) && (this.exponent == p.exponent))
+		if ((this.coefficient == p.coefficient)
+				&& (this.exponent == p.exponent))
 		{
 			return true;
 		}
