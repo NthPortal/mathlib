@@ -26,7 +26,7 @@ public class FractionPolynomial
 		this.terms = new ArrayList<FracPolyUnit>();
 		for (int i = 0; i < monomials.size(); i++)
 		{
-			this.add(new FracPolyUnit(monomials.get(i)));
+			this.add(monomials.get(i));
 		}
 	}
 
@@ -35,7 +35,7 @@ public class FractionPolynomial
 		this.terms = new ArrayList<FracPolyUnit>();
 		for (int i = 0; i < p.terms.size(); i++)
 		{
-			this.terms.add(new FracPolyUnit(p.terms.get(i)));
+			this.terms.add(p.terms.get(i));
 		}
 	}
 
@@ -65,26 +65,13 @@ public class FractionPolynomial
 
 	public FracPolyUnit getTerm(int index)
 	{
-		return new FracPolyUnit(terms.get(index));
+		return terms.get(index);
 	}
 
 	public int getSize()
 	{
 		return this.terms.size();
 	}
-
-	/*
-	 * private void reduce() { FractionPolynomial temp = new
-	 * FractionPolynomial(this); FractionPolynomial temp2 = new
-	 * FractionPolynomial();
-	 * 
-	 * this.terms.clear();
-	 * 
-	 * for (int i = 0; i < temp.terms.size(); i++) { temp2 =
-	 * temp2.add(temp.terms.get(i)); }
-	 * 
-	 * this.terms = temp2.terms; }
-	 */
 
 	private void order()
 	{
@@ -120,7 +107,7 @@ public class FractionPolynomial
 			}
 		}
 		// Else
-		result.terms.add(new FracPolyUnit(m));
+		result.terms.add(m);
 		result.order();
 		return result;
 	}
@@ -278,7 +265,7 @@ public class FractionPolynomial
 		FractionPolynomial dividend = new FractionPolynomial(this);
 		FracPolyUnit firstDividendTerm;
 		FracPolyUnit firstDivisorTerm;
-		FracPolyUnit temp = new FracPolyUnit();
+		FracPolyUnit temp;
 
 		while (true)
 		{

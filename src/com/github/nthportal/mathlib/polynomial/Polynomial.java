@@ -19,7 +19,7 @@ public class Polynomial
 		this.terms = new ArrayList<PolyUnit>();
 		for (int i = 0; i < monomials.size(); i++)
 		{
-			this.add(new PolyUnit(monomials.get(i)));
+			this.add(monomials.get(i));
 		}
 	}
 
@@ -28,7 +28,7 @@ public class Polynomial
 		this.terms = new ArrayList<PolyUnit>();
 		for (int i = 0; i < p.terms.size(); i++)
 		{
-			this.terms.add(new PolyUnit(p.terms.get(i)));
+			this.terms.add(p.terms.get(i));
 		}
 	}
 
@@ -46,7 +46,7 @@ public class Polynomial
 
 	public PolyUnit getTerm(int index)
 	{
-		return new PolyUnit(terms.get(index));
+		return terms.get(index);
 	}
 
 	public int getSize()
@@ -239,7 +239,7 @@ public class Polynomial
 		Polynomial dividend = new Polynomial(this);
 		PolyUnit firstDividendTerm;
 		PolyUnit firstDivisorTerm;
-		PolyUnit temp = new PolyUnit();
+		PolyUnit temp;
 
 		while (true)
 		{
