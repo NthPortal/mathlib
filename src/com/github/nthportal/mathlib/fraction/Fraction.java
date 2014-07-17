@@ -20,15 +20,15 @@ public class Fraction implements Comparable<Fraction>
 		{
 			throw new ZeroDenomException();
 		}
-		
+
 		if (denom < 0)
 		{
 			denom *= -1;
 			numer *= -1;
 		}
-		
+
 		int gcf = Algebra.gcf(numer, denom);
-		
+
 		this.numer = numer / gcf;
 		this.denom = denom / gcf;
 	}
@@ -105,8 +105,7 @@ public class Fraction implements Comparable<Fraction>
 		int gcf = Algebra.gcf(this.denom, f.denom);
 
 		int denom = (this.denom * f.denom / gcf);
-		int numer = (this.numer * f.denom / gcf)
-				+ (f.numer * this.denom / gcf);
+		int numer = (this.numer * f.denom / gcf) + (f.numer * this.denom / gcf);
 
 		return new Fraction(numer, denom);
 	}
@@ -121,8 +120,7 @@ public class Fraction implements Comparable<Fraction>
 		int gcf = Algebra.gcf(this.denom, f.denom);
 
 		int denom = (this.denom * f.denom / gcf);
-		int numer = (this.numer * f.denom / gcf)
-				- (f.numer * this.denom / gcf);
+		int numer = (this.numer * f.denom / gcf) - (f.numer * this.denom / gcf);
 
 		return new Fraction(numer, denom);
 	}
@@ -136,7 +134,7 @@ public class Fraction implements Comparable<Fraction>
 	{
 		int numer = (this.numer * f.numer);
 		int denom = (this.denom * f.denom);
-		
+
 		return new Fraction(numer, denom);
 	}
 
@@ -155,7 +153,7 @@ public class Fraction implements Comparable<Fraction>
 
 		int numer = (this.numer * f.denom);
 		int denom = (this.denom * f.numer);
-		
+
 		return new Fraction(numer, denom);
 	}
 
@@ -177,7 +175,7 @@ public class Fraction implements Comparable<Fraction>
 		}
 
 		Fraction temp = this;
-		
+
 		if (exponent < 0)
 		{
 			exponent *= -1;

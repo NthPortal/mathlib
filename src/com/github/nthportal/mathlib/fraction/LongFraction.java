@@ -5,12 +5,8 @@ import com.github.nthportal.mathlib.util.ZeroDivisionException;
 
 public class LongFraction
 {
-	private long numer;
-	private long denom;
-
-	private LongFraction()
-	{
-	}
+	private final long numer;
+	private final long denom;
 
 	/**
 	 * @param numer
@@ -25,21 +21,26 @@ public class LongFraction
 			throw new ZeroDenomException();
 		}
 
-		this.numer = numer;
-		this.denom = denom;
-		this.fixNegativeDenom();
-		this.reduce();
+		if (denom < 0)
+		{
+			denom *= -1;
+			numer *= -1;
+		}
+
+		long gcf = Algebra.gcf(numer, denom);
+
+		this.numer = numer / gcf;
+		this.denom = denom / gcf;
 	}
 
 	/**
 	 * @param whole
-	 *            A long used as the value of the LongFraction. The denominator of
-	 *            the LongFraction is set to 1.
+	 *            A long used as the value of the LongFraction. The denominator
+	 *            of the LongFraction is set to 1.
 	 */
 	public LongFraction(long whole)
 	{
-		this.numer = whole;
-		this.denom = 1;
+		this(whole, 1);
 	}
 
 	/**
@@ -72,7 +73,7 @@ public class LongFraction
 		return false;
 	}
 
-	public long toLong() throws NonIntFractionException
+	public long toInt() throws NonIntFractionException
 	{
 		if (this.denom != 1)
 		{
@@ -88,23 +89,6 @@ public class LongFraction
 		return (this.numer / (double) this.denom);
 	}
 
-	private void reduce()
-	{
-		long gcf = Algebra.gcf(this.numer, this.denom);
-
-		this.numer /= gcf;
-		this.denom /= gcf;
-	}
-
-	private void fixNegativeDenom()
-	{
-		if (this.denom < 0)
-		{
-			this.denom *= -1;
-			this.numer *= -1;
-		}
-	}
-
 	public LongFraction reciprocal()
 	{
 		if (this.numer == 0)
@@ -113,23 +97,18 @@ public class LongFraction
 		}
 
 		LongFraction reciprocal = new LongFraction(this.denom, this.numer);
-		reciprocal.fixNegativeDenom();
 		return reciprocal;
 	}
 
 	public LongFraction add(LongFraction f)
 	{
-		LongFraction result = new LongFraction();
-
 		long gcf = Algebra.gcf(this.denom, f.denom);
 
-		result.denom = (this.denom * f.denom / gcf);
-		result.numer = (this.numer * f.denom / gcf)
+		long denom = (this.denom * f.denom / gcf);
+		long numer = (this.numer * f.denom / gcf)
 				+ (f.numer * this.denom / gcf);
 
-		result.reduce();
-
-		return result;
+		return new LongFraction(numer, denom);
 	}
 
 	public LongFraction add(long num)
@@ -139,17 +118,13 @@ public class LongFraction
 
 	public LongFraction subtract(LongFraction f)
 	{
-		LongFraction result = new LongFraction();
-
 		long gcf = Algebra.gcf(this.denom, f.denom);
 
-		result.denom = (this.denom * f.denom / gcf);
-		result.numer = (this.numer * f.denom / gcf)
+		long denom = (this.denom * f.denom / gcf);
+		long numer = (this.numer * f.denom / gcf)
 				- (f.numer * this.denom / gcf);
 
-		result.reduce();
-
-		return result;
+		return new LongFraction(numer, denom);
 	}
 
 	public LongFraction subtract(long num)
@@ -159,14 +134,10 @@ public class LongFraction
 
 	public LongFraction multiply(LongFraction f)
 	{
-		LongFraction result = new LongFraction();
+		long numer = (this.numer * f.numer);
+		long denom = (this.denom * f.denom);
 
-		result.numer = (this.numer * f.numer);
-		result.denom = (this.denom * f.denom);
-
-		result.reduce();
-
-		return result;
+		return new LongFraction(numer, denom);
 	}
 
 	public LongFraction multiply(long scalar)
@@ -176,22 +147,16 @@ public class LongFraction
 
 	public LongFraction divide(LongFraction f)
 	{
-		LongFraction result = new LongFraction();
-
 		if (f.numer == 0)
 		{
 			throw new ZeroDivisionException(
 					"Can't divide by a LongFraction with a '0' numerator.");
 		}
 
-		result.numer = (this.numer * f.denom);
-		result.denom = (this.denom * f.numer);
+		long numer = (this.numer * f.denom);
+		long denom = (this.denom * f.numer);
 
-		result.fixNegativeDenom();
-
-		result.reduce();
-
-		return result;
+		return new LongFraction(numer, denom);
 	}
 
 	public LongFraction divide(long scalar)
@@ -206,23 +171,23 @@ public class LongFraction
 
 	public LongFraction pow(long exponent)
 	{
-		LongFraction result = new LongFraction(this);
-
 		if (this.numer == 0)
 		{
-			return result;
+			return this;
 		}
+
+		LongFraction temp = this;
 
 		if (exponent < 0)
 		{
 			exponent *= -1;
-			result = result.reciprocal();
+			temp = temp.reciprocal();
 		}
 
-		result.numer = (long) Math.pow(result.numer, exponent);
-		result.denom = (long) Math.pow(result.denom, exponent);
+		long numer = (long) Math.pow(temp.numer, exponent);
+		long denom = (long) Math.pow(temp.denom, exponent);
 
-		return result;
+		return new LongFraction(numer, denom);
 	}
 
 	public long compareTo(LongFraction frac)
@@ -273,9 +238,5 @@ public class LongFraction
 	public void println()
 	{
 		System.out.println(this.numer + "/" + this.denom);
-	}
-
-	public static void main(String[] args)
-	{
 	}
 }
