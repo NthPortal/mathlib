@@ -5,41 +5,29 @@ import com.github.nthportal.mathlib.util.SWWAIDKWException;
 
 public class FractionComplex
 {
-	private Fraction real;
-	private Fraction imaginary;
-
-	private FractionComplex()
-	{
-	}
+	private final Fraction real;
+	private final Fraction imaginary;
 
 	public FractionComplex(Fraction realCoef, Fraction imaginaryCoef)
 	{
-		this.real = new Fraction(realCoef);
-		this.imaginary = new Fraction(imaginaryCoef);
+		this.real = realCoef;
+		this.imaginary = imaginaryCoef;
 	}
 
 	public FractionComplex(int realCoef, int imaginaryCoef)
 	{
-		this.real = new Fraction(realCoef);
-		this.imaginary = new Fraction(imaginaryCoef);
+		this(new Fraction(realCoef), new Fraction(imaginaryCoef));
 	}
 
 	public FractionComplex(Fraction imagNum)
 	{
-		this.real = new Fraction(0);
-		this.imaginary = new Fraction(imagNum);
+		this(new Fraction(0), imagNum);
 	}
 
 	public FractionComplex(int imagNum)
 	{
 		this.real = new Fraction(0);
 		this.imaginary = new Fraction(imagNum);
-	}
-
-	public FractionComplex(FractionComplex c)
-	{
-		this.real = new Fraction(c.real);
-		this.imaginary = new Fraction(c.imaginary);
 	}
 
 	public FractionComplex add(FractionComplex c)
@@ -68,12 +56,11 @@ public class FractionComplex
 
 	public FractionComplex multiply(FractionComplex c)
 	{
-		FractionComplex result = new FractionComplex();
-		result.real = this.real.multiply(c.real).subtract(
+		Fraction real = this.real.multiply(c.real).subtract(
 				this.imaginary.multiply(c.imaginary));
-		result.imaginary = this.real.multiply(c.imaginary).add(
+		Fraction imaginary = this.real.multiply(c.imaginary).add(
 				this.imaginary.multiply(c.real));
-		return result;
+		return new FractionComplex(real, imaginary);
 	}
 
 	public FractionComplex divide(int scalar)
@@ -90,7 +77,7 @@ public class FractionComplex
 
 	public FractionComplex divide(FractionComplex denom)
 	{
-		FractionComplex numer = new FractionComplex(this);
+		FractionComplex numer = this;
 
 		FractionComplex conjugate = new FractionComplex(denom.real,
 				denom.imaginary.multiply(-1));
@@ -120,7 +107,7 @@ public class FractionComplex
 			return new FractionComplex(1, 0);
 		}
 
-		FractionComplex result = new FractionComplex(this);
+		FractionComplex result = this;
 
 		for (int i = 0; i < (exp - 1); i++)
 		{

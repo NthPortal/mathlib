@@ -5,12 +5,8 @@ import com.github.nthportal.mathlib.util.ZeroDivisionException;
 
 public class Complex
 {
-	private double real;
-	private double imaginary;
-
-	private Complex()
-	{
-	}
+	private final double real;
+	private final double imaginary;
 
 	public Complex(double realCoef, double imaginaryCoef)
 	{
@@ -20,14 +16,7 @@ public class Complex
 
 	public Complex(double imagNum)
 	{
-		this.real = 0;
-		this.imaginary = imagNum;
-	}
-
-	public Complex(Complex c)
-	{
-		this.real = c.real;
-		this.imaginary = c.imaginary;
+		this(0, imagNum);
 	}
 
 	public Complex add(Complex c)
@@ -47,10 +36,9 @@ public class Complex
 
 	public Complex multiply(Complex c)
 	{
-		Complex result = new Complex();
-		result.real = ((this.real * c.real) - (this.imaginary * c.imaginary));
-		result.imaginary = ((this.real * c.imaginary) + (this.imaginary * c.real));
-		return result;
+		double real = ((this.real * c.real) - (this.imaginary * c.imaginary));
+		double imaginary = ((this.real * c.imaginary) + (this.imaginary * c.real));
+		return new Complex(real, imaginary);
 	}
 
 	public Complex divide(double scalar)
@@ -65,7 +53,7 @@ public class Complex
 
 	public Complex divide(Complex denom)
 	{
-		Complex numer = new Complex(this);
+		Complex numer = this;
 
 		Complex conjugate = new Complex(denom.real, (denom.imaginary * -1));
 
@@ -99,7 +87,7 @@ public class Complex
 			return new Complex(1, 0);
 		}
 
-		Complex result = new Complex(this);
+		Complex result = this;
 
 		for (int i = 0; i < (exp - 1); i++)
 		{
