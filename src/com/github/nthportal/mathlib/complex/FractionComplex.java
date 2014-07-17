@@ -107,6 +107,29 @@ public class FractionComplex
 				numer.imaginary.divide(denom.real));
 	}
 
+	public FractionComplex pow(int exp)
+	{
+		if (exp < 0)
+		{
+			throw new IllegalArgumentException(
+					"Cannot raise complex number to a negative power.");
+		}
+
+		if (exp == 0)
+		{
+			return new FractionComplex(1, 0);
+		}
+
+		FractionComplex result = new FractionComplex(this);
+
+		for (int i = 0; i < (exp - 1); i++)
+		{
+			result = result.multiply(this);
+		}
+
+		return result;
+	}
+
 	public boolean equals(FractionComplex c)
 	{
 		if (this.real.equals(c.real) && this.imaginary.equals(c.imaginary))

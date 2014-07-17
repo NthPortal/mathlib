@@ -59,7 +59,7 @@ public class Complex
 		{
 			throw new ZeroDivisionException();
 		}
-		
+
 		return new Complex((this.real / scalar), (this.imaginary / scalar));
 	}
 
@@ -81,9 +81,32 @@ public class Complex
 		{
 			throw new ZeroDivisionException();
 		}
-		
+
 		return new Complex((numer.real / denom.real),
 				(numer.imaginary / denom.real));
+	}
+
+	public Complex pow(int exp)
+	{
+		if (exp < 0)
+		{
+			throw new IllegalArgumentException(
+					"Cannot raise complex number to a negative power.");
+		}
+
+		if (exp == 0)
+		{
+			return new Complex(1, 0);
+		}
+
+		Complex result = new Complex(this);
+
+		for (int i = 0; i < (exp - 1); i++)
+		{
+			result = result.multiply(this);
+		}
+
+		return result;
 	}
 
 	public boolean equals(Complex c)
