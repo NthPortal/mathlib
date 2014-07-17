@@ -171,6 +171,35 @@ public class Matrix
 		return result;
 	}
 
+	public Matrix pow(int exp)
+	{
+		if (!this.square)
+		{
+			throw new NonSquareMatrixException(
+					"Cannot raise a non-square matrix to a power.");
+		}
+
+		if (exp < 0)
+		{
+			throw new IllegalArgumentException(
+					"Cannot raise matrix to a negative power.");
+		}
+
+		if (exp == 0)
+		{
+			return identity(this.rows);
+		}
+
+		Matrix result = new Matrix(this);
+
+		for (int i = 0; i < (exp - 1); i++)
+		{
+			result = result.multiply(this);
+		}
+
+		return result;
+	}
+
 	public static boolean compare(Matrix m1, Matrix m2)
 	{
 		if (!(m1.rows == m2.rows && m1.cols == m2.cols))
@@ -188,7 +217,7 @@ public class Matrix
 				}
 			}
 		}
-		
+
 		// They have different values even though they have the same dimensions
 		if (m1.square != m2.square)
 		{
