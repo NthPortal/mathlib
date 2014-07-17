@@ -35,6 +35,38 @@ public class Algebra
 
 		return larger;
 	}
+	
+	public static long gcf(long n1, long n2)
+	{
+		long larger, smaller, mod;
+
+		// Finds which is larger
+		if (n1 >= n2)
+		{
+			larger = n1;
+			smaller = n2;
+		}
+		else
+		{
+			larger = n2;
+			smaller = n1;
+		}
+
+		// Euclid's Algorithm
+		while (smaller != 0)
+		{
+			mod = (larger % smaller);
+			larger = smaller;
+			smaller = mod;
+		}
+
+		if (larger < 0)
+		{
+			larger *= -1;
+		}
+
+		return larger;
+	}
 
 	public static int lcm(int n1, int n2)
 	{

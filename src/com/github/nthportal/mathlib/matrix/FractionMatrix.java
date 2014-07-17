@@ -2,12 +2,12 @@ package com.github.nthportal.mathlib.matrix;
 
 import java.util.Random;
 
-import com.github.nthportal.mathlib.fraction.Fraction;
+import com.github.nthportal.mathlib.fraction.LongFraction;
 import com.github.nthportal.mathlib.util.SWWAIDKWException;
 
 public class FractionMatrix
 {
-	private Fraction[][] matrix;
+	private LongFraction[][] matrix;
 	private int rows;
 	private int cols;
 	private boolean square;
@@ -25,7 +25,7 @@ public class FractionMatrix
 		this.rows = size;
 		this.cols = size;
 		this.square = true;
-		this.matrix = new Fraction[size][size];
+		this.matrix = new LongFraction[size][size];
 	}
 
 	public FractionMatrix(int rows, int cols)
@@ -33,7 +33,7 @@ public class FractionMatrix
 		this.rows = rows;
 		this.cols = cols;
 		this.testSquare();
-		this.matrix = new Fraction[rows][cols];
+		this.matrix = new LongFraction[rows][cols];
 	}
 
 	public FractionMatrix(FractionMatrix m)
@@ -41,11 +41,11 @@ public class FractionMatrix
 		this.rows = m.rows;
 		this.cols = m.cols;
 		this.square = m.square;
-		this.matrix = new Fraction[m.rows][m.cols];
+		this.matrix = new LongFraction[m.rows][m.cols];
 		deepCopy(m.matrix, this.matrix, m.rows, m.cols);
 	}
 
-	private static void deepCopy(Fraction[][] source, Fraction[][] target,
+	private static void deepCopy(LongFraction[][] source, LongFraction[][] target,
 			int rows, int cols)
 	{
 		for (int row = 0; row < rows; row++)
@@ -57,7 +57,7 @@ public class FractionMatrix
 		}
 	}
 
-	private static void deepCopy(Fraction[][] source, Fraction[][] target,
+	private static void deepCopy(LongFraction[][] source, LongFraction[][] target,
 			int rows, int cols, int sourceStartRow, int sourceStartCol,
 			int targetStartRow, int targetStartCol)
 	{
@@ -91,12 +91,12 @@ public class FractionMatrix
 		return this.cols;
 	}
 
-	public Fraction getSpot(int row, int col)
+	public LongFraction getSpot(int row, int col)
 	{
-		return new Fraction(this.matrix[row][col]);
+		return new LongFraction(this.matrix[row][col]);
 	}
 
-	public void setSpot(int row, int col, Fraction value)
+	public void setSpot(int row, int col, LongFraction value)
 	{
 		this.matrix[row][col] = value;
 	}
@@ -162,7 +162,7 @@ public class FractionMatrix
 		{
 			for (int col = 0; col < m.cols; col++)
 			{
-				result.matrix[row][col] = new Fraction(0);
+				result.matrix[row][col] = new LongFraction(0);
 				for (int m1Col = 0; m1Col < this.cols; m1Col++)
 				{
 					// m2Row = m1Col
@@ -271,11 +271,11 @@ public class FractionMatrix
 			{
 				if (row == col)
 				{
-					identity.matrix[row][col] = new Fraction(1);
+					identity.matrix[row][col] = new LongFraction(1);
 				}
 				else
 				{
-					identity.matrix[row][col] = new Fraction(0);
+					identity.matrix[row][col] = new LongFraction(0);
 				}
 			}
 		}
@@ -283,7 +283,7 @@ public class FractionMatrix
 		return identity;
 	}
 
-	public Fraction det() throws NonSquareMatrixException
+	public LongFraction det() throws NonSquareMatrixException
 	{
 		if (!this.square)
 		{
@@ -292,7 +292,7 @@ public class FractionMatrix
 		}
 
 		int numRowSwaps = 0;
-		Fraction det = new Fraction(1);
+		LongFraction det = new LongFraction(1);
 		FractionMatrix tempMatrix = new FractionMatrix(this);
 
 		numRowSwaps = tempMatrix.reduceForwardPhase();
@@ -310,7 +310,7 @@ public class FractionMatrix
 		// Not sure if necessary in Java - was needed in C++
 		if (det.compareTo(-0) == 0)
 		{
-			det = new Fraction(0);
+			det = new LongFraction(0);
 		}
 
 		return det;
@@ -495,7 +495,7 @@ public class FractionMatrix
 
 		this.cols *= 2;
 		this.testSquare();
-		this.matrix = new Fraction[this.rows][this.cols];
+		this.matrix = new LongFraction[this.rows][this.cols];
 
 		deepCopy(tempMatrix.matrix, this.matrix, tempMatrix.rows,
 				tempMatrix.cols);
@@ -507,7 +507,7 @@ public class FractionMatrix
 
 	private void rowSwap(int row1, int row2)
 	{
-		Fraction[] tempRow = new Fraction[this.cols];
+		LongFraction[] tempRow = new LongFraction[this.cols];
 
 		for (int col = 0; col < this.cols; col++)
 		{
@@ -517,7 +517,7 @@ public class FractionMatrix
 		}
 	}
 
-	private void rowScale(int row, Fraction scalar)
+	private void rowScale(int row, LongFraction scalar)
 	{
 		for (int col = 0; col < this.cols; col++)
 		{
@@ -525,7 +525,7 @@ public class FractionMatrix
 		}
 	}
 
-	private void rowReplace(int targetRow, int modRow, Fraction scalar)
+	private void rowReplace(int targetRow, int modRow, LongFraction scalar)
 	{
 		for (int col = 0; col < this.cols; col++)
 		{
@@ -552,7 +552,7 @@ public class FractionMatrix
 			{
 				for (int col = 0; col < COLS; col++)
 				{
-					matrices[i].matrix[row][col] = new Fraction(
+					matrices[i].matrix[row][col] = new LongFraction(
 							rand.nextInt(MAX - MIN) + MIN);
 				}
 			}
