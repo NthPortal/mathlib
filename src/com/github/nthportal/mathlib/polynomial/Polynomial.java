@@ -210,7 +210,7 @@ public class Polynomial
 		{
 			throw new ZeroDivisionException();
 		}
-		
+
 		Polynomial result = new Polynomial();
 
 		for (int i = 0; i < this.terms.size(); i++)
@@ -263,6 +263,29 @@ public class Polynomial
 
 			dividend = dividend.subtract(divisor.multiply(temp));
 		}
+	}
+
+	public Polynomial pow(int exp)
+	{
+		if (exp < 0)
+		{
+			throw new IllegalArgumentException(
+					"Cannot raise polynomial to a negative power.");
+		}
+
+		if (exp == 0)
+		{
+			return new Polynomial(1, 0);
+		}
+
+		Polynomial result = new Polynomial(this);
+
+		for (int i = 0; i < (exp - 1); i++)
+		{
+			result = result.multiply(this);
+		}
+
+		return result;
 	}
 
 	public boolean equals(Polynomial p)

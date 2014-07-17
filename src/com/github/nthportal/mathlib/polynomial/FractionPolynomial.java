@@ -304,6 +304,29 @@ public class FractionPolynomial
 		}
 	}
 
+	public FractionPolynomial pow(int exp)
+	{
+		if (exp < 0)
+		{
+			throw new IllegalArgumentException(
+					"Cannot raise polynomial to a negative power.");
+		}
+
+		if (exp == 0)
+		{
+			return new FractionPolynomial(1, 0);
+		}
+
+		FractionPolynomial result = new FractionPolynomial(this);
+
+		for (int i = 0; i < (exp - 1); i++)
+		{
+			result = result.multiply(this);
+		}
+
+		return result;
+	}
+
 	public boolean equals(FractionPolynomial p)
 	{
 		int size = this.terms.size();
