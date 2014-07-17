@@ -5,12 +5,8 @@ import com.github.nthportal.mathlib.util.ZeroDivisionException;
 
 public class Fraction implements Comparable<Fraction>
 {
-	private int numer;
-	private int denom;
-
-	private Fraction()
-	{
-	}
+	private final int numer;
+	private final int denom;
 
 	/**
 	 * @param numer
@@ -24,11 +20,17 @@ public class Fraction implements Comparable<Fraction>
 		{
 			throw new ZeroDenomException();
 		}
-
-		this.numer = numer;
-		this.denom = denom;
-		this.fixNegativeDenom();
-		this.reduce();
+		
+		if (denom < 0)
+		{
+			denom *= -1;
+			numer *= -1;
+		}
+		
+		int gcf = Algebra.gcf(numer, denom);
+		
+		this.numer = numer / gcf;
+		this.denom = denom / gcf;
 	}
 
 	/**
@@ -38,8 +40,7 @@ public class Fraction implements Comparable<Fraction>
 	 */
 	public Fraction(int whole)
 	{
-		this.numer = whole;
-		this.denom = 1;
+		this(whole, 1);
 	}
 
 	/**
@@ -88,23 +89,6 @@ public class Fraction implements Comparable<Fraction>
 		return (this.numer / (double) this.denom);
 	}
 
-	private void reduce()
-	{
-		int gcf = Algebra.gcf(this.numer, this.denom);
-
-		this.numer /= gcf;
-		this.denom /= gcf;
-	}
-
-	private void fixNegativeDenom()
-	{
-		if (this.denom < 0)
-		{
-			this.denom *= -1;
-			this.numer *= -1;
-		}
-	}
-
 	public Fraction reciprocal()
 	{
 		if (this.numer == 0)
@@ -113,23 +97,18 @@ public class Fraction implements Comparable<Fraction>
 		}
 
 		Fraction reciprocal = new Fraction(this.denom, this.numer);
-		reciprocal.fixNegativeDenom();
 		return reciprocal;
 	}
 
 	public Fraction add(Fraction f)
 	{
-		Fraction result = new Fraction();
-
 		int gcf = Algebra.gcf(this.denom, f.denom);
 
-		result.denom = (this.denom * f.denom / gcf);
-		result.numer = (this.numer * f.denom / gcf)
+		int denom = (this.denom * f.denom / gcf);
+		int numer = (this.numer * f.denom / gcf)
 				+ (f.numer * this.denom / gcf);
 
-		result.reduce();
-
-		return result;
+		return new Fraction(numer, denom);
 	}
 
 	public Fraction add(int num)
@@ -139,17 +118,13 @@ public class Fraction implements Comparable<Fraction>
 
 	public Fraction subtract(Fraction f)
 	{
-		Fraction result = new Fraction();
-
 		int gcf = Algebra.gcf(this.denom, f.denom);
 
-		result.denom = (this.denom * f.denom / gcf);
-		result.numer = (this.numer * f.denom / gcf)
+		int denom = (this.denom * f.denom / gcf);
+		int numer = (this.numer * f.denom / gcf)
 				- (f.numer * this.denom / gcf);
 
-		result.reduce();
-
-		return result;
+		return new Fraction(numer, denom);
 	}
 
 	public Fraction subtract(int num)
@@ -159,14 +134,10 @@ public class Fraction implements Comparable<Fraction>
 
 	public Fraction multiply(Fraction f)
 	{
-		Fraction result = new Fraction();
-
-		result.numer = (this.numer * f.numer);
-		result.denom = (this.denom * f.denom);
-
-		result.reduce();
-
-		return result;
+		int numer = (this.numer * f.numer);
+		int denom = (this.denom * f.denom);
+		
+		return new Fraction(numer, denom);
 	}
 
 	public Fraction multiply(int scalar)
@@ -176,22 +147,16 @@ public class Fraction implements Comparable<Fraction>
 
 	public Fraction divide(Fraction f)
 	{
-		Fraction result = new Fraction();
-
 		if (f.numer == 0)
 		{
 			throw new ZeroDivisionException(
 					"Can't divide by a fraction with a '0' numerator.");
 		}
 
-		result.numer = (this.numer * f.denom);
-		result.denom = (this.denom * f.numer);
-
-		result.fixNegativeDenom();
-
-		result.reduce();
-
-		return result;
+		int numer = (this.numer * f.denom);
+		int denom = (this.denom * f.numer);
+		
+		return new Fraction(numer, denom);
 	}
 
 	public Fraction divide(int scalar)
@@ -206,23 +171,23 @@ public class Fraction implements Comparable<Fraction>
 
 	public Fraction pow(int exponent)
 	{
-		Fraction result = new Fraction(this);
-
 		if (this.numer == 0)
 		{
-			return result;
+			return this;
 		}
 
+		Fraction temp = this;
+		
 		if (exponent < 0)
 		{
 			exponent *= -1;
-			result = result.reciprocal();
+			temp = temp.reciprocal();
 		}
 
-		result.numer = (int) Math.pow(result.numer, exponent);
-		result.denom = (int) Math.pow(result.denom, exponent);
+		int numer = (int) Math.pow(temp.numer, exponent);
+		int denom = (int) Math.pow(temp.denom, exponent);
 
-		return result;
+		return new Fraction(numer, denom);
 	}
 
 	public int compareTo(Fraction frac)
@@ -273,9 +238,5 @@ public class Fraction implements Comparable<Fraction>
 	public void println()
 	{
 		System.out.println(this.numer + "/" + this.denom);
-	}
-
-	public static void main(String[] args)
-	{
 	}
 }
