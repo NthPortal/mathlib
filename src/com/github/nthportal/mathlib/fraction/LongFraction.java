@@ -43,16 +43,6 @@ public class LongFraction
 		this(whole, 1);
 	}
 
-	/**
-	 * @param frac
-	 *            A LongFraction to be copied.
-	 */
-	public LongFraction(LongFraction frac)
-	{
-		this.numer = frac.numer;
-		this.denom = frac.denom;
-	}
-
 	public long getNumer()
 	{
 		return this.numer;

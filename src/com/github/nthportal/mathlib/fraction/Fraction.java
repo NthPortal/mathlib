@@ -43,16 +43,6 @@ public class Fraction implements Comparable<Fraction>
 		this(whole, 1);
 	}
 
-	/**
-	 * @param frac
-	 *            A fraction to be copied.
-	 */
-	public Fraction(Fraction frac)
-	{
-		this.numer = frac.numer;
-		this.denom = frac.denom;
-	}
-
 	public int getNumer()
 	{
 		return this.numer;
