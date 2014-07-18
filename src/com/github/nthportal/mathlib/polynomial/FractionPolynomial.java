@@ -435,12 +435,11 @@ public class FractionPolynomial
 					.hasNext();)
 			{
 				Integer next = numerIter.next();
-				
+
 				for (Iterator<Integer> denomIter = denomFactors.iterator(); denomIter
 						.hasNext();)
 				{
-					possibleRoot = new Fraction(next,
-							denomIter.next());
+					possibleRoot = new Fraction(next, denomIter.next());
 
 					for (int neg = 0; neg <= 1; neg++)
 					{
