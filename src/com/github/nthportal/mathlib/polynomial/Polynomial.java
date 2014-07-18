@@ -2,34 +2,36 @@ package com.github.nthportal.mathlib.polynomial;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 import com.github.nthportal.mathlib.util.ZeroDivisionException;
 
 public class Polynomial
 {
-	private ArrayList<PolyUnit> terms;
+	private final List<PolyUnit> terms;
 
 	public Polynomial()
 	{
-		this.terms = new ArrayList<PolyUnit>();
+		this.terms = Collections.unmodifiableList(new ArrayList<PolyUnit>());
 	}
 
-	public Polynomial(ArrayList<PolyUnit> monomials)
+	private Polynomial(List<PolyUnit> list, boolean dummy)
 	{
-		this.terms = new ArrayList<PolyUnit>();
-		for (int i = 0; i < monomials.size(); i++)
-		{
-			this.add(monomials.get(i));
-		}
+		this.terms = Collections.unmodifiableList(list);
 	}
 
-	public Polynomial(Polynomial p)
+	public Polynomial(ArrayList<PolyUnit> list)
 	{
-		this.terms = new ArrayList<PolyUnit>();
-		for (int i = 0; i < p.terms.size(); i++)
+		if (list.contains(null))
 		{
-			this.terms.add(p.terms.get(i));
+			throw new IllegalArgumentException(
+					"Cannot create a polynomial from a list including null.");
 		}
+
+		List<PolyUnit> temp = new ArrayList<PolyUnit>(list);
+		this.terms = Collections.unmodifiableList(temp);
 	}
 
 	// Creates a Polynomial with one term
@@ -40,8 +42,10 @@ public class Polynomial
 			throw new InvalidExponentException();
 		}
 
-		this.terms = new ArrayList<PolyUnit>();
-		this.terms.add(new PolyUnit(coefficient, exponent));
+		List<PolyUnit> tempList = new ArrayList<PolyUnit>();
+		tempList.add(new PolyUnit(coefficient, exponent));
+
+		this.terms = Collections.unmodifiableList(tempList);
 	}
 
 	public PolyUnit getTerm(int index)
@@ -54,64 +58,49 @@ public class Polynomial
 		return this.terms.size();
 	}
 
-	/*
-	 * private void reduce() { Polynomial temp = new Polynomial(this);
-	 * Polynomial temp2 = new Polynomial();
-	 * 
-	 * this.terms.clear();
-	 * 
-	 * for (int i = 0; i < temp.terms.size(); i++) { temp2 =
-	 * temp2.add(temp.terms.get(i)); }
-	 * 
-	 * this.terms = temp2.terms; }
-	 */
-
-	private void order()
-	{
-		Collections.sort(this.terms, Collections.reverseOrder());
-	}
-
 	public Polynomial add(PolyUnit m)
 	{
-		Polynomial result = new Polynomial(this);
-
 		// Returns original polynomial if monomial added has a 0 coefficient
 		if (m.getCoefficient() == 0)
 		{
-			return result;
+			return this;
 		}
 
+		List<PolyUnit> tempList = new ArrayList<PolyUnit>(this.terms);
 		PolyUnit temp;
 
-		for (int i = 0; i < result.terms.size(); i++)
+		for (ListIterator<PolyUnit> iterator = tempList.listIterator(); iterator
+				.hasNext();)
 		{
-			if (m.getExponent() == result.terms.get(i).getExponent())
+			PolyUnit next = iterator.next();
+			if (m.getExponent() == next.getExponent())
 			{
-				temp = result.terms.get(i).add(m);
+				temp = next.add(m);
 				if (temp.getCoefficient() == 0)
 				{
-					result.terms.remove(i);
+					iterator.remove();
 				}
 				else
 				{
-					result.terms.set(i, temp);
+					iterator.set(temp);
 				}
-				return result;
+				return new Polynomial(tempList, true);
 			}
 		}
 		// Else
-		result.terms.add(m);
-		result.order();
-		return result;
+		tempList.add(m);
+		Collections.sort(tempList, Collections.reverseOrder());
+		return new Polynomial(tempList, true);
 	}
 
 	public Polynomial add(Polynomial p)
 	{
-		Polynomial result = new Polynomial(this);
+		Polynomial result = this;
 
-		for (int i = 0; i < p.terms.size(); i++)
+		for (Iterator<PolyUnit> iterator = p.terms.iterator(); iterator
+				.hasNext();)
 		{
-			result = result.add(p.terms.get(i));
+			result = result.add(iterator.next());
 		}
 
 		return result;
@@ -119,59 +108,30 @@ public class Polynomial
 
 	public Polynomial subtract(PolyUnit m)
 	{
-		Polynomial result = new Polynomial(this);
-
-		// Returns original polynomial if monomial subtracted has a 0
-		// coefficient
-		if (m.getCoefficient() == 0)
-		{
-			return result;
-		}
-
-		PolyUnit temp;
-
-		for (int i = 0; i < result.terms.size(); i++)
-		{
-			if (m.getExponent() == result.terms.get(i).getExponent())
-			{
-				temp = result.terms.get(i).subtract(m);
-				if (temp.getCoefficient() == 0)
-				{
-					result.terms.remove(i);
-				}
-				else
-				{
-					result.terms.set(i, temp);
-				}
-				return result;
-			}
-		}
-		// Else
-		m = m.multiply(-1);
-		result.terms.add(m);
-		result.order();
-		return result;
+		return this.add(m.multiply(-1));
 	}
 
 	public Polynomial subtract(Polynomial p)
 	{
-		Polynomial result = new Polynomial(this);
+		Polynomial result = this;
 
-		for (int i = 0; i < p.terms.size(); i++)
+		for (Iterator<PolyUnit> iterator = p.terms.iterator(); iterator
+				.hasNext();)
 		{
-			result = result.subtract(p.terms.get(i));
+			result = result.subtract(iterator.next());
 		}
 
 		return result;
 	}
 
-	public Polynomial multiply(double scalar)
+	public Polynomial multiply(double num)
 	{
 		Polynomial result = new Polynomial();
 
-		for (int i = 0; i < this.terms.size(); i++)
+		for (Iterator<PolyUnit> iterator = this.terms.iterator(); iterator
+				.hasNext();)
 		{
-			result.terms.add(this.terms.get(i).multiply(scalar));
+			result.add(iterator.next().multiply(num));
 		}
 
 		return result;
@@ -181,9 +141,10 @@ public class Polynomial
 	{
 		Polynomial result = new Polynomial();
 
-		for (int i = 0; i < this.terms.size(); i++)
+		for (Iterator<PolyUnit> iterator = this.terms.iterator(); iterator
+				.hasNext();)
 		{
-			result.terms.add(this.terms.get(i).multiply(m));
+			result.add(iterator.next().multiply(m));
 		}
 
 		return result;
@@ -193,29 +154,26 @@ public class Polynomial
 	{
 		Polynomial result = new Polynomial();
 
-		for (int i = 0; i < this.terms.size(); i++)
+		for (Iterator<PolyUnit> iter = this.terms.iterator(); iter.hasNext();)
 		{
-			for (int j = 0; j < p.terms.size(); j++)
+			PolyUnit next = iter.next();
+			for (Iterator<PolyUnit> jter = p.terms.iterator(); jter.hasNext();)
 			{
-				result = result.add(this.terms.get(i).multiply(p.terms.get(j)));
+				result = result.add(next.multiply(jter.next()));
 			}
 		}
 
 		return result;
 	}
 
-	public Polynomial divide(double scalar)
+	public Polynomial divide(double num)
 	{
-		if (scalar == 0)
-		{
-			throw new ZeroDivisionException();
-		}
-
 		Polynomial result = new Polynomial();
 
-		for (int i = 0; i < this.terms.size(); i++)
+		for (Iterator<PolyUnit> iterator = this.terms.iterator(); iterator
+				.hasNext();)
 		{
-			result.terms.add(this.terms.get(i).divide(scalar));
+			result.add(iterator.next().divide(num));
 		}
 
 		return result;
@@ -236,7 +194,7 @@ public class Polynomial
 					"Cannot divide polynomial by a polynomial with value of 0.");
 		}
 
-		Polynomial dividend = new Polynomial(this);
+		Polynomial dividend = this;
 		PolyUnit firstDividendTerm;
 		PolyUnit firstDivisorTerm;
 		PolyUnit temp;
@@ -254,12 +212,12 @@ public class Polynomial
 			// Check if dividing by higher order term
 			if (firstDividendTerm.compareTo(firstDivisorTerm) == -1)
 			{
-				result[1] = new Polynomial(dividend);
+				result[1] = dividend;
 				return result;
 			}
 
 			temp = firstDividendTerm.divide(firstDivisorTerm);
-			result[0].terms.add(temp);
+			result[0].add(temp);
 
 			dividend = dividend.subtract(divisor.multiply(temp));
 		}
@@ -278,7 +236,7 @@ public class Polynomial
 			return new Polynomial(1, 0);
 		}
 
-		Polynomial result = new Polynomial(this);
+		Polynomial result = this;
 
 		for (int i = 0; i < (exp - 1); i++)
 		{
@@ -290,17 +248,17 @@ public class Polynomial
 
 	public boolean equals(Polynomial p)
 	{
-		int size = this.terms.size();
-
-		if (size != p.terms.size())
+		if (this.terms.size() != p.terms.size())
 		{
 			return false;
 		}
 
 		// Should work because polynomial should always be sorted
-		for (int i = 0; i < size; i++)
+		Iterator<PolyUnit> otherIter = p.terms.iterator();
+		for (Iterator<PolyUnit> iterator = this.terms.iterator(); iterator
+				.hasNext();)
 		{
-			if (!this.terms.get(i).equals(p.terms.get(i)))
+			if (!iterator.next().equals(otherIter.next()))
 			{
 				return false;
 			}
@@ -314,9 +272,10 @@ public class Polynomial
 	{
 		double result = 0;
 
-		for (int i = 0; i < this.terms.size(); i++)
+		for (Iterator<PolyUnit> iterator = this.terms.iterator(); iterator
+				.hasNext();)
 		{
-			result += this.terms.get(i).eval(value);
+			result += iterator.next().eval(value);
 		}
 
 		return result;
@@ -327,12 +286,13 @@ public class Polynomial
 		Polynomial result = new Polynomial();
 		PolyUnit temp;
 
-		for (int i = 0; i < this.terms.size(); i++)
+		for (Iterator<PolyUnit> iterator = this.terms.iterator(); iterator
+				.hasNext();)
 		{
-			temp = this.terms.get(i).derivative();
+			temp = iterator.next().derivative();
 			if (temp.getCoefficient() != 0)
 			{
-				result.terms.add(temp);
+				result.add(temp);
 			}
 		}
 
@@ -343,9 +303,10 @@ public class Polynomial
 	{
 		Polynomial result = new Polynomial();
 
-		for (int i = 0; i < this.terms.size(); i++)
+		for (Iterator<PolyUnit> iterator = this.terms.iterator(); iterator
+				.hasNext();)
 		{
-			result.terms.add(this.terms.get(i).antiDerivative());
+			result.add(iterator.next().antiDerivative());
 		}
 
 		return result;
@@ -355,11 +316,12 @@ public class Polynomial
 	{
 		Polynomial result = new Polynomial();
 
-		for (int i = 0; i < this.terms.size(); i++)
+		for (Iterator<PolyUnit> iterator = this.terms.iterator(); iterator
+				.hasNext();)
 		{
-			result.terms.add(this.terms.get(i).antiDerivative());
+			result.add(iterator.next().antiDerivative());
 		}
-		result.terms.add(new PolyUnit(constant, 0));
+		result.add(new PolyUnit(constant, 0));
 
 		return result;
 	}
@@ -368,9 +330,10 @@ public class Polynomial
 	{
 		double result = 0;
 
-		for (int i = 0; i < this.terms.size(); i++)
+		for (Iterator<PolyUnit> iterator = this.terms.iterator(); iterator
+				.hasNext();)
 		{
-			result += this.terms.get(i).integral(lowerBound, upperBound);
+			result += iterator.next().integral(lowerBound, upperBound);
 		}
 
 		return result;
