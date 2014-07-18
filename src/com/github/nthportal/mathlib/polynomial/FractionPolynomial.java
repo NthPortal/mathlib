@@ -104,9 +104,10 @@ public class FractionPolynomial
 	{
 		FractionPolynomial result = this;
 
-		for (int i = 0; i < p.terms.size(); i++)
+		for (Iterator<FracPolyUnit> iterator = p.terms.iterator(); iterator
+				.hasNext();)
 		{
-			result = result.add(p.terms.get(i));
+			result = result.add(iterator.next());
 		}
 
 		return result;
@@ -121,9 +122,10 @@ public class FractionPolynomial
 	{
 		FractionPolynomial result = this;
 
-		for (int i = 0; i < p.terms.size(); i++)
+		for (Iterator<FracPolyUnit> iterator = p.terms.iterator(); iterator
+				.hasNext();)
 		{
-			result = result.subtract(p.terms.get(i));
+			result = result.subtract(iterator.next());
 		}
 
 		return result;
@@ -167,10 +169,11 @@ public class FractionPolynomial
 		for (Iterator<FracPolyUnit> iter = this.terms.iterator(); iter
 				.hasNext();)
 		{
+			FracPolyUnit next = iter.next();
 			for (Iterator<FracPolyUnit> jter = p.terms.iterator(); jter
 					.hasNext();)
 			{
-				result = result.add(iter.next().multiply(jter.next()));
+				result = result.add(next.multiply(jter.next()));
 			}
 		}
 
@@ -181,9 +184,10 @@ public class FractionPolynomial
 	{
 		FractionPolynomial result = new FractionPolynomial();
 
-		for (int i = 0; i < this.terms.size(); i++)
+		for (Iterator<FracPolyUnit> iterator = this.terms.iterator(); iterator
+				.hasNext();)
 		{
-			result.add(this.terms.get(i).divide(frac));
+			result.add(iterator.next().divide(frac));
 		}
 
 		return result;
@@ -336,9 +340,10 @@ public class FractionPolynomial
 	{
 		FractionPolynomial result = new FractionPolynomial();
 
-		for (int i = 0; i < this.terms.size(); i++)
+		for (Iterator<FracPolyUnit> iterator = this.terms.iterator(); iterator
+				.hasNext();)
 		{
-			result.add(this.terms.get(i).antiDerivative());
+			result.add(iterator.next().antiDerivative());
 		}
 		result.add(new FracPolyUnit(constant, 0));
 
@@ -429,10 +434,12 @@ public class FractionPolynomial
 			loop: for (Iterator<Integer> numerIter = numerFactors.iterator(); numerIter
 					.hasNext();)
 			{
+				Integer next = numerIter.next();
+				
 				for (Iterator<Integer> denomIter = denomFactors.iterator(); denomIter
 						.hasNext();)
 				{
-					possibleRoot = new Fraction(numerIter.next(),
+					possibleRoot = new Fraction(next,
 							denomIter.next());
 
 					for (int neg = 0; neg <= 1; neg++)
@@ -525,10 +532,11 @@ public class FractionPolynomial
 			return;
 		}
 
-		for (int i = 0; i < size; i++)
+		for (Iterator<FracPolyUnit> iterator = this.terms.iterator(); iterator
+				.hasNext();)
 		{
-			this.terms.get(i).print();
-			if (i != (size - 1))
+			iterator.next().print();
+			if (iterator.hasNext())
 			{
 				System.out.print(" ");
 			}
@@ -541,16 +549,17 @@ public class FractionPolynomial
 
 		if (size == 0)
 		{
-			System.out.println(0);
+			System.out.print(0);
 			return;
 		}
 
-		for (int i = 0; i < size; i++)
+		for (Iterator<FracPolyUnit> iterator = this.terms.iterator(); iterator
+				.hasNext();)
 		{
-			this.terms.get(i).print();
-			if (i != (size - 1))
+			iterator.next().print();
+			if (iterator.hasNext())
 			{
-				System.out.print(" + ");
+				System.out.print(" ");
 			}
 		}
 
@@ -566,7 +575,8 @@ public class FractionPolynomial
 
 		extrema = factorTest.calcExtrema();
 
-		for (Iterator<FractionExtremum> iterator = extrema.iterator(); iterator.hasNext();)
+		for (Iterator<FractionExtremum> iterator = extrema.iterator(); iterator
+				.hasNext();)
 		{
 			iterator.next().print();
 
