@@ -31,6 +31,12 @@ public class FractionPolynomial
 
 	public FractionPolynomial(ArrayList<FracPolyUnit> list)
 	{
+		if (list.contains(null))
+		{
+			throw new IllegalArgumentException(
+					"Cannot create a polynomial from a list including null.");
+		}
+
 		List<FracPolyUnit> temp = new ArrayList<FracPolyUnit>(list);
 		this.terms = Collections.unmodifiableList(temp);
 	}
@@ -267,17 +273,17 @@ public class FractionPolynomial
 
 	public boolean equals(FractionPolynomial p)
 	{
-		int size = this.terms.size();
-
-		if (size != p.terms.size())
+		if (this.terms.size() != p.terms.size())
 		{
 			return false;
 		}
 
 		// Should work because polynomial should always be sorted
-		for (int i = 0; i < size; i++)
+		Iterator<FracPolyUnit> otherIter = p.terms.iterator();
+		for (Iterator<FracPolyUnit> iterator = this.terms.iterator(); iterator
+				.hasNext();)
 		{
-			if (!this.terms.get(i).equals(p.terms.get(i)))
+			if (!iterator.next().equals(otherIter.next()))
 			{
 				return false;
 			}
