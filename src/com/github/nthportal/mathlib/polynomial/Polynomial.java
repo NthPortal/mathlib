@@ -17,21 +17,9 @@ public class Polynomial
 		this.terms = Collections.unmodifiableList(new ArrayList<PolyUnit>());
 	}
 
-	private Polynomial(List<PolyUnit> list, boolean dummy)
+	private Polynomial(List<PolyUnit> list)
 	{
 		this.terms = Collections.unmodifiableList(list);
-	}
-
-	public Polynomial(ArrayList<PolyUnit> list)
-	{
-		if (list.contains(null))
-		{
-			throw new IllegalArgumentException(
-					"Cannot create a polynomial from a list including null.");
-		}
-
-		List<PolyUnit> temp = new ArrayList<PolyUnit>(list);
-		this.terms = Collections.unmodifiableList(temp);
 	}
 
 	// Creates a Polynomial with one term
@@ -46,11 +34,6 @@ public class Polynomial
 		tempList.add(new PolyUnit(coefficient, exponent));
 
 		this.terms = Collections.unmodifiableList(tempList);
-	}
-
-	public PolyUnit getTerm(int index)
-	{
-		return terms.get(index);
 	}
 
 	public int getSize()
@@ -84,13 +67,13 @@ public class Polynomial
 				{
 					iterator.set(temp);
 				}
-				return new Polynomial(tempList, true);
+				return new Polynomial(tempList);
 			}
 		}
 		// Else
 		tempList.add(m);
 		Collections.sort(tempList, Collections.reverseOrder());
-		return new Polynomial(tempList, true);
+		return new Polynomial(tempList);
 	}
 
 	public Polynomial add(Polynomial p)
