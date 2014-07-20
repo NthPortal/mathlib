@@ -1,174 +1,42 @@
 package com.github.nthportal.mathlib.matrix;
 
-import java.util.Random;
-
-import com.github.nthportal.mathlib.util.SWWAIDKWException;
-
-public class Matrix
+public class Matrix extends MatrixType
 {
-	private double[][] matrix;
-	private int rows;
-	private int cols;
 	private boolean square;
 
-	public Matrix()
+	public Matrix(int rows, int cols)
 	{
-		this.rows = 0;
-		this.cols = 0;
-		this.square = false;
-		this.matrix = null;
+		super(rows, cols);
+		this.square = testSquare();
 	}
 
 	public Matrix(int size)
 	{
-		this.rows = size;
-		this.cols = size;
+		super(size);
 		this.square = true;
-		this.matrix = new double[size][size];
-	}
-
-	public Matrix(int rows, int cols)
-	{
-		this.rows = rows;
-		this.cols = cols;
-		this.testSquare();
-		this.matrix = new double[rows][cols];
 	}
 
 	public Matrix(Matrix m)
 	{
-		this.rows = m.rows;
-		this.cols = m.cols;
+		super(m);
 		this.square = m.square;
-		this.matrix = new double[m.rows][m.cols];
-		deepCopy(m.matrix, this.matrix, m.rows, m.cols);
 	}
 
-	private static void deepCopy(double[][] source, double[][] target,
-			int rows, int cols)
+	public boolean isSquare()
 	{
-		for (int row = 0; row < rows; row++)
+		return this.square;
+	}
+
+	private boolean testSquare()
+	{
+		if (this.getNumRows() == this.getNumCols())
 		{
-			for (int col = 0; col < cols; col++)
-			{
-				target[row][col] = source[row][col];
-			}
+			return true;
 		}
-	}
-
-	private static void deepCopy(double[][] source, double[][] target,
-			int rows, int cols, int sourceStartRow, int sourceStartCol,
-			int targetStartRow, int targetStartCol)
-	{
-		for (int row = 0; row < rows; row++)
+		else
 		{
-			for (int col = 0; col < cols; col++)
-			{
-				target[row + targetStartRow][col + targetStartCol] = source[row
-						+ sourceStartRow][col + sourceStartCol];
-			}
+			return false;
 		}
-	}
-
-	public int getSize() throws NonSquareMatrixException
-	{
-		if (!this.square)
-		{
-			throw new NonSquareMatrixException(
-					"The matrix is not square - GetSize() doesn't work.");
-		}
-		return this.rows;
-	}
-
-	public int getNumRows()
-	{
-		return this.rows;
-	}
-
-	public int getNumCols()
-	{
-		return this.cols;
-	}
-
-	public double getSpot(int row, int col)
-	{
-		return this.matrix[row][col];
-	}
-
-	public void setSpot(int row, int col, double value)
-	{
-		this.matrix[row][col] = value;
-	}
-
-	public Matrix add(Matrix m) throws IncompatMatrixSizesException
-	{
-		if (!(this.rows == m.rows && this.cols == m.cols))
-		{
-			throw new IncompatMatrixSizesException(
-					"Cannot add matrices of different dimensions.");
-		}
-
-		Matrix result = new Matrix(this.rows, this.cols);
-
-		for (int row = 0; row < this.rows; row++)
-		{
-			for (int col = 0; col < this.cols; col++)
-			{
-				result.matrix[row][col] = this.matrix[row][col]
-						+ m.matrix[row][col];
-			}
-		}
-
-		return result;
-	}
-
-	public Matrix subtract(Matrix m) throws IncompatMatrixSizesException
-	{
-		if (!(this.rows == m.rows && this.cols == m.cols))
-		{
-			throw new IncompatMatrixSizesException(
-					"Cannot subtract matrices of different dimensions.");
-		}
-
-		Matrix result = new Matrix(this.rows, this.cols);
-
-		for (int row = 0; row < this.rows; row++)
-		{
-			for (int col = 0; col < this.cols; col++)
-			{
-				result.matrix[row][col] = this.matrix[row][col]
-						- m.matrix[row][col];
-			}
-		}
-
-		return result;
-	}
-
-	public Matrix multiply(Matrix m) throws IncompatMatrixSizesException
-	{
-		if (!(this.cols == m.rows))
-		{
-			throw new IncompatMatrixSizesException(
-					"The first matrix must have the same number of columns as the second has rows.");
-		}
-
-		Matrix result = new Matrix(this.rows, m.cols);
-
-		for (int row = 0; row < this.rows; row++)
-		{
-			for (int col = 0; col < m.cols; col++)
-			{
-				result.matrix[row][col] = 0;
-				for (int m1Col = 0; m1Col < this.cols; m1Col++)
-				{
-					// m2Row = m1Col
-					result.matrix[row][col] += this.matrix[row][m1Col]
-							* m.matrix[m1Col][col];
-				}
-			}
-		}
-
-		return result;
 	}
 
 	public Matrix pow(int exp)
@@ -187,7 +55,7 @@ public class Matrix
 
 		if (exp == 0)
 		{
-			return identity(this.rows);
+			return identity(this.getNumRows());
 		}
 
 		Matrix result = new Matrix(this);
@@ -198,62 +66,6 @@ public class Matrix
 		}
 
 		return result;
-	}
-
-	public static boolean compare(Matrix m1, Matrix m2)
-	{
-		if (!(m1.rows == m2.rows && m1.cols == m2.cols))
-		{
-			return false;
-		}
-
-		for (int row = 0; row < m1.rows; row++)
-		{
-			for (int col = 0; col < m1.cols; col++)
-			{
-				if (!(m1.matrix[row][col] == m2.matrix[row][col]))
-				{
-					return false;
-				}
-			}
-		}
-
-		// They have different values even though they have the same dimensions
-		if (m1.square != m2.square)
-		{
-			throw new SWWAIDKWException();
-		}
-
-		// Else
-		return true;
-	}
-
-	public boolean equals(Matrix m)
-	{
-		if (!(this.rows == m.rows && this.cols == m.cols))
-		{
-			return false;
-		}
-
-		for (int row = 0; row < this.rows; row++)
-		{
-			for (int col = 0; col < this.cols; col++)
-			{
-				if (!(this.matrix[row][col] == m.matrix[row][col]))
-				{
-					return false;
-				}
-			}
-		}
-
-		// They have different values even though they have the same dimensions
-		if (this.square != m.square)
-		{
-			throw new SWWAIDKWException();
-		}
-
-		// Else
-		return true;
 	}
 
 	public static Matrix identity(int size)
@@ -458,34 +270,6 @@ public class Matrix
 		return result;
 	}
 
-	public void print()
-	{
-		for (int i = 0; i < this.rows; i++)
-		{
-			for (int j = 0; j < this.cols; j++)
-			{
-				System.out.print(this.matrix[i][j]);
-				if (!(j == this.cols - 1))
-				{
-					System.out.print(" ");
-				}
-			}
-			System.out.println();
-		}
-	}
-
-	private void testSquare()
-	{
-		if (this.rows == this.cols)
-		{
-			this.square = true;
-		}
-		else
-		{
-			this.square = false;
-		}
-	}
-
 	private void augmentIdentity()
 	{
 		Matrix tempMatrix = new Matrix(this);
@@ -528,46 +312,5 @@ public class Matrix
 		{
 			this.matrix[targetRow][col] -= (scalar * this.matrix[modRow][col]);
 		}
-	}
-
-	public static void main(String[] args)
-	{
-		final int MAX = 9;
-		final int MIN = 1;
-		final int ROWS = 2;
-		final int COLS = 2;
-		final int NUM_MATRICES = 1;
-
-		Random rand = new Random();
-
-		Matrix[] matrices = new Matrix[NUM_MATRICES];
-		for (int i = 0; i < NUM_MATRICES; i++)
-		{
-			matrices[i] = new Matrix(ROWS, COLS);
-			for (int row = 0; row < ROWS; row++)
-			{
-				for (int col = 0; col < COLS; col++)
-				{
-					matrices[i].matrix[row][col] = rand.nextInt(MAX - MIN)
-							+ MIN;
-				}
-			}
-		}
-
-		System.out.println("Original matrix:");
-		matrices[0].print();
-		System.out.println();
-
-		Matrix inverse = matrices[0].inverse();
-
-		System.out.println("Inverse:");
-		inverse.print();
-		System.out.println();
-
-		Matrix result = matrices[0].multiply(inverse);
-
-		System.out.println("Product:");
-		result.print();
-		System.out.println();
 	}
 }
