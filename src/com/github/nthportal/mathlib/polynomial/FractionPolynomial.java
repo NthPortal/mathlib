@@ -24,21 +24,9 @@ public class FractionPolynomial
 				.unmodifiableList(new ArrayList<FracPolyUnit>());
 	}
 
-	private FractionPolynomial(List<FracPolyUnit> list, boolean dummy)
+	private FractionPolynomial(List<FracPolyUnit> list)
 	{
 		this.terms = Collections.unmodifiableList(list);
-	}
-
-	public FractionPolynomial(ArrayList<FracPolyUnit> list)
-	{
-		if (list.contains(null))
-		{
-			throw new IllegalArgumentException(
-					"Cannot create a polynomial from a list including null.");
-		}
-
-		List<FracPolyUnit> temp = new ArrayList<FracPolyUnit>(list);
-		this.terms = Collections.unmodifiableList(temp);
 	}
 
 	// Creates a FractionPolynomial with one term
@@ -59,11 +47,6 @@ public class FractionPolynomial
 	public FractionPolynomial(int coefficient, int exponent)
 	{
 		this(new Fraction(coefficient), exponent);
-	}
-
-	public FracPolyUnit getTerm(int index)
-	{
-		return terms.get(index);
 	}
 
 	public int getSize()
@@ -97,13 +80,13 @@ public class FractionPolynomial
 				{
 					iterator.set(temp);
 				}
-				return new FractionPolynomial(tempList, true);
+				return new FractionPolynomial(tempList);
 			}
 		}
 		// Else
 		tempList.add(m);
 		Collections.sort(tempList, Collections.reverseOrder());
-		return new FractionPolynomial(tempList, true);
+		return new FractionPolynomial(tempList);
 	}
 
 	public FractionPolynomial add(FractionPolynomial p)
