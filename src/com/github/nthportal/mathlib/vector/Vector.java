@@ -4,9 +4,34 @@ import com.github.nthportal.mathlib.matrix.MatrixType;
 
 public class Vector extends MatrixType
 {
+	private static final int CROSS_PRODUCT_ROWS = 3;
+
 	public Vector(int degree)
 	{
 		super(degree, 1);
+	}
+
+	private Vector(double[][] v)
+	{
+		super(v);
+
+		if (!(this.cols == 1))
+		{
+			throw new IllegalArgumentException("Array must have exactly 1 col.");
+		}
+	}
+
+	public Vector(double[] v)
+	{
+		this.rows = v.length;
+		this.cols = 1;
+
+		double[][] copy = new double[this.rows][1];
+		for (int row = 0; row < this.rows; row++)
+		{
+			copy[row][0] = v[row];
+		}
+		this.matrix = copy;
 	}
 
 	public double innerProduct(Vector v)
@@ -27,8 +52,30 @@ public class Vector extends MatrixType
 		return result;
 	}
 
+	public double getSpot(int index)
+	{
+		return getSpot(index, 0);
+	}
+
 	public double dotProduct(Vector v)
 	{
 		return this.innerProduct(v);
+	}
+
+	public Vector crossProduct(Vector v)
+	{
+		if (!(this.rows == CROSS_PRODUCT_ROWS && this.rows == v.rows))
+		{
+			throw new IncompatVectorSizesException(
+					"Cannot calculate the cross product of vectors with size other than 3.");
+		}
+
+		double[][] resultArray = new double[CROSS_PRODUCT_ROWS][1];
+
+		resultArray[0][0] = ((this.matrix[1][0] * v.matrix[2][0]) - (this.matrix[2][0] * v.matrix[1][0]));
+		resultArray[1][0] = ((this.matrix[2][0] * v.matrix[0][0]) - (this.matrix[0][0] * v.matrix[2][0]));
+		resultArray[2][0] = ((this.matrix[0][0] * v.matrix[1][0]) - (this.matrix[1][0] * v.matrix[0][0]));
+
+		return new Vector(resultArray);
 	}
 }

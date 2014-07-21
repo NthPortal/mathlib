@@ -1,6 +1,5 @@
 package com.github.nthportal.mathlib.matrix;
 
-
 public class MatrixType
 {
 	protected double[][] matrix;
@@ -24,6 +23,37 @@ public class MatrixType
 	public MatrixType(int size)
 	{
 		this(size, size);
+	}
+
+	protected MatrixType(double[][] m, boolean dummy)
+	{
+		this.rows = m.length;
+		if (this.rows == 0)
+		{
+			this.cols = 0;
+		}
+		else
+		{
+			this.cols = m[0].length;
+		}
+
+		this.matrix = m;
+	}
+
+	public MatrixType(double[][] m)
+	{
+		if (this.rows == 0)
+		{
+			this.cols = 0;
+		}
+		else
+		{
+			this.cols = m[0].length;
+		}
+
+		double[][] copy = new double[m.length][this.cols];
+		deepCopy(m, copy, this.rows, this.cols);
+		this.matrix = copy;
 	}
 
 	public MatrixType(MatrixType m)
@@ -124,7 +154,7 @@ public class MatrixType
 
 		return result;
 	}
-	
+
 	public Matrix multiply(Matrix m) throws IncompatMatrixSizesException
 	{
 		if (!(this.cols == m.rows))
