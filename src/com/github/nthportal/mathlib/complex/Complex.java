@@ -8,10 +8,6 @@ public class Complex
 	private double real;
 	private double imaginary;
 
-	private Complex()
-	{
-	}
-
 	public Complex(double realCoef, double imaginaryCoef)
 	{
 		this.real = realCoef;
@@ -47,10 +43,9 @@ public class Complex
 
 	public Complex multiply(Complex c)
 	{
-		Complex result = new Complex();
-		result.real = ((this.real * c.real) - (this.imaginary * c.imaginary));
-		result.imaginary = ((this.real * c.imaginary) + (this.imaginary * c.real));
-		return result;
+		double real = ((this.real * c.real) - (this.imaginary * c.imaginary));
+		double imaginary = ((this.real * c.imaginary) + (this.imaginary * c.real));
+		return new Complex(real, imaginary);
 	}
 
 	public Complex divide(double scalar)
