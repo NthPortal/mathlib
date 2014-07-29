@@ -13,6 +13,7 @@ public class FractionTest
 		Fraction fraction = new Fraction(5, 2);
 		assertEquals(5, fraction.getNumer());
 		assertEquals(2, fraction.getDenom());
+		assertTrue(fraction.equals(fraction));
 	}
 
 	@Test
