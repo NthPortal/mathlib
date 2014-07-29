@@ -25,6 +25,21 @@ public class Complex
 		this.real = c.real;
 		this.imaginary = c.imaginary;
 	}
+	
+	public double getReal()
+	{
+		return this.real;
+	}
+	
+	public double getImaginary()
+	{
+		return this.imaginary;
+	}
+	
+	public Complex conjugate()
+	{
+		return new Complex(this.real, (this.imaginary * -1));
+	}
 
 	public Complex add(Complex c)
 	{
@@ -62,7 +77,7 @@ public class Complex
 	{
 		Complex numer = new Complex(this);
 
-		Complex conjugate = new Complex(denom.real, (denom.imaginary * -1));
+		Complex conjugate = denom.conjugate();
 
 		numer = numer.multiply(conjugate);
 		denom = denom.multiply(conjugate);
