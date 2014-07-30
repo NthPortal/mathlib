@@ -5,8 +5,8 @@ import com.github.nthportal.mathlib.util.SWWAIDKWException;
 
 public class FractionComplex
 {
-    private static final int HASH_PRIME_1 = 61;
-    private static final int HASH_PRIME_2 = 151;
+    private static final int HASH_PRIME_1 = 19;
+    private static final int HASH_PRIME_2 = 61;
 
     private Fraction real;
     private Fraction imaginary;

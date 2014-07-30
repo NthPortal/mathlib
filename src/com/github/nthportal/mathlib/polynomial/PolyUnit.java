@@ -3,6 +3,9 @@ package com.github.nthportal.mathlib.polynomial;
 class PolyUnit implements Comparable<PolyUnit>
 {
 	private static final String VAR_SYMBOL = "x";
+    private static final int HASH_PRIME_1 = 19;
+    private static final int HASH_PRIME_2 = 61;
+    private static final int PRECISION_FACTOR = 100;
 
 	private double coefficient;
 	private int exponent;
@@ -105,16 +108,29 @@ class PolyUnit implements Comparable<PolyUnit>
 		// Else
 		return 1;
 	}
-	
-	public boolean equals(PolyUnit p)
-	{
-		if ((this.coefficient == p.coefficient) && (this.exponent == p.exponent))
-		{
-			return true;
-		}
-		// Else
-		return false;
-	}
+
+    public boolean equals(Object obj)
+    {
+        if (obj == this) {
+            return true;
+        }
+
+        if (!(obj instanceof PolyUnit)) {
+            return false;  // takes care of null check
+        }
+
+        PolyUnit that = (PolyUnit) obj;
+
+        return ((this.coefficient == that.coefficient) && (this.exponent == that.exponent));
+    }
+
+    public int hashCode()
+    {
+        int result = HASH_PRIME_1;
+        result = HASH_PRIME_2 * result + (int) (this.coefficient * PRECISION_FACTOR);
+        result = HASH_PRIME_2 * result + this.exponent;
+        return result;
+    }
 
 	public double eval(double value)
 	{
