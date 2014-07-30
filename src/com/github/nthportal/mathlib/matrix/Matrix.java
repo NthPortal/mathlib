@@ -6,9 +6,6 @@ import com.github.nthportal.mathlib.util.SWWAIDKWException;
 
 public class Matrix
 {
-    private static final int HASH_PRIME_1 = 23;
-    private static final int HASH_PRIME_2 = 3;
-
 	private double[][] matrix;
 	private int rows;
 	private int cols;
@@ -271,13 +268,13 @@ public class Matrix
 
     public int hashCode()
     {
-        int result = HASH_PRIME_1;
+        int result = 0;
 
         for(int row = 0; row < this.rows; row++)
         {
             for (int col = 0; col < this.cols; col++)
             {
-                result = HASH_PRIME_2 * result + (int) this.matrix[row][col];
+                result += Double.valueOf(this.matrix[row][col]).hashCode();
             }
         }
 
