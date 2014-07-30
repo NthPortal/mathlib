@@ -5,6 +5,9 @@ import com.github.nthportal.mathlib.util.ZeroDivisionException;
 
 public class LongFraction
 {
+    private static final int HASH_PRIME_1 = 19;
+    private static final int HASH_PRIME_2 = 61;
+
 	private long numer;
 	private long denom;
 
@@ -255,15 +258,28 @@ public class LongFraction
 		return 1;
 	}
 
-	public boolean equals(LongFraction frac)
+	public boolean equals(Object obj)
 	{
-		if ((this.numer == frac.numer) && (this.denom == frac.denom))
-		{
-			return true;
-		}
-		// Else
-		return false;
+        if (obj == this) {
+            return true;
+        }
+
+        if (!(obj instanceof LongFraction)) {
+            return false;  // takes care of null check
+        }
+
+        LongFraction that = (LongFraction) obj;
+
+        return ((this.numer == that.numer) && (this.denom == that.denom));
 	}
+
+    public int hashCode()
+    {
+        int result = HASH_PRIME_1;
+        result = HASH_PRIME_2 * result + (int) this.numer;
+        result = HASH_PRIME_2 * result + (int) this.denom;
+        return result;
+    }
 
 	public void print()
 	{
