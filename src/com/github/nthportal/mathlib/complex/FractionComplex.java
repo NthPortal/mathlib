@@ -5,6 +5,9 @@ import com.github.nthportal.mathlib.util.SWWAIDKWException;
 
 public class FractionComplex
 {
+    private static final int HASH_PRIME_1 = 61;
+    private static final int HASH_PRIME_2 = 151;
+
     private Fraction real;
     private Fraction imaginary;
 
@@ -139,15 +142,28 @@ public class FractionComplex
 		return result;
 	}
 
-	public boolean equals(FractionComplex c)
-	{
-		if (this.real.equals(c.real) && this.imaginary.equals(c.imaginary))
-		{
-			return true;
-		}
-		// Else
-		return false;
-	}
+    public boolean equals(Object obj)
+    {
+        if (obj == this) {
+            return true;
+        }
+
+        if (!(obj instanceof FractionComplex)) {
+            return false;  // takes care of null check
+        }
+
+        FractionComplex that = (FractionComplex) obj;
+
+        return (this.real.equals(that.real) && this.imaginary.equals(that.imaginary));
+    }
+
+    public int hashCode()
+    {
+        int result = HASH_PRIME_1;
+        result = HASH_PRIME_2 * result + this.real.hashCode();
+        result = HASH_PRIME_2 * result + this.imaginary.hashCode();
+        return result;
+    }
 
 	public void print()
 	{

@@ -5,6 +5,10 @@ import com.github.nthportal.mathlib.util.ZeroDivisionException;
 
 public class Complex
 {
+    private static final int HASH_PRIME_1 = 61;
+    private static final int HASH_PRIME_2 = 151;
+    private static final int PRECISION_FACTOR = 100;
+
 	private double real;
 	private double imaginary;
 
@@ -119,15 +123,28 @@ public class Complex
 		return result;
 	}
 
-	public boolean equals(Complex c)
-	{
-		if (this.real == c.real && this.imaginary == c.imaginary)
-		{
-			return true;
-		}
-		// Else
-		return false;
-	}
+    public boolean equals(Object obj)
+    {
+        if (obj == this) {
+            return true;
+        }
+
+        if (!(obj instanceof Complex)) {
+            return false;  // takes care of null check
+        }
+
+        Complex that = (Complex) obj;
+
+        return ((this.real == that.real) && (this.imaginary == that.imaginary));
+    }
+
+    public int hashCode()
+    {
+        int result = HASH_PRIME_1;
+        result = HASH_PRIME_2 * result + (int) (this.real * PRECISION_FACTOR);
+        result = HASH_PRIME_2 * result + (int) (this.imaginary * PRECISION_FACTOR);
+        return result;
+    }
 
 	public void print()
 	{
