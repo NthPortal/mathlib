@@ -233,9 +233,19 @@ public class FractionMatrix
 		return true;
 	}
 
-	public boolean equals(FractionMatrix m)
+	public boolean equals(Object obj)
 	{
-		if (!(this.rows == m.rows && this.cols == m.cols))
+        if (obj == this) {
+            return true;
+        }
+
+        if (!(obj instanceof FractionMatrix)) {
+            return false;  // takes care of null check
+        }
+
+        FractionMatrix that = (FractionMatrix) obj;
+
+		if (!(this.rows == that.rows && this.cols == that.cols))
 		{
 			return false;
 		}
@@ -244,7 +254,7 @@ public class FractionMatrix
 		{
 			for (int col = 0; col < this.cols; col++)
 			{
-				if (!(this.matrix[row][col] == m.matrix[row][col]))
+				if (!(this.matrix[row][col] == that.matrix[row][col]))
 				{
 					return false;
 				}
@@ -252,7 +262,7 @@ public class FractionMatrix
 		}
 
 		// They have different values even though they have the same dimensions
-		if (this.square != m.square)
+		if (this.square != that.square)
 		{
 			throw new SWWAIDKWException();
 		}
@@ -260,6 +270,21 @@ public class FractionMatrix
 		// Else
 		return true;
 	}
+
+    public int hashCode()
+    {
+        int result = 0;
+
+        for(int row = 0; row < this.rows; row++)
+        {
+            for (int col = 0; col < this.cols; col++)
+            {
+                result += this.matrix[row][col].hashCode();
+            }
+        }
+
+        return result;
+    }
 
 	public static FractionMatrix identity(int size)
 	{

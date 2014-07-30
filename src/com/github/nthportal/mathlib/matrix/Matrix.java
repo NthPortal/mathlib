@@ -6,6 +6,9 @@ import com.github.nthportal.mathlib.util.SWWAIDKWException;
 
 public class Matrix
 {
+    private static final int HASH_PRIME_1 = 23;
+    private static final int HASH_PRIME_2 = 3;
+
 	private double[][] matrix;
 	private int rows;
 	private int cols;
@@ -228,9 +231,19 @@ public class Matrix
 		return true;
 	}
 
-	public boolean equals(Matrix m)
+	public boolean equals(Object obj)
 	{
-		if (!(this.rows == m.rows && this.cols == m.cols))
+        if (obj == this) {
+            return true;
+        }
+
+        if (!(obj instanceof Matrix)) {
+            return false;  // takes care of null check
+        }
+
+        Matrix that = (Matrix) obj;
+
+		if (!(this.rows == that.rows && this.cols == that.cols))
 		{
 			return false;
 		}
@@ -239,7 +252,7 @@ public class Matrix
 		{
 			for (int col = 0; col < this.cols; col++)
 			{
-				if (!(this.matrix[row][col] == m.matrix[row][col]))
+				if (!(this.matrix[row][col] == that.matrix[row][col]))
 				{
 					return false;
 				}
@@ -247,7 +260,7 @@ public class Matrix
 		}
 
 		// They have different values even though they have the same dimensions
-		if (this.square != m.square)
+		if (this.square != that.square)
 		{
 			throw new SWWAIDKWException();
 		}
@@ -255,6 +268,21 @@ public class Matrix
 		// Else
 		return true;
 	}
+
+    public int hashCode()
+    {
+        int result = HASH_PRIME_1;
+
+        for(int row = 0; row < this.rows; row++)
+        {
+            for (int col = 0; col < this.cols; col++)
+            {
+                result = HASH_PRIME_2 * result + (int) this.matrix[row][col];
+            }
+        }
+
+        return result;
+    }
 
 	public static Matrix identity(int size)
 	{
