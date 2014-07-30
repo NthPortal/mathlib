@@ -5,12 +5,8 @@ import com.github.nthportal.mathlib.util.SWWAIDKWException;
 
 public class FractionComplex
 {
-	private Fraction real;
-	private Fraction imaginary;
-
-	private FractionComplex()
-	{
-	}
+    private Fraction real;
+    private Fraction imaginary;
 
 	public FractionComplex(Fraction realCoef, Fraction imaginaryCoef)
 	{
@@ -42,6 +38,21 @@ public class FractionComplex
 		this.imaginary = new Fraction(c.imaginary);
 	}
 
+    public Fraction getReal()
+    {
+        return new Fraction(real);
+    }
+
+    public Fraction getImaginary()
+    {
+        return new Fraction(imaginary);
+    }
+
+    public FractionComplex conjugate()
+    {
+        return new FractionComplex(this.real, (this.imaginary.multiply(-1)));
+    }
+
 	public FractionComplex add(FractionComplex c)
 	{
 		return new FractionComplex(this.real.add(c.real),
@@ -68,12 +79,11 @@ public class FractionComplex
 
 	public FractionComplex multiply(FractionComplex c)
 	{
-		FractionComplex result = new FractionComplex();
-		result.real = this.real.multiply(c.real).subtract(
+		Fraction real = this.real.multiply(c.real).subtract(
 				this.imaginary.multiply(c.imaginary));
-		result.imaginary = this.real.multiply(c.imaginary).add(
+		Fraction imaginary = this.real.multiply(c.imaginary).add(
 				this.imaginary.multiply(c.real));
-		return result;
+		return new FractionComplex(real, imaginary);
 	}
 
 	public FractionComplex divide(int scalar)
@@ -92,8 +102,7 @@ public class FractionComplex
 	{
 		FractionComplex numer = new FractionComplex(this);
 
-		FractionComplex conjugate = new FractionComplex(denom.real,
-				denom.imaginary.multiply(-1));
+		FractionComplex conjugate = denom.conjugate();
 
 		numer = numer.multiply(conjugate);
 		denom = denom.multiply(conjugate);
