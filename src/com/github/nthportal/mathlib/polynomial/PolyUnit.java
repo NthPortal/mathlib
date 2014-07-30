@@ -3,8 +3,8 @@ package com.github.nthportal.mathlib.polynomial;
 class PolyUnit implements Comparable<PolyUnit>
 {
 	private static final String VAR_SYMBOL = "x";
-    private static final int HASH_PRIME_1 = 19;
-    private static final int HASH_PRIME_2 = 61;
+    private static final int HASH_PRIME_1 = 11;
+    private static final int HASH_PRIME_2 = 71;
     private static final int PRECISION_FACTOR = 100;
 
 	private double coefficient;

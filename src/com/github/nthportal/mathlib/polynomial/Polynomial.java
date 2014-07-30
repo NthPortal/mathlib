@@ -2,6 +2,7 @@ package com.github.nthportal.mathlib.polynomial;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 
 import com.github.nthportal.mathlib.util.ZeroDivisionException;
 
@@ -239,7 +240,7 @@ public class Polynomial
 		Polynomial dividend = new Polynomial(this);
 		PolyUnit firstDividendTerm;
 		PolyUnit firstDivisorTerm;
-		PolyUnit temp = new PolyUnit();
+		PolyUnit temp;
 
 		while (true)
 		{
@@ -288,11 +289,21 @@ public class Polynomial
 		return result;
 	}
 
-	public boolean equals(Polynomial p)
+	public boolean equals(Object obj)
 	{
+        if (obj == this) {
+            return true;
+        }
+
+        if (!(obj instanceof Polynomial)) {
+            return false;  // takes care of null check
+        }
+
+        Polynomial that = (Polynomial) obj;
+
 		int size = this.terms.size();
 
-		if (size != p.terms.size())
+		if (size != that.terms.size())
 		{
 			return false;
 		}
@@ -300,7 +311,7 @@ public class Polynomial
 		// Should work because polynomial should always be sorted
 		for (int i = 0; i < size; i++)
 		{
-			if (!this.terms.get(i).equals(p.terms.get(i)))
+			if (!this.terms.get(i).equals(that.terms.get(i)))
 			{
 				return false;
 			}
@@ -309,6 +320,18 @@ public class Polynomial
 		// Else
 		return true;
 	}
+
+    public int hashCode()
+    {
+        int result = 0;
+
+        for(Iterator<PolyUnit> iterator = this.terms.iterator(); iterator.hasNext();)
+        {
+            result += iterator.next().hashCode();
+        }
+
+        return result;
+    }
 
 	public double eval(double value)
 	{

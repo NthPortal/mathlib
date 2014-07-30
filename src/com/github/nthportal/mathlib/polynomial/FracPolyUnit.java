@@ -5,8 +5,8 @@ import com.github.nthportal.mathlib.fraction.Fraction;
 class FracPolyUnit implements Comparable<FracPolyUnit>
 {
 	private static final String VAR_SYMBOL = "x";
-    private static final int HASH_PRIME_1 = 19;
-    private static final int HASH_PRIME_2 = 61;
+    private static final int HASH_PRIME_1 = 29;
+    private static final int HASH_PRIME_2 = 43;
 
 	private Fraction coefficient;
 	private int exponent;

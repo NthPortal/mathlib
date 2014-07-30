@@ -327,27 +327,49 @@ public class FractionPolynomial
 		return result;
 	}
 
-	public boolean equals(FractionPolynomial p)
-	{
-		int size = this.terms.size();
+    public boolean equals(Object obj)
+    {
+        if (obj == this) {
+            return true;
+        }
 
-		if (size != p.terms.size())
-		{
-			return false;
-		}
+        if (!(obj instanceof FractionPolynomial)) {
+            return false;  // takes care of null check
+        }
 
-		// Should work because polynomial should always be sorted
-		for (int i = 0; i < size; i++)
-		{
-			if (!this.terms.get(i).equals(p.terms.get(i)))
-			{
-				return false;
-			}
-		}
+        FractionPolynomial that = (FractionPolynomial) obj;
 
-		// Else
-		return true;
-	}
+        int size = this.terms.size();
+
+        if (size != that.terms.size())
+        {
+            return false;
+        }
+
+        // Should work because polynomial should always be sorted
+        for (int i = 0; i < size; i++)
+        {
+            if (!this.terms.get(i).equals(that.terms.get(i)))
+            {
+                return false;
+            }
+        }
+
+        // Else
+        return true;
+    }
+
+    public int hashCode()
+    {
+        int result = 0;
+
+        for(Iterator<FracPolyUnit> iterator = this.terms.iterator(); iterator.hasNext();)
+        {
+            result += iterator.next().hashCode();
+        }
+
+        return result;
+    }
 
 	public Fraction eval(int value)
 	{

@@ -5,8 +5,8 @@ import com.github.nthportal.mathlib.util.ZeroDivisionException;
 
 public class LongFraction
 {
-    private static final int HASH_PRIME_1 = 19;
-    private static final int HASH_PRIME_2 = 61;
+    private static final int HASH_PRIME_1 = 13;
+    private static final int HASH_PRIME_2 = 53;
 
 	private long numer;
 	private long denom;

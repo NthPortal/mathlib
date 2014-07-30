@@ -5,8 +5,8 @@ import com.github.nthportal.mathlib.util.ZeroDivisionException;
 
 public class Complex
 {
-    private static final int HASH_PRIME_1 = 19;
-    private static final int HASH_PRIME_2 = 61;
+    private static final int HASH_PRIME_1 = 23;
+    private static final int HASH_PRIME_2 = 67;
     private static final int PRECISION_FACTOR = 100;
 
 	private double real;
