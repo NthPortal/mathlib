@@ -1,5 +1,7 @@
 package com.github.nthportal.mathlib.polynomial;
 
+import com.github.nthportal.mathlib.util.ZeroDivisionException;
+
 class PolyUnit implements Comparable<PolyUnit>
 {
 	private static final String VAR_SYMBOL = "x";
@@ -85,12 +87,22 @@ class PolyUnit implements Comparable<PolyUnit>
 
 	public PolyUnit divide(PolyUnit p)
 	{
+        if (p.coefficient == 0)
+        {
+            throw new ZeroDivisionException();
+        }
+
 		return new PolyUnit((this.coefficient / p.coefficient),
 				(this.exponent - p.exponent));
 	}
 
 	public PolyUnit divide(double scalar)
 	{
+        if (scalar == 0)
+        {
+            throw new ZeroDivisionException();
+        }
+
 		return new PolyUnit((this.coefficient / scalar), this.exponent);
 	}
 
