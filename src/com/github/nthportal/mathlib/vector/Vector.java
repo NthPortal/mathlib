@@ -35,9 +35,14 @@ public class Vector extends MatrixType
 		this.matrix = copy;
 	}
 
-    protected Vector createInstance(int rows, int cols)
+    protected Vector createInstance(double[][] matrix)
     {
-        return new Vector(rows);
+        return new Vector(matrix);
+    }
+
+    public int getSize()
+    {
+        return this.rows;
     }
 
     public Vector add(Vector v)

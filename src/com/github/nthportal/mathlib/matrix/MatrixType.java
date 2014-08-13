@@ -62,7 +62,7 @@ public abstract class MatrixType
         deepCopy(m.matrix, this.matrix, m.rows, m.cols);
     }
 
-    protected abstract <T extends MatrixType> T createInstance(int rows, int cols);
+    protected abstract <T extends MatrixType> T createInstance(double[][] matrix);
 
     protected static void deepCopy(double[][] source, double[][] target,
                                    int rows, int cols)
@@ -149,23 +149,23 @@ public abstract class MatrixType
                     "The first matrix must have the same number of columns as the second has rows.");
         }
 
-        T result = createInstance(this.rows, m.cols);
+        double[][] result = new double[this.rows][m.cols];
 
         for (int row = 0; row < this.rows; row++)
         {
             for (int col = 0; col < m.cols; col++)
             {
-                result.matrix[row][col] = 0;
+                result[row][col] = 0;
                 for (int m1Col = 0; m1Col < this.cols; m1Col++)
                 {
                     // m1Row = m2Col
-                    result.matrix[row][col] += this.matrix[row][m1Col]
+                    result[row][col] += this.matrix[row][m1Col]
                             * m.matrix[m1Col][col];
                 }
             }
         }
 
-        return result;
+        return createInstance(result);
     }
 
     public boolean equals(MatrixType m)

@@ -34,9 +34,9 @@ public class Matrix extends MatrixType
 		this.square = m.square;
 	}
 
-    protected Matrix createInstance(int rows, int cols)
+    protected Matrix createInstance(double[][] matrix)
     {
-        return new Matrix(rows, cols);
+        return new Matrix(matrix, true);
     }
 
 	public boolean isSquare()
