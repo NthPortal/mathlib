@@ -17,12 +17,6 @@ class FracPolyUnit implements Comparable<FracPolyUnit>
 
 	public FracPolyUnit(Fraction coefficient, int exponent)
 	{
-		if (this.exponent < 0)
-		{
-			throw new InvalidExponentException(
-					"Something went wrong. This shouldn't have been called.");
-		}
-
 		this.coefficient = new Fraction(coefficient);
 
 		if (coefficient.compareTo(0) == 0)

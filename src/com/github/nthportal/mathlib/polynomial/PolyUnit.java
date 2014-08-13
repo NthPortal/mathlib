@@ -18,12 +18,6 @@ class PolyUnit implements Comparable<PolyUnit>
 
 	public PolyUnit(double coefficient, int exponent)
 	{
-		if (this.exponent < 0)
-		{
-			throw new InvalidExponentException(
-					"Something went wrong. This shouldn't have been called.");
-		}
-
 		this.coefficient = coefficient;
 
 		if (coefficient == 0)
