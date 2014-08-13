@@ -1,5 +1,6 @@
 package com.github.nthportal.mathlib.vector;
 
+import com.github.nthportal.mathlib.matrix.IncompatMatrixSizesException;
 import com.github.nthportal.mathlib.matrix.MatrixType;
 
 public class Vector extends MatrixType
@@ -33,6 +34,33 @@ public class Vector extends MatrixType
 		}
 		this.matrix = copy;
 	}
+
+    protected Vector createInstance(int rows, int cols)
+    {
+        return new Vector(rows);
+    }
+
+    public Vector add(Vector v)
+    {
+        if (!(this.rows == v.rows))
+        {
+            throw new IncompatMatrixSizesException(
+                    "Cannot add vectors of different dimensions.");
+        }
+
+        return new Vector(add(this.matrix, v.matrix, this.rows, this.cols));
+    }
+
+    public Vector subtract(Vector v)
+    {
+        if (!(this.rows == v.rows))
+        {
+            throw new IncompatMatrixSizesException(
+                    "Cannot subtract vectors of different dimensions.");
+        }
+
+        return new Vector(subtract(this.matrix, v.matrix, this.rows, this.cols));
+    }
 
 	public double innerProduct(Vector v)
 	{

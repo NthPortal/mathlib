@@ -16,11 +16,28 @@ public class Matrix extends MatrixType
 		this.square = true;
 	}
 
+    private Matrix(double[][] m, boolean dummy)
+    {
+        super(m, dummy);
+        this.square = testSquare();
+    }
+
+    public Matrix(double[][] m)
+    {
+        super(m);
+        this.square = testSquare();
+    }
+
 	public Matrix(Matrix m)
 	{
 		super(m);
 		this.square = m.square;
 	}
+
+    protected Matrix createInstance(int rows, int cols)
+    {
+        return new Matrix(rows, cols);
+    }
 
 	public boolean isSquare()
 	{
@@ -29,15 +46,30 @@ public class Matrix extends MatrixType
 
 	private boolean testSquare()
 	{
-		if (this.getNumRows() == this.getNumCols())
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return (this.rows == this.cols);
 	}
+
+    public Matrix add(Matrix m)
+    {
+        if (!(this.rows == m.rows && this.cols == m.cols))
+        {
+            throw new IncompatMatrixSizesException(
+                    "Cannot add matrices of different dimensions.");
+        }
+
+        return new Matrix(add(this.matrix, m.matrix, this.rows, this.cols), true);
+    }
+
+    public Matrix subtract(Matrix m)
+    {
+        if (!(this.rows == m.rows && this.cols == m.cols))
+        {
+            throw new IncompatMatrixSizesException(
+                    "Cannot subtract matrices of different dimensions.");
+        }
+
+        return new Matrix(subtract(this.matrix, m.matrix, this.rows, this.cols), true);
+    }
 
 	public Matrix pow(int exp)
 	{
@@ -55,7 +87,7 @@ public class Matrix extends MatrixType
 
 		if (exp == 0)
 		{
-			return identity(this.getNumRows());
+			return identity(this.rows);
 		}
 
 		Matrix result = new Matrix(this);
