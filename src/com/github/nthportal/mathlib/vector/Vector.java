@@ -3,14 +3,9 @@ package com.github.nthportal.mathlib.vector;
 import com.github.nthportal.mathlib.matrix.IncompatMatrixSizesException;
 import com.github.nthportal.mathlib.matrix.MatrixType;
 
-public class Vector extends MatrixType
+public final class Vector extends MatrixType
 {
 	private static final int CROSS_PRODUCT_ROWS = 3;
-
-	public Vector(int degree)
-	{
-		super(degree, 1);
-	}
 
 	private Vector(double[][] v)
 	{

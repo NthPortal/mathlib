@@ -1,20 +1,8 @@
 package com.github.nthportal.mathlib.matrix;
 
-public class Matrix extends MatrixType
+public final class Matrix extends MatrixType
 {
 	private boolean square;
-
-	public Matrix(int rows, int cols)
-	{
-		super(rows, cols);
-		this.square = testSquare();
-	}
-
-	public Matrix(int size)
-	{
-		super(size);
-		this.square = true;
-	}
 
     private Matrix(double[][] m, boolean dummy)
     {
@@ -27,12 +15,6 @@ public class Matrix extends MatrixType
         super(m);
         this.square = testSquare();
     }
-
-	public Matrix(Matrix m)
-	{
-		super(m);
-		this.square = m.square;
-	}
 
     protected Matrix createInstance(double[][] matrix)
     {
@@ -90,7 +72,7 @@ public class Matrix extends MatrixType
 			return identity(this.rows);
 		}
 
-		Matrix result = new Matrix(this);
+		Matrix result = this;
 
 		for (int i = 0; i < (exp - 1); i++)
 		{
@@ -102,25 +84,53 @@ public class Matrix extends MatrixType
 
 	public static Matrix identity(int size)
 	{
-		Matrix identity = new Matrix(size);
+		double[][] identity = new double[size][size];
 
-		for (int row = 0; row < identity.rows; row++)
+		for (int row = 0; row < size; row++)
 		{
-			for (int col = 0; col < identity.cols; col++)
+			for (int col = 0; col < size; col++)
 			{
 				if (row == col)
 				{
-					identity.matrix[row][col] = 1;
+					identity[row][col] = 1;
 				}
 				else
 				{
-					identity.matrix[row][col] = 0;
+					identity[row][col] = 0;
 				}
 			}
 		}
 
-		return identity;
+		return new Matrix(identity, true);
 	}
+
+    private static double det(double[][] matrix, int rows, int cols)
+    {
+        double det = 1;
+
+        double[][] tempMatrix = new double[rows][cols];
+        deepCopy(matrix, tempMatrix, rows, cols);
+
+        int numRowSwaps = reduceForwardPhase(tempMatrix, rows, cols);
+
+        for (int i = 0; i < rows; i++)
+        {
+            det *= tempMatrix[i][i];
+        }
+
+        if (numRowSwaps % 2 == 1)
+        {
+            det *= -1;
+        }
+
+        // Not sure if necessary in Java - was needed in C++
+        if (det == -0)
+        {
+            det = 0;
+        }
+
+        return det;
+    }
 
 	public double det() throws NonSquareMatrixException
 	{
@@ -130,56 +140,34 @@ public class Matrix extends MatrixType
 					"Cannot compute the determinant of a non-square matrix.");
 		}
 
-		int numRowSwaps = 0;
-		double det = 1;
-		Matrix tempMatrix = new Matrix(this);
-
-		numRowSwaps = tempMatrix.reduceForwardPhase();
-
-		for (int i = 0; i < this.rows; i++)
-		{
-			det *= tempMatrix.matrix[i][i];
-		}
-
-		if (numRowSwaps % 2 == 1)
-		{
-			det *= -1;
-		}
-
-		// Not sure if necessary in Java - was needed in C++
-		if (det == -0)
-		{
-			det = 0;
-		}
-
-		return det;
+        return det(this.matrix, this.rows, this.cols);
 	}
 
-	public int reduceForwardPhase()
+	public static int reduceForwardPhase(double[][] matrix, int rows, int cols)
 	{
 		int numRowSwaps = 0;
-		int smallerSize = 0;
+		int smallerSize;
 
-		if (this.rows <= this.cols)
+		if (rows <= cols)
 		{
-			smallerSize = this.rows;
+			smallerSize = rows;
 		}
 		else
 		{
-			smallerSize = this.cols;
+			smallerSize = cols;
 		}
 
 		// "i < smallerSize - 1" (not "i < smallerSize")
 		// because last row doesn't get reduced
 		for (int i = 0; i < smallerSize - 1; i++)
 		{
-			if (this.matrix[i][i] == 0)
+			if (matrix[i][i] == 0)
 			{
-				for (int j = i + 1; j < this.rows; j++)
+				for (int j = i + 1; j < rows; j++)
 				{
-					if (this.matrix[j][i] != 0)
+					if (matrix[j][i] != 0)
 					{
-						rowSwap(i, j);
+						rowSwap(matrix, rows, cols, i, j);
 						numRowSwaps++;
 						i--;
 						break;
@@ -188,40 +176,41 @@ public class Matrix extends MatrixType
 			}
 			else
 			{
-				for (int j = i + 1; j < this.rows; j++)
+				for (int j = i + 1; j < rows; j++)
 				{
-					rowReplace(j, i, this.matrix[j][i] / this.matrix[i][i]);
+					rowReplace(matrix, cols, j, i, matrix[j][i] / matrix[i][i]);
 				}
 			}
 			// this.print();
 			// System.out.println();
 		}
+
 		return numRowSwaps;
 	}
 
 	// Should only be run after ReduceForwardPhase()
-	public void reduceBackwardPhase()
+	public static void reduceBackwardPhase(double[][] matrix, int rows, int cols)
 	{
 		int smallerSize = 0;
 
-		if (this.rows <= this.cols)
+		if (rows <= cols)
 		{
-			smallerSize = this.rows;
+			smallerSize = rows;
 		}
 		else
 		{
-			smallerSize = this.cols;
+			smallerSize = cols;
 		}
 
 		// only while i > 0 (and not when i == 0)
 		// because last row doesn't get reduced
 		for (int i = smallerSize - 1; i > 0; i--)
 		{
-			if (!(this.matrix[i][i] == 0))
+			if (!(matrix[i][i] == 0))
 			{
 				for (int j = i - 1; j >= 0; j--)
 				{
-					rowReplace(j, i, this.matrix[j][i] / this.matrix[i][i]);
+					rowReplace(matrix, cols, j, i, matrix[j][i] / matrix[i][i]);
 				}
 			}
 			// this.print();
@@ -229,17 +218,18 @@ public class Matrix extends MatrixType
 		}
 	}
 
-	public void reducedEchelon()
+	public Matrix reducedEchelon()
 	{
-		reduceForwardPhase();
-		reduceBackwardPhase();
+        double[][] tempMatrix = new double[this.rows][this.cols];
+        deepCopy(this.matrix, tempMatrix, this.rows, this.cols);
+
+		reduceForwardPhase(tempMatrix, this.rows, this.cols);
+		reduceBackwardPhase(tempMatrix, this.rows, this.cols);
 
 		for (int row = 0; row < this.rows; row++)
 		{
-			rowScale(row, 1 / this.matrix[row][row]);
+			rowScale(tempMatrix, cols, row, 1 / this.matrix[row][row]);
 		}
-
-		// print();
 
 		// Move zero rows to bottom HERE
 		for (int row = 0; row < this.rows; row++)
@@ -248,10 +238,12 @@ public class Matrix extends MatrixType
 			{
 				for (int i = row; i < (row - 1); i++)
 				{
-					rowSwap(i, (i + 1));
+					rowSwap(tempMatrix, rows, cols, i, (i + 1));
 				}
 			}
 		}
+
+        return new Matrix(tempMatrix, true);
 	}
 
 	public Matrix inverse() throws NonSquareMatrixException,
@@ -263,15 +255,14 @@ public class Matrix extends MatrixType
 					"Inverse not defined for a non-square matrix.");
 		}
 
-		Matrix tempMatrix = new Matrix(this);
-		Matrix result = new Matrix(this.rows, this.cols);
+		double[][] result = new double[this.rows][this.cols];
 
-		tempMatrix.augmentIdentity();
-		tempMatrix.reducedEchelon();
+		Matrix tempMatrix = this.augmentIdentity();
+		tempMatrix = tempMatrix.reducedEchelon();
 
-		Matrix lhs = new Matrix(this.rows, this.cols);
-		deepCopy(tempMatrix.matrix, lhs.matrix, lhs.rows, lhs.cols);
-		if (lhs.det() == 0)
+		double[][] lhs = new double[this.rows][this.cols];
+		deepCopy(tempMatrix.matrix, lhs, this.rows, this.cols);
+		if (det(lhs, this.rows, this.cols) == 0)
 		{
 			throw new NonInvertibleMatrixException();
 		}
@@ -280,69 +271,66 @@ public class Matrix extends MatrixType
 		{
 			for (int col = 0; col < this.cols; col++)
 			{
-				result.matrix[row][col] = tempMatrix.matrix[row][(col + this.cols)];
+				result[row][col] = tempMatrix.matrix[row][(col + this.cols)];
 			}
 		}
 
-		return result;
+		return new Matrix(result, true);
 	}
 
 	public Matrix transpose()
 	{
-		Matrix result = new Matrix(this.cols, this.rows);
+		double[][] result = new double[this.cols][this.rows];
 
 		for (int row = 0; row < this.rows; row++)
 		{
 			for (int col = 0; col < this.cols; col++)
 			{
-				result.matrix[col][row] = this.matrix[row][col];
+				result[col][row] = this.matrix[row][col];
 			}
 		}
 
-		return result;
+		return new Matrix(result, true);
 	}
 
-	private void augmentIdentity()
+	private Matrix augmentIdentity()
 	{
-		Matrix tempMatrix = new Matrix(this);
+		double[][] tempMatrix = new double[this.rows][(this.cols * 2)];
 
-		this.cols *= 2;
-		this.testSquare();
-		this.matrix = new double[this.rows][(this.cols)];
-
-		deepCopy(tempMatrix.matrix, this.matrix, tempMatrix.rows,
-				tempMatrix.cols);
+		deepCopy(this.matrix, tempMatrix, this.rows, this.cols);
 
 		// Augments with Identity matrix
 		Matrix id = identity(this.rows);
-		deepCopy(id.matrix, this.matrix, id.rows, id.cols, 0, 0, 0, id.cols);
+		deepCopy(id.matrix, tempMatrix, id.rows, id.cols, 0, 0, 0, id.cols);
+
+        return new Matrix(tempMatrix, true);
 	}
 
-	private void rowSwap(int row1, int row2)
+	private static void rowSwap(double[][] matrix, int rows, int cols, int row1, int row2)
 	{
-		double[] tempRow = new double[this.cols];
+		double[] tempRow = new double[cols];
 
-		for (int col = 0; col < this.cols; col++)
+		for (int col = 0; col < cols; col++)
 		{
-			tempRow[col] = this.matrix[row1][col];
-			this.matrix[row1][col] = this.matrix[row2][col];
-			this.matrix[row2][col] = tempRow[col];
+			tempRow[col] = matrix[row1][col];
+			matrix[row1][col] = matrix[row2][col];
+			matrix[row2][col] = tempRow[col];
 		}
 	}
 
-	private void rowScale(int row, double scalar)
+	private static void rowScale(double[][] matrix, int cols, int row, double scalar)
 	{
-		for (int col = 0; col < this.cols; col++)
+		for (int col = 0; col < cols; col++)
 		{
-			this.matrix[row][col] *= scalar;
+			matrix[row][col] *= scalar;
 		}
 	}
 
-	private void rowReplace(int targetRow, int modRow, double scalar)
+	private static void rowReplace(double[][] matrix, int cols, int targetRow, int modRow, double scalar)
 	{
-		for (int col = 0; col < this.cols; col++)
+		for (int col = 0; col < cols; col++)
 		{
-			this.matrix[targetRow][col] -= (scalar * this.matrix[modRow][col]);
+			matrix[targetRow][col] -= (scalar * matrix[modRow][col]);
 		}
 	}
 }

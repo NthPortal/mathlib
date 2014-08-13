@@ -13,18 +13,6 @@ public abstract class MatrixType
         this.matrix = null;
     }
 
-    public MatrixType(int rows, int cols)
-    {
-        this.rows = rows;
-        this.cols = cols;
-        this.matrix = new double[rows][cols];
-    }
-
-    public MatrixType(int size)
-    {
-        this(size, size);
-    }
-
     protected MatrixType(double[][] m, boolean dummy)
     {
         this.rows = m.length;
@@ -54,26 +42,12 @@ public abstract class MatrixType
         this.matrix = copy;
     }
 
-    public MatrixType(MatrixType m)
-    {
-        this.rows = m.rows;
-        this.cols = m.cols;
-        this.matrix = new double[m.rows][m.cols];
-        deepCopy(m.matrix, this.matrix, m.rows, m.cols);
-    }
-
     protected abstract <T extends MatrixType> T createInstance(double[][] matrix);
 
     protected static void deepCopy(double[][] source, double[][] target,
                                    int rows, int cols)
     {
-        for (int row = 0; row < rows; row++)
-        {
-            for (int col = 0; col < cols; col++)
-            {
-                target[row][col] = source[row][col];
-            }
-        }
+        deepCopy(source, target, rows, cols, 0, 0, 0, 0);
     }
 
     protected static void deepCopy(double[][] source, double[][] target,
@@ -103,11 +77,6 @@ public abstract class MatrixType
     public double getSpot(int row, int col)
     {
         return this.matrix[row][col];
-    }
-
-    public void setSpot(int row, int col, double value)
-    {
-        this.matrix[row][col] = value;
     }
 
     protected static double[][] add(double[][] m1, double[][] m2, int rows, int cols)
