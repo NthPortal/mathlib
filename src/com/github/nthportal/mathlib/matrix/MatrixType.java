@@ -2,16 +2,9 @@ package com.github.nthportal.mathlib.matrix;
 
 public abstract class MatrixType
 {
-    protected double[][] matrix;
-    protected int rows;
-    protected int cols;
-
-    protected MatrixType()
-    {
-        this.rows = 0;
-        this.cols = 0;
-        this.matrix = null;
-    }
+    protected final double[][] matrix;
+    protected final int rows;
+    protected final int cols;
 
     protected MatrixType(double[][] m, boolean dummy)
     {
@@ -29,6 +22,7 @@ public abstract class MatrixType
 
     public MatrixType(double[][] m)
     {
+        this.rows = m.length;
         if (this.rows == 0)
         {
             this.cols = 0;

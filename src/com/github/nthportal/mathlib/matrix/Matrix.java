@@ -1,8 +1,8 @@
 package com.github.nthportal.mathlib.matrix;
 
-public final class Matrix extends MatrixType
+public class Matrix extends MatrixType
 {
-	private boolean square;
+	private final boolean square;
 
     private Matrix(double[][] m, boolean dummy)
     {
@@ -167,7 +167,7 @@ public final class Matrix extends MatrixType
 				{
 					if (matrix[j][i] != 0)
 					{
-						rowSwap(matrix, rows, cols, i, j);
+						rowSwap(matrix, cols, i, j);
 						numRowSwaps++;
 						i--;
 						break;
@@ -191,7 +191,7 @@ public final class Matrix extends MatrixType
 	// Should only be run after ReduceForwardPhase()
 	public static void reduceBackwardPhase(double[][] matrix, int rows, int cols)
 	{
-		int smallerSize = 0;
+		int smallerSize;
 
 		if (rows <= cols)
 		{
@@ -238,7 +238,7 @@ public final class Matrix extends MatrixType
 			{
 				for (int i = row; i < (row - 1); i++)
 				{
-					rowSwap(tempMatrix, rows, cols, i, (i + 1));
+					rowSwap(tempMatrix, cols, i, (i + 1));
 				}
 			}
 		}
@@ -306,7 +306,7 @@ public final class Matrix extends MatrixType
         return new Matrix(tempMatrix, true);
 	}
 
-	private static void rowSwap(double[][] matrix, int rows, int cols, int row1, int row2)
+	private static void rowSwap(double[][] matrix, int cols, int row1, int row2)
 	{
 		double[] tempRow = new double[cols];
 

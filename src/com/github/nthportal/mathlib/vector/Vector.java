@@ -1,9 +1,8 @@
 package com.github.nthportal.mathlib.vector;
 
-import com.github.nthportal.mathlib.matrix.IncompatMatrixSizesException;
 import com.github.nthportal.mathlib.matrix.MatrixType;
 
-public final class Vector extends MatrixType
+public class Vector extends MatrixType
 {
 	private static final int CROSS_PRODUCT_ROWS = 3;
 
@@ -13,21 +12,19 @@ public final class Vector extends MatrixType
 
 		if (!(this.cols == 1))
 		{
-			throw new IllegalArgumentException("Array must have exactly 1 col.");
+			throw new IllegalArgumentException(
+                    "Array must have exactly 1 col; this shouldn't ever be thrown.");
 		}
 	}
 
-	public Vector(double[] v)
+	public static Vector toVector(double[] v)
 	{
-		this.rows = v.length;
-		this.cols = 1;
-
-		double[][] copy = new double[this.rows][1];
-		for (int row = 0; row < this.rows; row++)
+		double[][] copy = new double[v.length][1];
+		for (int row = 0; row < v.length; row++)
 		{
 			copy[row][0] = v[row];
 		}
-		this.matrix = copy;
+		return new Vector(copy);
 	}
 
     protected Vector createInstance(double[][] matrix)
@@ -44,7 +41,7 @@ public final class Vector extends MatrixType
     {
         if (!(this.rows == v.rows))
         {
-            throw new IncompatMatrixSizesException(
+            throw new IncompatVectorSizesException(
                     "Cannot add vectors of different dimensions.");
         }
 
@@ -55,7 +52,7 @@ public final class Vector extends MatrixType
     {
         if (!(this.rows == v.rows))
         {
-            throw new IncompatMatrixSizesException(
+            throw new IncompatVectorSizesException(
                     "Cannot subtract vectors of different dimensions.");
         }
 
