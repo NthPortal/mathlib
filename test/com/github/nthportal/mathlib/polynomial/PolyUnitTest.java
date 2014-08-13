@@ -14,7 +14,7 @@ public class PolyUnitTest
     {
         PolyUnit p = new PolyUnit(5, 2);
         assertEquals(5, p.getCoefficient(), 0);
-        assertEquals(2, p.getExponent(), 0);
+        assertEquals(2, p.getExponent());
         assertTrue(p.equals(p));
     }
 
@@ -30,19 +30,19 @@ public class PolyUnitTest
         assertTrue(new PolyUnit(3, 3).equals(p2));
 
         assertEquals(5, result.getCoefficient(), 0);
-        assertEquals(3, result.getExponent(), 0);
+        assertEquals(3, result.getExponent());
 
         // verify adding a negative PolyUnit
         result = new PolyUnit(1, 2).add(new PolyUnit(-2, 2));
         assertEquals(-1, result.getCoefficient(), 0);
-        assertEquals(2, result.getExponent(), 0);
+        assertEquals(2, result.getExponent());
 
         // assert that adding 0 doesn't change the PolyUnit
         // assert that constructing a PolyUnit with a 0 coefficient makes the
         //   exponent 0
         result = new PolyUnit(2, 0).add(new PolyUnit(0, 1));
         assertEquals(2, result.getCoefficient(), 0);
-        assertEquals(0, result.getExponent(), 0);
+        assertEquals(0, result.getExponent());
 
         // verify that adding PolyUnits with different exponents throws an error
         try {
@@ -67,19 +67,19 @@ public class PolyUnitTest
         assertTrue(new PolyUnit(2, 3).equals(p2));
 
         assertEquals(1, result.getCoefficient(), 0);
-        assertEquals(3, result.getExponent(), 0);
+        assertEquals(3, result.getExponent());
 
         // verify subtracting a negative PolyUnit
         result = new PolyUnit(1, 2).subtract(new PolyUnit(-2, 2));
         assertEquals(3, result.getCoefficient(), 0);
-        assertEquals(2, result.getExponent(), 0);
+        assertEquals(2, result.getExponent());
 
         // assert that subtracting 0 doesn't change the PolyUnit
         // assert that constructing a PolyUnit with a 0 coefficient makes the
         //   exponent 0
         result = new PolyUnit(2, 0).subtract(new PolyUnit(0, 1));
         assertEquals(2, result.getCoefficient(), 0);
-        assertEquals(0, result.getExponent(), 0);
+        assertEquals(0, result.getExponent());
 
         // verify that subtracting PolyUnits with different exponents throws an error
         try {
@@ -104,24 +104,54 @@ public class PolyUnitTest
         assertTrue(new PolyUnit(3, 3).equals(p2));
 
         assertEquals(6, result.getCoefficient(), 0);
-        assertEquals(6, result.getExponent(), 0);
+        assertEquals(6, result.getExponent());
 
         // verify multiplying a negative PolyUnit
         result = new PolyUnit(1, 2).multiply(new PolyUnit(-2, 2));
         assertEquals(-2, result.getCoefficient(), 0);
-        assertEquals(4, result.getExponent(), 0);
+        assertEquals(4, result.getExponent());
 
         // assert that multiplying by 1 doesn't change the PolyUnit
         result = new PolyUnit(3, 4).multiply(new PolyUnit(1, 0));
         assertEquals(3, result.getCoefficient(), 0);
-        assertEquals(4, result.getExponent(), 0);
+        assertEquals(4, result.getExponent());
 
         // assert that multiplying by 0 doesn't yields 0
         // assert that constructing a PolyUnit with a 0 coefficient makes the
         //   exponent 0
         result = new PolyUnit(2, 0).multiply(new PolyUnit(0, 1));
         assertEquals(0, result.getCoefficient(), 0);
-        assertEquals(0, result.getExponent(), 0);
+        assertEquals(0, result.getExponent());
+    }
+
+    @Test
+    public void multiplyDouble()
+    {
+        PolyUnit p = new PolyUnit(2, 3);
+        PolyUnit result = p.multiply(4);
+
+        // assert the original PolyUnit remained unchanged
+        assertTrue(new PolyUnit(2, 3).equals(p));
+
+        assertEquals(8, result.getCoefficient(), 0);
+        assertEquals(3, result.getExponent());
+
+        // verify multiplying a negative double
+        result = new PolyUnit(1, 2).multiply(-3);
+        assertEquals(-3, result.getCoefficient(), 0);
+        assertEquals(2, result.getExponent());
+
+        // assert that multiplying by 1 doesn't change the PolyUnit
+        result = new PolyUnit(3, 4).multiply(1);
+        assertEquals(3, result.getCoefficient(), 0);
+        assertEquals(4, result.getExponent());
+
+        // assert that multiplying by 0 yields 0
+        // assert that constructing a PolyUnit with a 0 coefficient makes the
+        //   exponent 0
+        result = new PolyUnit(2, 0).multiply(0);
+        assertEquals(0, result.getCoefficient(), 0);
+        assertEquals(0, result.getExponent());
     }
 
     @Test
@@ -136,21 +166,54 @@ public class PolyUnitTest
         assertTrue(new PolyUnit(3, 3).equals(p2));
 
         assertEquals(((double) 2 / 3), result.getCoefficient(), 0);
-        assertEquals(0, result.getExponent(), 0);
+        assertEquals(0, result.getExponent());
 
         // verify dividing a negative PolyUnit
         result = new PolyUnit(1, 2).divide(new PolyUnit(-2, 2));
         assertEquals(((double) -1 / 2), result.getCoefficient(), 0);
-        assertEquals(0, result.getExponent(), 0);
+        assertEquals(0, result.getExponent());
 
         // assert that dividing by 1 doesn't change the PolyUnit
         result = new PolyUnit(2, 3).divide(new PolyUnit(1, 0));
         assertEquals(2, result.getCoefficient(), 0);
-        assertEquals(3, result.getExponent(), 0);
+        assertEquals(3, result.getExponent());
 
         // verify that dividing by 0 throws an error
         try {
             new PolyUnit(1, 3).divide(new PolyUnit(0, 0));
+            fail("expected exception: ZeroDivisionException");
+        }
+        catch (ZeroDivisionException e)
+        {
+            // success
+        }
+    }
+
+    @Test
+    public void divideDouble()
+    {
+        PolyUnit p = new PolyUnit(2, 3);
+        PolyUnit result = p.divide(4);
+
+        // assert the original PolyUnit remained unchanged
+        assertTrue(new PolyUnit(2, 3).equals(p));
+
+        assertEquals(0.5, result.getCoefficient(), 0);
+        assertEquals(3, result.getExponent());
+
+        // verify dividing a negative double
+        result = new PolyUnit(1, 2).divide(-2);
+        assertEquals(((double) -1 / 2), result.getCoefficient(), 0);
+        assertEquals(2, result.getExponent());
+
+        // assert that dividing by 1 doesn't change the PolyUnit
+        result = new PolyUnit(2, 3).divide(1);
+        assertEquals(2, result.getCoefficient(), 0);
+        assertEquals(3, result.getExponent());
+
+        // verify that dividing by 0 throws an error
+        try {
+            new PolyUnit(1, 3).divide(0);
             fail("expected exception: ZeroDivisionException");
         }
         catch (ZeroDivisionException e)
