@@ -50,6 +50,16 @@ public class Polynomial
 		return new PolyUnit(terms.get(index));
 	}
 
+    public double getCoefficient(int index)
+    {
+        return this.terms.get(index).getCoefficient();
+    }
+
+    public int getExponent(int index)
+    {
+        return this.terms.get(index).getExponent();
+    }
+
 	public int getSize()
 	{
 		return this.terms.size();
@@ -72,7 +82,7 @@ public class Polynomial
 		Collections.sort(this.terms, Collections.reverseOrder());
 	}
 
-	public Polynomial add(PolyUnit m)
+	private Polynomial add(PolyUnit m)
 	{
 		Polynomial result = new Polynomial(this);
 
@@ -118,7 +128,7 @@ public class Polynomial
 		return result;
 	}
 
-	public Polynomial subtract(PolyUnit m)
+	private Polynomial subtract(PolyUnit m)
 	{
 		Polynomial result = new Polynomial(this);
 
